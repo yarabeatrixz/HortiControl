@@ -1,6 +1,6 @@
 import { ImagePlus } from "lucide-react";
 import { useState } from "react";
-import { CATEGORIAS, UNIDADES } from "@hortilink/dominio";
+import { CATEGORIAS, UNIDADES, validarArquivoDeFoto } from "@hortilink/dominio";
 import { Button } from "../../components/base/Button";
 import { ErrorMessage } from "../../components/base/ErrorMessage";
 import { Field } from "../../components/base/Field";
@@ -23,10 +23,16 @@ export function ProductForm({ id, back }) {
   const [error, setError] = useState("");
   const set = (key) => (event) => setForm({ ...form, [key]: event.target.value });
 
-  // Foto salva como base64 só no modo demonstração; com back-end, trocar por upload.
+  // Foto vai como base64 (até 1 MB); a fase 5 troca por upload no Supabase Storage.
   const choosePhoto = (event) => {
     const selected = event.target.files[0];
     if (!selected) return;
+    const problema = validarArquivoDeFoto(selected);
+    if (problema) {
+      setError(problema);
+      event.target.value = "";
+      return;
+    }
     const reader = new FileReader();
     reader.onload = () => setForm((current) => ({ ...current, photo: reader.result }));
     reader.readAsDataURL(selected);
@@ -50,9 +56,9 @@ export function ProductForm({ id, back }) {
           <label>
             <ImagePlus size={19} aria-hidden="true" />
             <span>
-              Escolher foto <small>Opcional · JPG ou PNG</small>
+              Escolher foto <small>Opcional · JPG, PNG ou WebP até 1 MB</small>
             </span>
-            <input type="file" accept="image/*" onChange={choosePhoto} />
+            <input type="file" accept="image/jpeg,image/png,image/webp" onChange={choosePhoto} />
           </label>
         </div>
         <Field

@@ -82,6 +82,12 @@ export function criarCasosDeUso({ repositorio, relogio = () => new Date() }: Dep
     return item;
   }
 
+  /** Toda loja citada precisa existir (evita oferta ligada a ponto inexistente). */
+  const exigirLojas = (estado: Estado, storeIds: string[]) => {
+    const lojaInexistente = storeIds.find((id) => !estado.stores.some((loja) => loja.id === id));
+    if (lojaInexistente) throw naoEncontrado("Ponto de retirada não encontrado");
+  };
+
   return {
     // ------------------------------------------------------------ Produtor
     salvarProduto: (userId: string, dados: EntradaProduto) =>
@@ -102,6 +108,7 @@ export function criarCasosDeUso({ repositorio, relogio = () => new Date() }: Dep
       executar(userId, (estado, usuario, agora) => {
         exigirPerfil(usuario, "produtor");
         doUsuario(estado.products, dados.productId, (p) => p.producerId, usuario, "Produto");
+        exigirLojas(estado, dados.storeIds);
         return criarOferta(estado, dados, agora);
       }),
 
@@ -115,8 +122,7 @@ export function criarCasosDeUso({ repositorio, relogio = () => new Date() }: Dep
     salvarPontosRetirada: (userId: string, storeIds: string[]) =>
       executar(userId, (estado, usuario) => {
         exigirPerfil(usuario, "produtor");
-        const lojaInexistente = storeIds.find((id) => !estado.stores.some((loja) => loja.id === id));
-        if (lojaInexistente) throw naoEncontrado("Ponto de retirada não encontrado");
+        exigirLojas(estado, storeIds);
         return salvarPontosRetirada(estado, usuario.id, storeIds);
       }),
 

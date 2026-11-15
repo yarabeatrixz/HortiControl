@@ -3,6 +3,9 @@
 
 import type { ConfigSupabase } from "../../2-adapters/supabase/config";
 
+const HOST_LOCAL = "127.0.0.1";
+const ENDERECOS_LOCAIS = new Set([HOST_LOCAL, "localhost", "::1"]);
+
 export interface Ambiente {
   porta: number;
   host: string;
@@ -29,13 +32,22 @@ export function lerAmbiente(variaveis: Record<string, string | undefined> = proc
   }
   const supabase = url && chaveServiceRole ? { url, chaveServiceRole } : null;
 
+  if (supabase?.chaveServiceRole.startsWith("sb_publishable_")) {
+    throw new Error("SUPABASE_SERVICE_ROLE_KEY recebeu a chave PUBLICÁVEL; use a chave secreta (sb_secret_…).");
+  }
+
+  const host = variaveis.HOST ?? HOST_LOCAL;
   if (!supabase && variaveis.NODE_ENV === "production") {
     throw new Error("Em produção a API exige o Supabase: o modo demo aceita login falso e é só para desenvolvimento.");
+  }
+  // O login falso do modo demo nunca fica acessível de outra máquina (auditoria, item 1a).
+  if (!supabase && !ENDERECOS_LOCAIS.has(host)) {
+    throw new Error(`Modo demo só escuta neste computador (HOST=${HOST_LOCAL}); configure o Supabase para usar HOST=${host}.`);
   }
 
   return {
     porta,
-    host: variaveis.HOST ?? "0.0.0.0",
+    host,
     origemFrontend: variaveis.FRONTEND_ORIGIN ?? "http://localhost:5173",
     modo: supabase ? "supabase" : "demo",
     supabase,

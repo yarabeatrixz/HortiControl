@@ -21,7 +21,7 @@ describe("casos de uso", () => {
       name: "Ana",
       city: "Suzano",
       email: "ana@x.com",
-      password: "123456",
+      password: "senha-forte-1",
     });
     expect(repositorio.espiar().users.some((u) => u.id === user.id)).toBe(true);
     expect(await repositorio.carregarSessao()).toBe(user.id);

@@ -40,7 +40,7 @@ describe("login", () => {
     await user.type(screen.getByLabelText("E-mail"), "ana@x.com");
     await user.type(screen.getByLabelText("Senha"), "123");
     await user.click(screen.getByRole("button", { name: "Criar minha conta" }));
-    expect(screen.getByRole("alert")).toHaveTextContent("pelo menos 6 caracteres");
+    expect(screen.getByRole("alert")).toHaveTextContent("pelo menos 8 caracteres");
   });
 
   it("sair volta para a tela de login", async () => {

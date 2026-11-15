@@ -15,6 +15,23 @@ describe("servidor", () => {
     await app.close();
   });
 
+  it("envia cabeçalhos de segurança", async () => {
+    const app = criarServidor({ origemFrontend: ORIGEM });
+    const resposta = await app.inject({ method: "GET", url: "/saude" });
+    expect(resposta.headers["x-content-type-options"]).toBe("nosniff");
+    expect(resposta.headers["content-security-policy"]).toContain("default-src 'none'");
+    await app.close();
+  });
+
+  it("limita requisições por minuto (429 com mensagem clara)", async () => {
+    const app = criarServidor({ origemFrontend: ORIGEM });
+    let ultima = await app.inject({ method: "GET", url: "/saude" });
+    for (let i = 0; i < 120; i += 1) ultima = await app.inject({ method: "GET", url: "/saude" });
+    expect(ultima.statusCode).toBe(429);
+    expect(ultima.json()).toEqual({ error: "Muitas requisições. Aguarde um minuto e tente de novo." });
+    await app.close();
+  });
+
   it("rota inexistente devolve 404", async () => {
     const app = criarServidor({ origemFrontend: ORIGEM });
     const resposta = await app.inject({ method: "GET", url: "/nao-existe" });
@@ -27,7 +44,7 @@ describe("ambiente", () => {
   it("sem Supabase usa o modo demo e padrões seguros", () => {
     expect(lerAmbiente({})).toEqual({
       porta: 3333,
-      host: "0.0.0.0",
+      host: "127.0.0.1",
       origemFrontend: ORIGEM,
       modo: "demo",
       supabase: null,
@@ -44,5 +61,21 @@ describe("ambiente", () => {
     expect(() => lerAmbiente({ PORT: "abc" })).toThrow(/PORT inválida/);
     expect(() => lerAmbiente({ SUPABASE_URL: "https://x.supabase.co" })).toThrow(/juntas/);
     expect(() => lerAmbiente({ NODE_ENV: "production" })).toThrow(/exige o Supabase/);
+  });
+
+  it("modo demo (login falso) não escuta fora deste computador", () => {
+    expect(() => lerAmbiente({ HOST: "0.0.0.0" })).toThrow(/Modo demo só escuta neste computador/);
+    expect(lerAmbiente({ HOST: "localhost" }).modo).toBe("demo");
+  });
+
+  it("com Supabase pode escutar em qualquer endereço", () => {
+    const ambiente = lerAmbiente({ HOST: "0.0.0.0", SUPABASE_URL: "https://x.supabase.co", SUPABASE_SERVICE_ROLE_KEY: "sb_secret_x" });
+    expect(ambiente.host).toBe("0.0.0.0");
+  });
+
+  it("recusa a chave publicável no lugar da secreta", () => {
+    expect(() =>
+      lerAmbiente({ SUPABASE_URL: "https://x.supabase.co", SUPABASE_SERVICE_ROLE_KEY: "sb_publishable_x" }),
+    ).toThrow(/chave PUBLICÁVEL/);
   });
 });

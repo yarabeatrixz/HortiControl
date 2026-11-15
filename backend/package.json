@@ -17,6 +17,8 @@
   },
   "dependencies": {
     "@fastify/cors": "^11.4.3",
+    "@fastify/helmet": "^13.2.0",
+    "@fastify/rate-limit": "^11.2.2",
     "@hortilink/banco": "workspace:*",
     "@hortilink/dominio": "workspace:*",
     "@supabase/supabase-js": "^2.119.0",

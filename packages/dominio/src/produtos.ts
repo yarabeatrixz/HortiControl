@@ -1,6 +1,6 @@
 // Catálogo do produtor: cadastrar, editar e excluir produtos.
 
-import type { Categoria, Unidade } from "./constantes";
+import { type Categoria, FORMATOS_FOTO, TAMANHO_MAXIMO_FOTO, type Unidade } from "./constantes";
 import { num } from "./formatacao";
 import type { Estado, Numerico, Produto, Resultado } from "./tipos";
 import { falha, novoId, substituir, texto } from "./util";
@@ -57,4 +57,11 @@ export function excluirProduto(estado: Estado, produtoId: string): Resultado {
       offers: estado.offers.filter((item) => item.productId !== produtoId),
     },
   };
+}
+
+/** Arquivo escolhido como foto do produto: devolve a mensagem de erro, ou null se serve. */
+export function validarArquivoDeFoto(arquivo: { type: string; size: number }): string | null {
+  if (!(FORMATOS_FOTO as readonly string[]).includes(arquivo.type)) return "Use uma foto JPG, PNG ou WebP";
+  if (arquivo.size > TAMANHO_MAXIMO_FOTO) return "A foto precisa ter até 1 MB";
+  return null;
 }

@@ -104,7 +104,11 @@ export const ORIGEM = {
 
 export type Origem = (typeof ORIGEM)[keyof typeof ORIGEM];
 
-export const SENHA_MINIMA = 6;
+export const SENHA_MINIMA = 8;
+
+/** Foto do produto: formatos aceitos e tamanho máximo do arquivo (1 MB). */
+export const FORMATOS_FOTO = ["image/jpeg", "image/png", "image/webp"] as const;
+export const TAMANHO_MAXIMO_FOTO = 1024 * 1024;
 
 // ------------------------------------------------- Estoque e financeiro
 

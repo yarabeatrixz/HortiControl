@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { criarExemplo } from "./exemplo";
-import { type DadosProduto, excluirProduto, salvarProduto } from "./produtos";
+import { type DadosProduto, excluirProduto, salvarProduto, validarArquivoDeFoto } from "./produtos";
 import { falhaDe, sucesso } from "./testes";
 
 const couve: DadosProduto = {
@@ -40,5 +40,17 @@ describe("produtos", () => {
     const { state } = sucesso(excluirProduto(criarExemplo(), "produto-1"));
     expect(state.products.some((item) => item.id === "produto-1")).toBe(false);
     expect(state.offers.some((item) => item.productId === "produto-1")).toBe(false);
+  });
+});
+
+describe("foto do produto", () => {
+  it("aceita JPG, PNG e WebP de até 1 MB", () => {
+    expect(validarArquivoDeFoto({ type: "image/png", size: 500_000 })).toBeNull();
+  });
+
+  it("recusa outros formatos (SVG, HTML) e arquivos grandes", () => {
+    expect(validarArquivoDeFoto({ type: "image/svg+xml", size: 10 })).toMatch(/JPG, PNG ou WebP/);
+    expect(validarArquivoDeFoto({ type: "text/html", size: 10 })).toMatch(/JPG, PNG ou WebP/);
+    expect(validarArquivoDeFoto({ type: "image/jpeg", size: 2_000_000 })).toMatch(/até 1 MB/);
   });
 });

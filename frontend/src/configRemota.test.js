@@ -25,4 +25,11 @@ describe("lerConfigRemota", () => {
       "falta VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY",
     );
   });
+
+  it("recusa chave secreta no front (nova ou JWT service_role)", () => {
+    const base = { VITE_API_URL: "https://api.exemplo.test", VITE_SUPABASE_URL: "https://p.supabase.co" };
+    expect(() => lerConfigRemota({ ...base, VITE_SUPABASE_ANON_KEY: "sb_secret_abc" })).toThrow(/chave SECRETA/);
+    const jwtServiceRole = `x.${btoa(JSON.stringify({ role: "service_role" }))}.y`;
+    expect(() => lerConfigRemota({ ...base, VITE_SUPABASE_ANON_KEY: jwtServiceRole })).toThrow(/chave SECRETA/);
+  });
 });
