@@ -9,7 +9,7 @@ import {
   TriangleAlert,
 } from "lucide-react";
 import { useState } from "react";
-import { brl, calcularIndicadores, statusEstoque } from "@domain";
+import { brl, calcularIndicadores, statusEstoque } from "@hortilink/dominio";
 import { PageTitle } from "../../components/base/PageTitle";
 import { SummaryCard } from "../../components/base/SummaryCard";
 import { StatusBadge } from "../../components/StatusBadge";

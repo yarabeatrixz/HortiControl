@@ -1,6 +1,6 @@
 import { ShoppingBasket, Sprout, Store } from "lucide-react";
 import { useState } from "react";
-import { PERFIS, SENHA_MINIMA } from "@domain";
+import { PERFIS, SENHA_MINIMA } from "@hortilink/dominio";
 import { Button } from "../components/base/Button";
 import { ErrorMessage } from "../components/base/ErrorMessage";
 import { Field } from "../components/base/Field";

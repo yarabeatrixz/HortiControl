@@ -1,6 +1,6 @@
 import { ChevronRight, Clock3, PackageCheck } from "lucide-react";
 import { useState } from "react";
-import { STATUS_PEDIDO } from "@domain";
+import { STATUS_PEDIDO } from "@hortilink/dominio";
 import { EmptyState } from "../../components/base/EmptyState";
 import { PageTitle } from "../../components/base/PageTitle";
 import { SearchBox } from "../../components/base/SearchBox";

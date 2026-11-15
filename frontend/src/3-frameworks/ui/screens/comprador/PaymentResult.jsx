@@ -1,5 +1,5 @@
 import { CheckCircle2, Store, XCircle } from "lucide-react";
-import { brl, dataHora } from "@domain";
+import { brl, dataHora } from "@hortilink/dominio";
 import { Button } from "../../components/base/Button";
 import { useApp } from "../../state/AppProvider";
 import { totalPedido } from "../orderFilters";

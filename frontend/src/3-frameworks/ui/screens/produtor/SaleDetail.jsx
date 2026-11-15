@@ -1,4 +1,4 @@
-import { EVENTO_PEDIDO, brl, dataHora } from "@domain";
+import { EVENTO_PEDIDO, brl, dataHora } from "@hortilink/dominio";
 import { BackButton } from "../../components/base/BackButton";
 import { OrderTimeline } from "../../components/OrderTimeline";
 import { ProductImage } from "../../components/ProductImage";

@@ -7,14 +7,25 @@
     "checkJs": false,
     "baseUrl": ".",
     "paths": {
-      "@domain": ["src/0-domain"],
-      "@domain/*": ["src/0-domain/*"],
-      "@application": ["src/1-application"],
-      "@application/*": ["src/1-application/*"],
-      "@adapters": ["src/2-adapters"],
-      "@adapters/*": ["src/2-adapters/*"],
-      "@ui/*": ["src/3-frameworks/ui/*"]
+      "@application": [
+        "src/1-application"
+      ],
+      "@application/*": [
+        "src/1-application/*"
+      ],
+      "@adapters": [
+        "src/2-adapters"
+      ],
+      "@adapters/*": [
+        "src/2-adapters/*"
+      ],
+      "@ui/*": [
+        "src/3-frameworks/ui/*"
+      ]
     }
   },
-  "include": ["src", "vite.config.js"]
+  "include": [
+    "src",
+    "vite.config.js"
+  ]
 }

@@ -1,6 +1,6 @@
 import { ChevronRight, MapPin } from "lucide-react";
 import { useState } from "react";
-import { CATEGORIAS, brl, inicial } from "@domain";
+import { CATEGORIAS, brl, inicial } from "@hortilink/dominio";
 import { Button } from "../../components/base/Button";
 import { EmptyState } from "../../components/base/EmptyState";
 import { PageTitle } from "../../components/base/PageTitle";

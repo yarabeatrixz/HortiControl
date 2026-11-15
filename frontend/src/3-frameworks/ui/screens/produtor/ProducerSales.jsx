@@ -1,6 +1,6 @@
 import { Banknote, Boxes, ChevronRight, Clock3, PackageCheck, TrendingUp } from "lucide-react";
 import { useState } from "react";
-import { STATUS_PEDIDO, brl, dataCurta } from "@domain";
+import { STATUS_PEDIDO, brl, dataCurta } from "@hortilink/dominio";
 import { EmptyState } from "../../components/base/EmptyState";
 import { Field } from "../../components/base/Field";
 import { PageTitle } from "../../components/base/PageTitle";

@@ -1,17 +1,14 @@
-name: Front-end
+name: CI
 
 on:
   push:
-    paths: ["frontend/**", ".github/workflows/frontend.yml"]
+    branches: [main]
   pull_request:
-    paths: ["frontend/**", ".github/workflows/frontend.yml"]
 
 jobs:
   check:
+    name: Lint, tipos, testes e build
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: frontend
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -21,11 +18,9 @@ jobs:
         with:
           node-version: 22
           cache: pnpm
-          cache-dependency-path: frontend/pnpm-lock.yaml
       - run: pnpm install --frozen-lockfile
-      - run: pnpm lint
-      - run: pnpm test
-      - run: pnpm build
+      - name: Domínio, back-end e front-end
+        run: pnpm check
       - uses: actions/upload-artifact@v4
         with:
           name: frontend-dist

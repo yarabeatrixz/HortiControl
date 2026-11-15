@@ -1,6 +1,6 @@
 import { ImagePlus } from "lucide-react";
 import { useState } from "react";
-import { CATEGORIAS, UNIDADES } from "@domain";
+import { CATEGORIAS, UNIDADES } from "@hortilink/dominio";
 import { Button } from "../../components/base/Button";
 import { ErrorMessage } from "../../components/base/ErrorMessage";
 import { Field } from "../../components/base/Field";

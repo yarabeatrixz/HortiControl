@@ -1,6 +1,6 @@
 // Mapa de telas: qual componente aparece para cada aba e para cada rota.
 
-import { METODO_PAGAMENTO, ORIGEM } from "@domain";
+import { METODO_PAGAMENTO, ORIGEM } from "@hortilink/dominio";
 import { BuyerOffers } from "../screens/comprador/BuyerOffers";
 import { Checkout } from "../screens/comprador/Checkout";
 import { MyPurchases } from "../screens/comprador/MyPurchases";
