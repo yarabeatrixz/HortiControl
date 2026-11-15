@@ -51,7 +51,7 @@ export function cadastrarUsuario(estado: Estado, dados: DadosCadastro): Resultad
   const validacao = validarCadastro(estado.users, dados);
   if (!validacao.ok) return validacao;
   const user: Usuario = {
-    id: novoId("user"),
+    id: novoId(),
     role: dados.role,
     name: texto(dados.name),
     city: texto(dados.city),

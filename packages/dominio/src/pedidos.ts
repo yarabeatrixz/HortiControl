@@ -23,7 +23,7 @@ export function criarPedidoDireto(
   const momento = agora.toISOString();
   const sequencia = estado.nextOrderNumber || 1;
   const order: Pedido = {
-    id: novoId("pedido"),
+    id: novoId(),
     orderNumber: numeroPedido(sequencia),
     type: dados.type,
     sourceId: oferta?.id ?? produto.id,

@@ -55,7 +55,7 @@ export function registrarEntrada(estado: Estado, dados: DadosEntrada, agora: Dat
     estado,
     produto,
     {
-      id: novoId("mov"),
+      id: novoId(),
       type: TIPO_MOVIMENTO.ENTRADA,
       producerId: produto.producerId,
       productId: produto.id,
@@ -80,7 +80,7 @@ export function registrarPerda(estado: Estado, dados: DadosPerda, agora: Date = 
     estado,
     produto,
     {
-      id: novoId("mov"),
+      id: novoId(),
       type: TIPO_MOVIMENTO.PERDA,
       producerId: produto.producerId,
       productId: produto.id,

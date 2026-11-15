@@ -19,7 +19,7 @@ export function salvarLoja(estado: Estado, userId: string, dados: DadosLoja): Re
   const existente = estado.stores.find((item) => item.userId === userId);
   const loja: Loja = {
     ...existente,
-    id: existente?.id ?? novoId("loja"),
+    id: existente?.id ?? novoId(),
     userId,
     name: texto(dados.name),
     address: texto(dados.address),

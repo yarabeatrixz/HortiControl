@@ -30,7 +30,7 @@ export function salvarProduto(estado: Estado, dados: DadosProduto): Resultado {
   const existente = dados.id ? estado.products.find((item) => item.id === dados.id) : undefined;
   const produto: Produto = {
     ...dados,
-    id: existente?.id ?? novoId("produto"),
+    id: existente?.id ?? novoId(),
     name: texto(dados.name),
     price,
     quantity,

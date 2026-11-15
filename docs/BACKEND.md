@@ -1,6 +1,9 @@
 # Guia para o back-end e o banco de dados
 
-O front-end está pronto e funciona com **dados fictícios no navegador**. Este documento descreve o que ele espera do back-end. As rotas são o **plano inicial**: podem mudar durante o desenvolvimento da API, e o front se adapta num único lugar.
+O front-end está pronto e funciona com **dados fictícios no navegador**. Este documento descreve o contrato entre front, API e banco.
+
+> **Estado (fase 3):** as rotas de escrita abaixo estão **implementadas** em `backend/` (lista final, status HTTP e modo demo em [`backend/README.md`](../backend/README.md)).
+> **Leituras** são feitas pelo front direto no Supabase, protegidas por RLS (`supabase/migrations/0001_schema.sql`); **escritas** só pela API.
 
 ## Onde o back-end entra no front
 
@@ -38,7 +41,7 @@ Valores fixos (status, categorias, unidades, eventos da linha do tempo): `packag
 
 Fluxo de status do pedido: `Aguardando pagamento → Pago → Entregue na loja → Pronto para retirada → Retirado` (ou `Cancelado`).
 
-## Operações (caso de uso → rota sugerida)
+## Operações (caso de uso → rota)
 
 | Caso de uso (`useCases.js`) | Rota sugerida | Validações principais |
 |---|---|---|
