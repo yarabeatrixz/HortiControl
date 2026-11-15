@@ -3,6 +3,7 @@
 | Arquivo | Conteúdo |
 |---|---|
 | `migrations/0001_schema.sql` | tabelas (espelham `packages/dominio/src/tipos.ts`), enums, índices, trigger que cria o perfil no cadastro, **RLS em todas as tabelas** |
+| `auditoria/auditoria-completa.sql` | auditoria de segurança **somente leitura** (RLS, policies, grants, funções, storage, realtime, auth) |
 | `seed.sql` | dados fictícios gerados de `criarExemplo()` (senha de todos: `123456`). Não editar à mão: `pnpm --filter @hortilink/backend gerar:seed` |
 
 ## Modelo de segurança
@@ -22,7 +23,7 @@
 
 ## Conferir depois de aplicar
 
-Rode as queries das skills do Obsidian `Skills/supabase/audit-rls.md` e `audit-policies.md` no SQL Editor. Esperado:
+Rode `auditoria/auditoria-completa.sql` (somente leitura, das skills `Skills/supabase` do Obsidian) no SQL Editor; o cabeçalho diz o resultado esperado de cada seção. Resumo do esperado:
 - nenhuma tabela de `public` com `rls_enabled = false`;
 - nenhuma policy de escrita para `anon`/`authenticated`;
 - grants de `authenticated` só `SELECT`.

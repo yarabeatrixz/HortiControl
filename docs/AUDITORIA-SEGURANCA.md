@@ -1,6 +1,6 @@
 # Auditoria de segurança — 15/11/2026
 
-Escopo: monorepo inteiro na branch `feat/front-api-fase-4` (`packages/dominio`, `packages/banco`, `backend/`, `frontend/`, `supabase/`).
+Escopo: monorepo inteiro na branch `feat/front-api-fase-4`, mais o banco Supabase (migration, seed e as skills `Skills/supabase` do Obsidian) (`packages/dominio`, `packages/banco`, `backend/`, `frontend/`, `supabase/`).
 Método: leitura do código e da migration, busca por APIs de risco e `pnpm audit` (nenhuma vulnerabilidade conhecida nas dependências).
 Esta auditoria **só diagnostica**: não altera código nem propõe correções.
 
@@ -114,6 +114,40 @@ A API autentica só pelo cabeçalho `Authorization: Bearer`, sem cookie de sess�
 - **Sem limite de tamanho nos textos** (`name`, `description`, `note`, `address`, `photo`): só o limite global de corpo. **Confiança:** Alta.
 - **Leitura completa no front:** `supabaseLeitura.js` lê todas as linhas que o RLS libera, sem paginação. O catálogo inteiro e todas as ofertas vão para cada usuário logado. É o que o RLS permite por desenho, então não vaza dado de outros usuários além do previsto. **Confiança:** Alta.
 - Positivos: corpo validado por esquema com `additionalProperties: false` (campos a mais são recusados), dono sempre vindo do token e nunca do corpo, CORS restrito, `service_role` só no back-end (`.env` ignorado pelo git; o front só lê variáveis `VITE_*`).
+
+## Banco Supabase (skills do Obsidian `Skills/supabase`)
+
+Auditoria **estática** de `supabase/migrations/0001_schema.sql` e `supabase/seed.sql`, seção por seção da skill `full-security-audit`. O projeto Supabase ainda não tinha sido criado. O mesmo roteiro, somente leitura, está em `supabase/auditoria/auditoria-completa.sql`, para rodar no SQL Editor e confirmar no banco real (o resultado esperado de cada seção está no cabeçalho do arquivo).
+
+| Seção (skill) | Status | Evidência | Confiança |
+|---|---|---|---|
+| 1. Tabelas sem RLS (`audit-rls`) | Não detectado | As 11 tabelas com `enable` + `force row level security` | Alta |
+| 2. RLS sem policy (`audit-rls`) | Não detectado | Toda tabela tem uma policy `for select to authenticated` | Alta |
+| 3. Policies de escrita permissivas (`audit-policies`) | Não detectado | Não há policy de INSERT/UPDATE/DELETE; `revoke all` de `anon`/`authenticated` e só `grant select` | Alta |
+| 4. Colunas sensíveis (`audit-sensitive-columns`) | Não detectado | Nenhuma coluna de senha/token em `public`; `profiles.email` (PII) fica fora do grant por coluna (`id, role, name, city`); a senha só existe no `auth.users` | Alta |
+| 5. Permissões de `anon` (`audit-api-exposure`) | Não detectado | `revoke all on all tables/sequences ... from anon`; nenhum `grant` a `anon` | Alta |
+| 6–7. Funções e SECURITY DEFINER (`audit-rpc-functions`) | Não detectado | Só `criar_perfil_do_usuario`: `security definer` com `search_path = ''` e `execute` revogado de `public`, `anon` e `authenticated` | Alta |
+| 8–9. Storage (`audit-storage`) | Inconclusivo | Nenhum bucket nas migrations; as fotos vão em base64 na coluna `photo_url` (ver "Upload de arquivos"). Conferir no projeto real | Média |
+| 10. Realtime (`audit-realtime`) | Não detectado (estático) | Nenhuma tabela adicionada à publicação `supabase_realtime`; conferir no painel | Média |
+| 12. Auth (`audit-auth`) | **Presente** | Ver abaixo | Alta |
+| API: privilégios padrão de objetos futuros | **Presente** (risco futuro) | Ver abaixo | Alta |
+
+### Auth — **Presente**
+- **Seed com senha conhecida**: `seed.sql` insere cinco usuários em `auth.users` já **confirmados** (`email_confirmed_at = now()`), com `crypt('123456', gen_salt('bf'))`. O hash é bcrypt (adequado), mas a senha é pública. Em qualquer projeto onde o seed for aplicado, essas contas ficam abertas a quem ler o repositório (item 1b). A seção 17 do script lista essas contas.
+- **Perfil escolhido pelo cliente**: o gatilho `criar_perfil_do_usuario` converte `raw_user_meta_data ->> 'role'` em `public.perfil`. O cliente controla esses metadados no `signUp`, então escolhe ser `loja` ou `produtor` (item 3a). Mudanças posteriores de metadados (`updateUser`) **não** alteram o perfil, porque o gatilho só roda no `insert`.
+- **Inconclusivo (painel, fora do repositório):** confirmação de e-mail, tamanho mínimo de senha, proteção contra senhas vazadas, MFA, limites de tentativa e hooks de Auth.
+- `service_role`: não aparece no front (`frontend/src`, `index.html`, `vite.config.js`), só em `backend/.env.example` (vazia) e na documentação.
+
+### Privilégios padrão para tabelas futuras — **Presente (risco futuro)**
+- **Onde:** `0001_schema.sql` revoga os privilégios das tabelas que **já existem** (`revoke all on all tables in schema public`), mas não altera os privilégios padrão (`alter default privileges`).
+- **Vetor:** no Supabase, uma tabela nova criada em `public` recebe por padrão todos os privilégios para `anon` e `authenticated`. Uma migration futura que esqueça `enable row level security` deixa essa tabela legível **e gravável** pela REST API com a anon key, que fica pública no front. A seção 16 do script mostra esses privilégios padrão.
+- **Impacto:** leitura e escrita sem login na tabela nova.
+- **Confiança:** Alta. O risco só aparece em migrations futuras; o `supabase/README.md` já alerta, mas nada no banco impede.
+
+### Outras observações do esquema
+- Colunas de texto sem limite de tamanho (`name`, `description`, `address`, `note`, `photo_url`): só os `check` de texto não vazio. **Confiança:** Alta.
+- `order_events` herda o filtro de `orders` por subconsulta, e o RLS de `orders` vale dentro da subconsulta. Correto.
+- `profiles` é legível por qualquer usuário logado (`using (true)`), limitado às colunas `id, role, name, city`. Os dados de todos os perfis (nome, cidade, papel) ficam listáveis. Aceito por desenho (catálogos públicos para quem está logado).
 
 ## Dependências
 `pnpm audit` em 15/11/2026: **nenhuma vulnerabilidade conhecida**. O monitoramento contínuo passa a ser feito pelo Dependabot (`.github/dependabot.yml`).
