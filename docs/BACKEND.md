@@ -19,7 +19,7 @@ URL da API via variável de ambiente do Vite: `VITE_API_URL` em `frontend/.env.l
 
 ## Regras = validações do servidor
 
-Toda regra de `frontend/src/0-domain/regras.js` precisa existir **também no servidor** (o servidor é a fonte da verdade). As mensagens de erro do front são as que o usuário vê; a API pode devolver `{ "error": "mensagem" }` com status 4xx e o adapter repassa a mensagem.
+As regras ficam no pacote `@hortilink/dominio` (`packages/dominio/src`, TypeScript) e a API **importa as mesmas funções**: o servidor é a fonte da verdade e roda exatamente a mesma validação do front. As mensagens de erro do front são as que o usuário vê; a API pode devolver `{ "error": "mensagem" }` com status 4xx e o adapter repassa a mensagem.
 
 ## Entidades (formato atual dos dados)
 
@@ -34,7 +34,7 @@ Toda regra de `frontend/src/0-domain/regras.js` precisa existir **também no ser
 | `expenses` | `id, producerId, type (Custo\|Investimento), description, amount, createdAt` | Custos e investimentos que não são entrada de mercadoria. |
 | `proposals` | `id, type, sourceId, producerId, buyerId, productId, quantity, unitPrice, storeId, status, createdAt, orderId?` | Regras prontas; a tela atual usa compra direta (ver "Pontos em aberto"). |
 
-Valores fixos (status, categorias, unidades, eventos da linha do tempo): `frontend/src/0-domain/constants.js`. Use **exatamente as mesmas strings**.
+Valores fixos (status, categorias, unidades, eventos da linha do tempo): `packages/dominio/src/constantes.ts`. Use **exatamente as mesmas strings**.
 
 Fluxo de status do pedido: `Aguardando pagamento → Pago → Entregue na loja → Pronto para retirada → Retirado` (ou `Cancelado`).
 
@@ -62,7 +62,7 @@ Fluxo de status do pedido: `Aguardando pagamento → Pago → Entregue na loja �
 
 Leituras de que as telas precisam: ofertas ativas, produtos por produtor, lojas, pedidos do usuário (comprador/produtor/loja), movimentações de estoque e despesas do produtor, usuário logado.
 
-Alerta de estoque baixo: `quantity <= minQuantity` (ou `quantity <= 0`), regra em `frontend/src/0-domain/estoque.js` (`statusEstoque`).
+Alerta de estoque baixo: `quantity <= minQuantity` (ou `quantity <= 0`), regra em `packages/dominio/src/estoque.ts` (`statusEstoque`).
 
 ## Segurança (checklist antes de ir para produção)
 

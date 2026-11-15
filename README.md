@@ -4,6 +4,8 @@
 
 O HortiLink é um projeto acadêmico de Engenharia de Software: um sistema web que conecta **produtores** de verduras e legumes do Alto Tietê a **compradores** (restaurantes, sacolões, mercados e famílias), com retirada em **lojas parceiras**. Além da venda, o produtor controla o próprio estoque: entradas, perdas, custos e indicadores.
 
+Projeto individual de Bruna Franco: front-end, back-end e banco de dados.
+
 ## Objetivo
 
 Facilitar o gerenciamento de produtos, entradas, vendas, perdas e quantidades disponíveis, aproximando quem produz de quem compra. O resultado esperado é uma gestão mais organizada, preço justo e menos desperdício.
@@ -32,41 +34,36 @@ Facilitar o gerenciamento de produtos, entradas, vendas, perdas e quantidades di
 | Ofertas promocionais (queima de estoque) | Ofertas → criar e encerrar | ✅ |
 | Compra com retirada em loja parceira | Perfil Comprador → Ofertas / Produtores → Comprar → Checkout | ✅ |
 
-> Hoje o front-end funciona com **dados fictícios no navegador**. A API e o banco de dados são a próxima etapa ([guia para o back-end](docs/BACKEND.md)).
+> Hoje o front-end funciona com **dados fictícios no navegador**. A API (TypeScript + Supabase) está em construção ([guia do back-end](docs/BACKEND.md)).
 
-## Estrutura do projeto
+## Estrutura (monorepo pnpm)
 
 | Pasta | Conteúdo | Status |
 |---|---|---|
-| [`frontend/`](frontend/) | Interface e telas do sistema (React 19 + Vite), em camadas de Clean Architecture | ✅ funcional com dados fictícios |
-| [`backend/`](backend/) | Lógica e funcionalidades no servidor (API) | ⏳ a fazer ([guia](docs/BACKEND.md)) |
-| [`database/`](database/) | Modelagem e scripts do banco de dados | ⏳ a fazer |
-| [`docs/`](docs/) | Documentação e diagramas: [arquitetura](docs/ARQUITETURA.md) e [contrato com o back-end](docs/BACKEND.md) | ✅ |
-| [`tests/`](tests/) | Testes de funcionalidades integrados (front + back) | ⏳ (os 60 testes do front ficam em `frontend/src`) |
-| `.github/workflows/` | CI: lint, testes e build do front a cada push/PR | ✅ |
+| [`packages/dominio/`](packages/dominio/) | `@hortilink/dominio`: regras de negócio puras em TypeScript estrito, usadas pelo front e pelo back | ✅ 42 testes |
+| [`frontend/`](frontend/) | Interface web (React 19 + Vite), em camadas de Clean Architecture | ✅ funcional com dados fictícios |
+| [`backend/`](backend/) | API em TypeScript (Fastify), em camadas de Clean Architecture | 🟡 esqueleto (`GET /saude`) |
+| `supabase/` | Migrations SQL (tabelas + RLS) e seed fictício | ⏳ fase 2 |
+| [`docs/`](docs/) | [Arquitetura](docs/ARQUITETURA.md), [contrato do back-end](docs/BACKEND.md) e tutorial em vídeo/áudio | ✅ |
+| `.github/workflows/` | CI: lint, tipos, testes e build de todos os pacotes a cada push/PR | ✅ |
 
-## Como rodar o front-end
+## Como rodar
+
+Pré-requisitos: Node 22+ e pnpm 10 (`npm i -g pnpm`).
 
 ```bash
-cd frontend
 pnpm install
-pnpm dev      # http://localhost:5173
-pnpm check    # lint + testes + build
+pnpm dev      # front-end em http://localhost:5173 e API em http://localhost:3333
+pnpm check    # lint + tipos + testes + build de todos os pacotes
 ```
 
-Contas de demonstração (senha `123456`): `produtor@hortilink.com`, `comprador@hortilink.com`, `loja@hortilink.com`. Mais detalhes em [`frontend/README.md`](frontend/README.md).
+Contas de demonstração (senha `123456`): `produtor@hortilink.com`, `comprador@hortilink.com`, `loja@hortilink.com`. Mais detalhes em [`frontend/README.md`](frontend/README.md) e [`backend/README.md`](backend/README.md).
 
 ## Fluxo de trabalho
 
-1. Criar uma branch por tarefa (`feat/...`, `fix/...`, `docs/...`).
-2. Commits pequenos no padrão [Conventional Commits](https://www.conventionalcommits.org/pt-br/) (`feat(frontend): ...`).
-3. Abrir Pull Request; o CI precisa ficar verde e alguém da equipe revisa antes do merge.
-
-## Equipe
-
-- Yara — Scrum Master e organização do projeto.
-- Bruna — Desenvolvedora Front-end.
-- Laura — Desenvolvedora Back-end.
+1. Uma branch por tarefa (`feat/...`, `fix/...`, `docs/...`).
+2. Commits pequenos no padrão [Conventional Commits](https://www.conventionalcommits.org/pt-br/) (`feat(backend): ...`).
+3. Pull Request com descrição e checklist; merge só com o CI verde e depois de revisão (checklist próprio + revisão de código automatizada).
 
 ## Metodologia
 
