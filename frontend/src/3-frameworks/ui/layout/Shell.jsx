@@ -77,7 +77,7 @@ export function Shell() {
           {route ? (
             <RouteScreen route={route} setRoute={setRoute} abrirAba={abrirAba} />
           ) : (
-            <TabScreen role={currentUser.role} tab={tab} setRoute={setRoute} />
+            <TabScreen role={currentUser.role} tab={tab} setRoute={setRoute} abrirAba={abrirAba} />
           )}
         </main>
         {!route && (

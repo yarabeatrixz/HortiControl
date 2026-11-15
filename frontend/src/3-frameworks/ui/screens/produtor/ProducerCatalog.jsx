@@ -6,10 +6,11 @@ import { ConfirmModal } from "../../components/base/ConfirmModal";
 import { EmptyState } from "../../components/base/EmptyState";
 import { ErrorMessage } from "../../components/base/ErrorMessage";
 import { PageTitle } from "../../components/base/PageTitle";
+import { LowStockAlert } from "../../components/LowStockAlert";
 import { ProductImage } from "../../components/ProductImage";
 import { useApp } from "../../state/AppProvider";
 
-export function ProducerCatalog({ create, edit, offer }) {
+export function ProducerCatalog({ create, edit, offer, openStock }) {
   const { currentUser, products, deleteProduct } = useApp();
   const [productToDelete, setProductToDelete] = useState(null);
   const [error, setError] = useState("");
@@ -33,6 +34,14 @@ export function ProducerCatalog({ create, edit, offer }) {
         action={
           <Button icon={Plus} onClick={create}>
             Cadastrar produto
+          </Button>
+        }
+      />
+      <LowStockAlert
+        products={list}
+        action={
+          <Button variant="secondary" onClick={openStock}>
+            Ver estoque
           </Button>
         }
       />

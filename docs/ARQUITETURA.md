@@ -29,7 +29,10 @@ frontend/src/
 │   ├── constants.js          perfis, categorias, unidades, status, eventos do pedido
 │   ├── format.js             brl(), num(), dataCurta(), dataHora(), km()
 │   ├── regras.js             criarOferta, criarPedidoDireto, pagarPedido, aceitarProposta…
-│   ├── regras.test.js
+│   ├── estoque.js            registrarEntrada, registrarPerda, registrarDespesa, statusEstoque
+│   ├── indicadores.js        calcularIndicadores (relatórios)
+│   ├── util.js               helpers internos (falha, novoId, substituir)
+│   ├── *.test.js
 │   └── index.js              API pública da camada
 ├── 1-application/            Casos de uso e portas
 │   ├── ports.js              RepositorioPort (contrato em JSDoc)

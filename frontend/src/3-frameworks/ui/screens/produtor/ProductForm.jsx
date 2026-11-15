@@ -17,6 +17,7 @@ export function ProductForm({ id, back }) {
     unit: original?.unit ?? "kg",
     price: original?.price ?? "",
     quantity: original?.quantity ?? "",
+    minQuantity: original?.minQuantity ?? "",
     photo: original?.photo ?? "",
   });
   const [error, setError] = useState("");
@@ -96,6 +97,15 @@ export function ProductForm({ id, back }) {
             placeholder="0"
           />
         </div>
+        <Field
+          label="Estoque mínimo (alerta de reposição)"
+          type="number"
+          min="0"
+          step="0.01"
+          value={form.minQuantity}
+          onChange={set("minQuantity")}
+          placeholder="Opcional · avisa quando o estoque chegar nesse valor"
+        />
         <ErrorMessage>{error}</ErrorMessage>
         <div className="form-actions">
           <Button variant="ghost" type="button" onClick={back}>

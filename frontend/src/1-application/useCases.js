@@ -2,6 +2,7 @@
 // Não conhecem React, localStorage nem fetch. Todos são assíncronos para que
 // trocar o adapter fake por uma API não mude nada nas telas.
 
+import * as estoque from "@domain/estoque";
 import * as regras from "@domain/regras";
 
 /** @param {import("./ports").RepositorioPort} repositorio */
@@ -49,5 +50,10 @@ export function criarCasosDeUso(repositorio) {
     recusarProposta: (id) => executar(regras.recusarProposta, id),
 
     salvarLoja: (userId, dados) => executar(regras.salvarLoja, userId, dados),
+
+    registrarEntrada: (dados) => executar(estoque.registrarEntrada, dados),
+    registrarPerda: (dados) => executar(estoque.registrarPerda, dados),
+    registrarDespesa: (dados) => executar(estoque.registrarDespesa, dados),
+    excluirDespesa: (id) => executar(estoque.excluirDespesa, id),
   };
 }

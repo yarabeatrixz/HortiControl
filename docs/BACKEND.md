@@ -26,10 +26,12 @@ Toda regra de `frontend/src/0-domain/regras.js` precisa existir **também no ser
 | Entidade | Campos | Observações |
 |---|---|---|
 | `users` | `id, role (produtor\|comprador\|loja), name, city, email, password, pickupStoreIds[]` | `password` em texto puro **só no modo demo**. No servidor: hash (bcrypt/argon2) e nunca devolver a senha. `pickupStoreIds` só em produtor. |
-| `products` | `id, producerId, name, category, unit, price, quantity, photo` | `photo` hoje é URL ou base64 → trocar por upload (storage) e salvar a URL. |
+| `products` | `id, producerId, name, category, unit, price, quantity, minQuantity, photo` | `photo` hoje é URL ou base64 → trocar por upload (storage) e salvar a URL. |
 | `offers` | `id, producerId, productId, quantity, promotionalPrice, city, validityDays, storeIds[], createdAt, endedAt?` | Status calculado: `Encerrada` se `endedAt` ou vencida; `Esgotada` se `quantity <= 0`; senão `Ativa`. |
 | `stores` | `id, userId, name, address, city, hours, distanceKm` | `distanceKm` é simulado; calcular por geolocalização no futuro. |
 | `orders` | `id, orderNumber (#HL-000001), type (offer\|product), sourceId, producerId, buyerId, productId, quantity, unitPrice, storeId, status, createdAt, paidAt?, paymentMethod?, deliveredAt?, proposalId?, timeline[{label, at}]` | Sequência do número de pedido no servidor. |
+| `stockMovements` | `id, type (Entrada\|Perda), producerId, productId, quantity, unitCost (entrada), reason (perda), note, createdAt` | Entrada soma e perda subtrai de `products.quantity` na mesma transação. Motivos de perda em `MOTIVOS_PERDA`. |
+| `expenses` | `id, producerId, type (Custo\|Investimento), description, amount, createdAt` | Custos e investimentos que não são entrada de mercadoria. |
 | `proposals` | `id, type, sourceId, producerId, buyerId, productId, quantity, unitPrice, storeId, status, createdAt, orderId?` | Regras prontas; a tela atual usa compra direta (ver "Pontos em aberto"). |
 
 Valores fixos (status, categorias, unidades, eventos da linha do tempo): `frontend/src/0-domain/constants.js`. Use **exatamente as mesmas strings**.
@@ -53,8 +55,14 @@ Fluxo de status do pedido: `Aguardando pagamento → Pago → Entregue na loja �
 | `confirmarEntregaNaLoja` | `POST /orders/:id/delivered` | só pedido "Pago"; só o produtor do pedido |
 | `criarProposta` / `aceitarProposta` / `recusarProposta` | `POST /proposals` · `POST /proposals/:id/accept` · `/reject` | não decide duas vezes; aceitar reserva estoque e cria pedido |
 | `salvarLoja` | `PUT /stores/me` | todos os campos obrigatórios |
+| `registrarEntrada` | `POST /stock/entries` | qtd > 0; custo ≥ 0; soma ao estoque |
+| `registrarPerda` | `POST /stock/losses` | qtd > 0 e ≤ estoque; motivo da lista; subtrai do estoque |
+| `registrarDespesa` / `excluirDespesa` | `POST /expenses` · `DELETE /expenses/:id` | descrição; tipo Custo/Investimento; valor > 0 |
+| relatórios (`calcularIndicadores`) | `GET /reports/producer?from=&to=` | receita só de pedidos pagos em diante; gastos = entradas + custos + investimentos |
 
-Leituras de que as telas precisam: ofertas ativas, produtos por produtor, lojas, pedidos do usuário (comprador/produtor/loja), usuário logado.
+Leituras de que as telas precisam: ofertas ativas, produtos por produtor, lojas, pedidos do usuário (comprador/produtor/loja), movimentações de estoque e despesas do produtor, usuário logado.
+
+Alerta de estoque baixo: `quantity <= minQuantity` (ou `quantity <= 0`), regra em `frontend/src/0-domain/estoque.js` (`statusEstoque`).
 
 ## Segurança (checklist antes de ir para produção)
 
@@ -66,4 +74,3 @@ Leituras de que as telas precisam: ofertas ativas, produtos por produtor, lojas,
 ## Pontos em aberto (decidir com a PO)
 
 1. **Proposta × compra direta:** o backlog (US04/US05) descreve proposta → aceitar/recusar; a tela atual faz compra direta com pagamento. As regras de proposta existem e têm testes, mas não há tela.
-2. **Nome do produto:** o README fala em "HortiControl (controle de estoque)"; o app é o marketplace "HortiLink".

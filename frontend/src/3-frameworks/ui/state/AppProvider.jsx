@@ -57,6 +57,12 @@ export function AppProvider({ casosDeUso, children }) {
       confirmOrderDelivered: (id) => aplicar(casosDeUso.confirmarEntregaNaLoja, id),
 
       saveStore: (dados) => aplicar(casosDeUso.salvarLoja, currentUserId, dados),
+
+      addStockEntry: (dados) => aplicar(casosDeUso.registrarEntrada, dados),
+      addStockLoss: (dados) => aplicar(casosDeUso.registrarPerda, dados),
+      addExpense: (dados) =>
+        aplicar(casosDeUso.registrarDespesa, { ...dados, producerId: currentUserId }),
+      deleteExpense: (id) => aplicar(casosDeUso.excluirDespesa, id),
     };
   }, [data, currentUserId, casosDeUso]);
 

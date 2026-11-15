@@ -86,3 +86,30 @@ export const ORIGEM = {
 };
 
 export const SENHA_MINIMA = 6;
+
+// ------------------------------------------------- Estoque e financeiro
+
+export const TIPO_MOVIMENTO = {
+  ENTRADA: "Entrada",
+  PERDA: "Perda",
+};
+
+export const MOTIVOS_PERDA = [
+  "Estragou / passou do ponto",
+  "Avaria no transporte",
+  "Pragas ou clima",
+  "Sobra não vendida",
+  "Outro",
+];
+
+export const STATUS_ESTOQUE = {
+  OK: "Estoque ok",
+  BAIXO: "Estoque baixo",
+  ZERADO: "Sem estoque",
+};
+
+/** Custo = gasto do dia a dia (adubo, frete, embalagem); investimento = bem durável. */
+export const TIPO_DESPESA = {
+  CUSTO: "Custo",
+  INVESTIMENTO: "Investimento",
+};

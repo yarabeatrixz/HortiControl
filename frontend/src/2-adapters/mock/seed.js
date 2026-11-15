@@ -1,4 +1,11 @@
-import { EVENTO_PEDIDO, METODO_PAGAMENTO, ORIGEM, STATUS_PEDIDO } from "@domain";
+import {
+  EVENTO_PEDIDO,
+  METODO_PAGAMENTO,
+  ORIGEM,
+  STATUS_PEDIDO,
+  TIPO_DESPESA,
+  TIPO_MOVIMENTO,
+} from "@domain";
 
 // Dados FICTÍCIOS para demonstração (senha de todos: 123456). Não usar dados reais.
 // `distanceKm` das lojas é simulado; com back-end, calcular a partir da localização.
@@ -52,6 +59,7 @@ export function criarSeed() {
         category: "Verduras",
         unit: "kg",
         price: 3.5,
+        minQuantity: 30,
         quantity: 120,
         photo:
           "https://images.unsplash.com/photo-1788710737703-48dee6844122?auto=format&fit=crop&w=900&q=85",
@@ -63,6 +71,7 @@ export function criarSeed() {
         category: "Raízes",
         unit: "kg",
         price: 4.2,
+        minQuantity: 20,
         quantity: 85,
         photo:
           "https://images.unsplash.com/photo-1656770314761-76ea0da6a0a6?auto=format&fit=crop&w=900&q=85",
@@ -74,6 +83,7 @@ export function criarSeed() {
         category: "Temperos",
         unit: "mç",
         price: 2.5,
+        minQuantity: 50,
         quantity: 40,
         photo: "",
       },
@@ -84,6 +94,7 @@ export function criarSeed() {
         category: "Frutas",
         unit: "kg",
         price: 7.9,
+        minQuantity: 25,
         quantity: 150,
         photo:
           "https://images.unsplash.com/photo-1589483233144-795633bf597c?auto=format&fit=crop&w=900&q=85",
@@ -146,6 +157,46 @@ export function criarSeed() {
     ],
     nextOrderNumber: 3,
     proposals: [],
+    stockMovements: [
+      {
+        id: "mov-1",
+        type: TIPO_MOVIMENTO.ENTRADA,
+        producerId: "user-produtor",
+        productId: "produto-1",
+        quantity: 80,
+        unitCost: 1.1,
+        note: "Colheita da semana",
+        createdAt: semanaPassada.toISOString(),
+      },
+      {
+        id: "mov-2",
+        type: TIPO_MOVIMENTO.PERDA,
+        producerId: "user-produtor",
+        productId: "produto-3",
+        quantity: 6,
+        reason: "Estragou / passou do ponto",
+        note: "",
+        createdAt: ontem.toISOString(),
+      },
+    ],
+    expenses: [
+      {
+        id: "despesa-1",
+        producerId: "user-produtor",
+        type: TIPO_DESPESA.CUSTO,
+        description: "Adubo orgânico",
+        amount: 85,
+        createdAt: semanaPassada.toISOString(),
+      },
+      {
+        id: "despesa-2",
+        producerId: "user-produtor",
+        type: TIPO_DESPESA.INVESTIMENTO,
+        description: "Sistema de irrigação",
+        amount: 420,
+        createdAt: ontem.toISOString(),
+      },
+    ],
     orders: [
       {
         id: "pedido-1",

@@ -154,3 +154,77 @@ describe("loja parceira", () => {
     expect(screen.queryByText("#HL-000001")).not.toBeInTheDocument(); // ainda não pago
   });
 });
+
+describe("produtor: estoque, custos e relatórios", () => {
+  it("catálogo avisa estoque baixo e leva para a tela de estoque", async () => {
+    const user = userEvent.setup();
+    await entrar(user, "Produtor", "produtor@hortilink.com");
+    const alerta = await screen.findByRole("alert");
+    expect(alerta).toHaveTextContent("1 produto precisa de reposição");
+    expect(alerta).toHaveTextContent("Cheiro-verde");
+    await user.click(within(alerta).getByRole("button", { name: "Ver estoque" }));
+    expect(await screen.findByRole("heading", { name: "Estoque" })).toBeInTheDocument();
+  });
+
+  it("entrada de mercadoria tira o produto do alerta de estoque baixo", async () => {
+    const user = userEvent.setup();
+    await entrar(user, "Produtor", "produtor@hortilink.com");
+    await abrirMenu(user, "Estoque");
+    await user.click(screen.getByRole("button", { name: "Registrar entrada de Cheiro-verde" }));
+    await user.type(screen.getByLabelText(/Quantidade/), "30");
+    await user.type(screen.getByLabelText("Custo por unidade (R$)"), "1");
+    expect(screen.getByText(/Custo total da entrada: R\$\s*30,00/)).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Salvar entrada" }));
+
+    expect(await screen.findByRole("heading", { name: "Estoque" })).toBeInTheDocument();
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+    expect(screen.getByText(/Entrada: \+30 mç de Cheiro-verde/)).toBeInTheDocument();
+  });
+
+  it("perda maior que o estoque mostra erro; perda válida entra no histórico", async () => {
+    const user = userEvent.setup();
+    await entrar(user, "Produtor", "produtor@hortilink.com");
+    await abrirMenu(user, "Estoque");
+    await user.click(screen.getByRole("button", { name: "Registrar perda de Cenoura" }));
+    await user.type(screen.getByLabelText(/Quantidade/), "999");
+    await user.click(screen.getByRole("button", { name: "Salvar perda" }));
+    expect(screen.getByRole("alert")).toHaveTextContent("A perda é maior que o estoque atual");
+
+    await user.clear(screen.getByLabelText(/Quantidade/));
+    await user.type(screen.getByLabelText(/Quantidade/), "5");
+    await user.selectOptions(screen.getByLabelText("Motivo da perda"), "Avaria no transporte");
+    await user.click(screen.getByRole("button", { name: "Salvar perda" }));
+    expect(await screen.findByText(/Perda: −5 kg de Cenoura/)).toBeInTheDocument();
+    expect(screen.getByText(/Avaria no transporte/)).toBeInTheDocument();
+  });
+
+  it("registra custo e investimento e atualiza os totais", async () => {
+    const user = userEvent.setup();
+    await entrar(user, "Produtor", "produtor@hortilink.com");
+    await abrirMenu(user, "Custos");
+    await user.click(screen.getByRole("button", { name: "Adicionar" }));
+    expect(screen.getByRole("alert")).toHaveTextContent("Descreva o custo ou investimento");
+
+    await user.type(screen.getByLabelText("Descrição"), "Frete até a loja");
+    await user.type(screen.getByLabelText("Valor (R$)"), "15");
+    await user.click(screen.getByRole("button", { name: "Adicionar" }));
+    expect(await screen.findByText("Frete até a loja")).toBeInTheDocument();
+    // seed: R$ 85 de custo + R$ 15 novo
+    expect(screen.getByText(/R\$\s*100,00/)).toBeInTheDocument();
+  });
+
+  it("relatórios mostram receita, gastos e o produto a repor", async () => {
+    const user = userEvent.setup();
+    await entrar(user, "Produtor", "produtor@hortilink.com");
+    await abrirMenu(user, "Relatórios");
+    expect(await screen.findByRole("heading", { name: "Indicadores da produção" })).toBeInTheDocument();
+    const receita = screen.getByText("Receita (vendas pagas)").parentElement;
+    expect(receita).toHaveTextContent(/R\$\s*26,40/);
+    const gastos = screen.getByText("Gastos totais").parentElement;
+    expect(gastos).toHaveTextContent(/R\$\s*593,00/); // 88 + 85 + 420
+    expect(screen.getByText(/Repor:/)).toHaveTextContent("Cheiro-verde");
+
+    await user.selectOptions(screen.getByLabelText("Período do relatório"), "Hoje");
+    expect(screen.getByText("Gastos totais").parentElement).toHaveTextContent(/R\$\s*0,00/);
+  });
+});

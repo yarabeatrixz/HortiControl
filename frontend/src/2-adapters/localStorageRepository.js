@@ -3,7 +3,7 @@
 
 import { criarSeed } from "./mock/seed";
 
-const STORAGE_KEY = "hortilink:data:web:v5";
+const STORAGE_KEY = "hortilink:data:web:v6";
 const SESSION_KEY = "hortilink:session:web:v2";
 
 /**

@@ -12,15 +12,11 @@ import {
   STATUS_PROPOSTA,
 } from "./constants";
 import { num } from "./format";
+import { falha, novoId, substituir } from "./util";
 
-const falha = (error) => ({ ok: false, error });
-
-export const novoId = (prefixo) => `${prefixo}-${crypto.randomUUID()}`;
+export { novoId };
 
 const numeroPedido = (sequencia) => `#HL-${String(sequencia).padStart(6, "0")}`;
-
-const substituir = (lista, id, alterar) =>
-  lista.map((item) => (item.id === id ? alterar(item) : item));
 
 // ---------------------------------------------------------------- Usuários
 
@@ -80,10 +76,12 @@ export function salvarPontosRetirada(estado, userId, storeIds) {
 export function salvarProduto(estado, dados) {
   const price = num(dados.price);
   const quantity = num(dados.quantity);
+  const minQuantity = num(dados.minQuantity);
   if (!dados.name?.trim() || price <= 0 || quantity <= 0) {
     return falha("Preencha nome, preço e quantidade com valores válidos");
   }
-  const produto = { ...dados, name: dados.name.trim(), price, quantity };
+  if (minQuantity < 0) return falha("O estoque mínimo não pode ser negativo");
+  const produto = { ...dados, name: dados.name.trim(), price, quantity, minQuantity };
   const existe = estado.products.some((item) => item.id === produto.id);
   return {
     ok: true,

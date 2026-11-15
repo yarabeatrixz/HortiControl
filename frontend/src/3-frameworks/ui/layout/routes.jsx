@@ -19,13 +19,21 @@ import { ProducerOrderStatus } from "../screens/produtor/ProducerOrderStatus";
 import { ProducerPickupPoints } from "../screens/produtor/ProducerPickupPoints";
 import { ProducerSales } from "../screens/produtor/ProducerSales";
 import { ProductForm } from "../screens/produtor/ProductForm";
+import { ProducerExpenses } from "../screens/produtor/ProducerExpenses";
+import { ProducerReports } from "../screens/produtor/ProducerReports";
+import { ProducerStock } from "../screens/produtor/ProducerStock";
 import { SaleDetail } from "../screens/produtor/SaleDetail";
+import { StockMovementForm } from "../screens/produtor/StockMovementForm";
 
 /** Tela da aba atual do menu. */
-export function TabScreen({ role, tab, setRoute }) {
+export function TabScreen({ role, tab, setRoute, abrirAba }) {
   const abrir = (name, params = {}) => setRoute({ name, ...params });
 
   if (role === "produtor") {
+    if (tab === "estoque")
+      return <ProducerStock move={(type, productId) => abrir("movimento", { type, productId })} />;
+    if (tab === "custos") return <ProducerExpenses />;
+    if (tab === "relatorios") return <ProducerReports />;
     if (tab === "ofertas") return <ProducerOffers create={() => abrir("oferta")} />;
     if (tab === "pontos-retirada") return <ProducerPickupPoints />;
     if (tab === "vendas") return <ProducerSales open={(id) => abrir("venda", { id })} />;
@@ -35,6 +43,7 @@ export function TabScreen({ role, tab, setRoute }) {
         create={() => abrir("produto")}
         edit={(id) => abrir("produto", { id })}
         offer={(id) => abrir("oferta", { id })}
+        openStock={() => abrirAba("estoque")}
       />
     );
   }
@@ -62,6 +71,15 @@ export function RouteScreen({ route, setRoute, abrirAba }) {
       return <ProductForm id={route.id} back={fechar} />;
     case "oferta":
       return <OfferForm id={route.id} back={fechar} />;
+    case "movimento":
+      return (
+        <StockMovementForm
+          key={route.type}
+          type={route.type}
+          productId={route.productId}
+          back={() => abrirAba("estoque")}
+        />
+      );
     case "venda":
       return <SaleDetail id={route.id} back={fechar} />;
     case "produtor-publico":

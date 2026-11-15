@@ -1,5 +1,6 @@
 import {
   BadgePercent,
+  BarChart3,
   Boxes,
   CheckCircle2,
   Clock3,
@@ -7,16 +8,21 @@ import {
   PackageCheck,
   Sprout,
   Store,
+  Wallet,
+  Warehouse,
 } from "lucide-react";
 
 /** Abas do menu por perfil: a primeira é a inicial. */
 export const NAV = {
   produtor: [
     { id: "catalogo", label: "Catálogo", icon: Boxes },
+    { id: "estoque", label: "Estoque", icon: Warehouse },
     { id: "ofertas", label: "Ofertas", icon: BadgePercent },
     { id: "pontos-retirada", label: "Pontos de retirada", icon: MapPin },
     { id: "vendas", label: "Minhas vendas", icon: PackageCheck },
     { id: "status-pedidos", label: "Atualizar status", icon: CheckCircle2 },
+    { id: "custos", label: "Custos", icon: Wallet },
+    { id: "relatorios", label: "Relatórios", icon: BarChart3 },
   ],
   comprador: [
     { id: "ofertas", label: "Ofertas", icon: BadgePercent },

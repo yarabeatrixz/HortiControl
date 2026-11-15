@@ -1,6 +1,8 @@
-import { STATUS_OFERTA, STATUS_PEDIDO, STATUS_PROPOSTA } from "@domain";
+import { STATUS_ESTOQUE, STATUS_OFERTA, STATUS_PEDIDO, STATUS_PROPOSTA } from "@domain";
 
 const TOM_POR_STATUS = {
+  [STATUS_ESTOQUE.BAIXO]: "waiting",
+  [STATUS_ESTOQUE.ZERADO]: "rejected",
   [STATUS_PROPOSTA.AGUARDANDO]: "waiting",
   [STATUS_PEDIDO.AGUARDANDO_PAGAMENTO]: "waiting",
   [STATUS_PROPOSTA.RECUSADA]: "rejected",
@@ -11,7 +13,7 @@ const TOM_POR_STATUS = {
   [STATUS_PEDIDO.ENTREGUE_NA_LOJA]: "info",
 };
 
-/** Etiqueta colorida para status de oferta, proposta ou pedido. */
+/** Etiqueta colorida para status de oferta, proposta, pedido ou estoque. */
 export function StatusBadge({ status, tone = TOM_POR_STATUS[status] ?? "accepted" }) {
   return <span className={`status status-${tone}`}>{status}</span>;
 }
