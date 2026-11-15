@@ -1,0 +1,27 @@
+{
+  "name": "@hortilink/backend",
+  "version": "0.1.0",
+  "private": true,
+  "description": "API do HortiLink em TypeScript (Fastify + Supabase), em Clean Architecture.",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch --env-file-if-exists=.env src/main.ts",
+    "start": "tsx --env-file-if-exists=.env src/main.ts",
+    "lint": "oxlint src",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "check": "pnpm lint && pnpm typecheck && pnpm test",
+    "gerar:seed": "tsx scripts/gerar-seed.ts"
+  },
+  "dependencies": {
+    "@hortilink/dominio": "workspace:*",
+    "fastify": "^5.12.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "oxlint": "^1.93.0",
+    "tsx": "^4.23.15",
+    "typescript": "^6.0.3",
+    "vitest": "^5.1.0"
+  }
+}

@@ -8,9 +8,8 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     // Um alias por camada (Clean Architecture). Dependências só apontam para dentro:
-    // 3-frameworks → 2-adapters → 1-application → 0-domain.
+    // 3-frameworks → 2-adapters → 1-application → @hortilink/dominio (packages/dominio).
     alias: {
-      "@domain": camada("0-domain"),
       "@application": camada("1-application"),
       "@adapters": camada("2-adapters"),
       "@ui": camada("3-frameworks/ui"),

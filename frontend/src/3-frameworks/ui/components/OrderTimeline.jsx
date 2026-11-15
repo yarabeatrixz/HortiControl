@@ -1,5 +1,5 @@
 import { Check } from "lucide-react";
-import { dataHora } from "@domain";
+import { dataHora } from "@hortilink/dominio";
 
 /**
  * Linha do tempo de um pedido. `steps` = [{ label, event }] onde `event` é o

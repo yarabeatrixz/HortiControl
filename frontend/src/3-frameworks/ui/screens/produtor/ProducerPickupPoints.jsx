@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { km } from "@domain";
+import { km } from "@hortilink/dominio";
 import { Button } from "../../components/base/Button";
 import { ErrorMessage } from "../../components/base/ErrorMessage";
 import { PageTitle } from "../../components/base/PageTitle";

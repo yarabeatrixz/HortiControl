@@ -1,5 +1,5 @@
 import { MapPin, Store } from "lucide-react";
-import { brl, inicial } from "@domain";
+import { brl, inicial } from "@hortilink/dominio";
 import { BackButton } from "../../components/base/BackButton";
 import { Button } from "../../components/base/Button";
 import { EmptyState } from "../../components/base/EmptyState";

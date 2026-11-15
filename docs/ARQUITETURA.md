@@ -1,95 +1,106 @@
-# Arquitetura do front-end
+# Arquitetura
 
-O front-end (`frontend/`) segue **Clean Architecture** com camadas numeradas, no modelo do artigo [Clean architecture in React app](https://philrich.dev/clean-architecture-react/), adaptado para JavaScript.
+O HortiLink é um **monorepo pnpm** em **Clean Architecture** com camadas numeradas, no modelo do artigo [Clean architecture in React app](https://philrich.dev/clean-architecture-react/). As regras de negócio ficam num pacote só, usado pelo front-end (experiência do usuário) e pelo back-end (fonte da verdade).
+
+```
+hortilink/
+├── packages/dominio/   @hortilink/dominio: regras puras em TypeScript (camada 0)
+├── frontend/           React 19 + Vite: camadas 1 a 3 do app
+├── backend/            API Fastify + TypeScript: camadas 1 a 3 do servidor
+├── supabase/           (fase 2) migrations SQL com RLS e seed fictício
+└── docs/
+```
 
 ## Visão geral
 
 ```mermaid
 flowchart LR
-  subgraph UI["3-frameworks/ui (React)"]
-    screens[screens/] --> state[state/AppProvider]
-    layout[layout/] --> screens
-    components[components/] 
+  dominio["packages/dominio<br/>regras puras (TS)"]
+  subgraph FE["frontend"]
+    ui["3-frameworks/ui<br/>React"] --> fapp["1-application<br/>casos de uso + portas"]
+    fadp["2-adapters<br/>localStorage (hoje) / API (fase 4)"] -. implementa .-> fapp
+    fcomp["composition.js"] --> fadp
   end
-  comp[composition.js] -->|monta| app
-  app[1-application<br/>casos de uso + portas] --> domain[0-domain<br/>regras puras]
-  adapters[2-adapters<br/>localStorage fake / API] -. implementa porta .-> app
-  comp -->|escolhe| adapters
-  state -->|chama casos de uso| app
-  screens -->|formata/consulta| domain
+  subgraph BE["backend"]
+    http["3-frameworks<br/>Fastify, config"] --> badp["2-adapters<br/>rotas HTTP, Supabase"]
+    badp --> bapp["1-application<br/>casos de uso (fase 3)"]
+  end
+  fapp --> dominio
+  ui --> dominio
+  bapp --> dominio
 ```
 
-**Regra da dependência:** os imports só apontam para dentro: `3-frameworks → 2-adapters → 1-application → 0-domain`. A única peça que conhece todas é a *composition root* (`src/composition.js`).
+**Regra da dependência:** os imports só apontam para dentro: `3-frameworks → 2-adapters → 1-application → @hortilink/dominio`. O domínio não importa nada de fora dele.
 
-## Pastas
+## Domínio (`packages/dominio/src`)
+
+Um arquivo por agregado, cada um com o seu teste:
+
+| Arquivo | Conteúdo |
+|---|---|
+| `constantes.ts` | perfis, categorias, unidades, status (oferta, pedido, proposta, estoque), eventos, métodos de pagamento, motivos de perda |
+| `tipos.ts` | entidades (`Usuario`, `Produto`, `Oferta`, `Loja`, `Pedido`, `Proposta`, `MovimentoEstoque`, `Despesa`), `Estado` e `Resultado` |
+| `formatacao.ts` | `brl`, `num`, `dataCurta`, `dataHora`, `km`, `inicial` |
+| `usuarios.ts` · `produtos.ts` · `ofertas.ts` · `lojas.ts` | cadastro, catálogo, ofertas e ponto de coleta |
+| `compra.ts` · `pedidos.ts` · `propostas.ts` | validação de compra, pedido direto, pagamento, entrega e propostas |
+| `estoque.ts` · `despesas.ts` · `indicadores.ts` | entradas, perdas, alerta de reposição, custos/investimentos e relatórios |
+| `exemplo.ts` | dados fictícios (`@hortilink/dominio/exemplo`), usados no modo demonstração, nos testes e no seed do banco |
+| `testes.ts` | auxiliares tipados de teste (`sucesso`, `falhaDe`, `porId`) |
+
+**Contrato de toda regra:** `(estado, dados, agora?) → { ok: true, state, ... } | { ok: false, error }`. Nada de `throw` no domínio; a data atual entra como parâmetro para os testes serem determinísticos.
+
+## Front-end (`frontend/src`)
 
 ```
-frontend/src/
-├── 0-domain/                 Regras de negócio PURAS (sem React, storage ou rede)
-│   ├── constants.js          perfis, categorias, unidades, status, eventos do pedido
-│   ├── format.js             brl(), num(), dataCurta(), dataHora(), km()
-│   ├── regras.js             criarOferta, criarPedidoDireto, pagarPedido, aceitarProposta…
-│   ├── estoque.js            registrarEntrada, registrarPerda, registrarDespesa, statusEstoque
-│   ├── indicadores.js        calcularIndicadores (relatórios)
-│   ├── util.js               helpers internos (falha, novoId, substituir)
-│   ├── *.test.js
-│   └── index.js              API pública da camada
-├── 1-application/            Casos de uso e portas
-│   ├── ports.js              RepositorioPort (contrato em JSDoc)
-│   ├── useCases.js           criarCasosDeUso(repositorio) → { entrar, criarOferta, pagarPedido… }
-│   ├── useCases.test.js
-│   └── index.js
-├── 2-adapters/               Implementações das portas
-│   ├── localStorageRepository.js   fake atual (dados no navegador)
-│   ├── mock/seed.js          dados fictícios (senha 123456)
-│   └── index.js
-├── 3-frameworks/ui/          React
-│   ├── main.jsx, App.jsx, styles.css
-│   ├── state/AppProvider.jsx contexto React: estado para renderizar + ações (useApp)
-│   ├── layout/               Shell (menus), navigation.js (abas por perfil), routes.jsx
-│   ├── components/base/      componentes genéricos sem regra de negócio (Button, Field, ConfirmModal…)
-│   ├── components/           componentes do domínio (StatusBadge, OrderTimeline, pickup/…)
-│   ├── screens/              uma tela por arquivo: Auth, produtor/, comprador/, loja/
-│   └── App.test.jsx          testes de funcionamento (fluxos completos)
-├── composition.js            composition root: escolhe o adapter e monta os casos de uso
-└── test/                     setup do Vitest + fixtures (repositório em memória)
+1-application/      casos de uso assíncronos + RepositorioPort (JSDoc)
+2-adapters/         localStorageRepository (fake atual) + mock/seed.js → dados de exemplo do domínio
+3-frameworks/ui/    React: state/AppProvider, layout/, components/base (genéricos), components/, screens/
+composition.js      único lugar que escolhe o adapter
 ```
 
-Aliases (em `vite.config.js` e `jsconfig.json`): `@domain`, `@application`, `@adapters`, `@ui`.
+Aliases (em `vite.config.js` e `jsconfig.json`): `@application`, `@adapters`, `@ui`. O domínio é importado pelo nome do pacote: `@hortilink/dominio`.
 
-## Responsabilidade de cada camada
+| Camada | Pode importar | Não pode |
+|---|---|---|
+| `1-application` | `@hortilink/dominio` | React, adapters |
+| `2-adapters` | `@application` (tipos), libs de I/O | telas |
+| `3-frameworks/ui` | `@hortilink/dominio`, `useApp()` | `@adapters`, `localStorage` |
 
-| Camada | Pode importar | Não pode | Exemplo |
-|---|---|---|---|
-| `0-domain` | nada de fora | React, `localStorage`, `fetch` | `criarOferta(estado, dados)` → `{ ok, state }` ou `{ ok: false, error }` |
-| `1-application` | `@domain` | React, adapters | `criarOferta: (dados) => executar(regras.criarOferta, dados)` |
-| `2-adapters` | `@application` (tipos), libs de I/O | telas | `localStorageRepository.salvar(estado)` |
-| `3-frameworks/ui` | `@domain`, `useApp()` | `@adapters`, `localStorage` | `await addOffer(form)` dentro de `try/catch` |
+## Back-end (`backend/src`)
 
-Para conferir a regra no terminal:
+```
+1-application/      (fase 3) casos de uso por agregado + portas (interfaces TS)
+2-adapters/http/    rotas Fastify finas (hoje: rotasSaude.ts)
+3-frameworks/       config/ambiente.ts (variáveis validadas) e http/servidor.ts (monta o Fastify)
+main.ts             lê o ambiente, monta o servidor e abre a porta
+```
+
+## Conferir a regra da dependência
+
 ```bash
-grep -rnE "from \"react|localStorage|fetch\(" frontend/src/0-domain frontend/src/1-application   # só comentários
-grep -rn "@adapters" frontend/src/3-frameworks                                                    # vazio
+grep -rnE "from \"react|localStorage|fetch\(|fastify" packages/dominio/src       # vazio
+grep -rnE "from \"react|localStorage" frontend/src/1-application               # só comentários
+grep -rn "@adapters" frontend/src/3-frameworks                                 # vazio
 ```
 
 ## Fluxo de uma ação (ex.: publicar oferta)
 
 1. `OfferForm` chama `addOffer(form)` (de `useApp()`).
 2. `AppProvider` chama `casosDeUso.criarOferta(form)`.
-3. O caso de uso carrega o estado pelo repositório, aplica `regras.criarOferta` e, se der certo, salva.
+3. O caso de uso carrega o estado pelo repositório, aplica `criarOferta` do domínio e, se der certo, salva.
 4. Se a regra recusar, o caso de uso lança `Error("mensagem clara")` e a tela mostra em `<ErrorMessage>`.
-5. Se der certo, o `AppProvider` atualiza o estado do React e a tela re-renderiza.
+5. Com o back-end (fase 4), o passo 3 vira uma chamada à API, que roda **a mesma regra** no servidor.
 
 ## Como acrescentar
 
-- **Regra nova:** função pura em `0-domain/regras.js` + teste em `regras.test.js`.
-- **Caso de uso:** uma linha em `1-application/useCases.js` + ação em `state/AppProvider.jsx`.
+- **Regra nova:** função pura no arquivo do agregado em `packages/dominio/src` + teste no `*.test.ts` dele + export em `index.ts`.
+- **Caso de uso no front:** uma linha em `frontend/src/1-application/useCases.js` + ação em `state/AppProvider.jsx`.
 - **Tela nova:** arquivo em `screens/<perfil>/`; aba em `layout/navigation.js`; tela em `layout/routes.jsx`.
-- **Back-end:** ver [BACKEND.md](BACKEND.md). Cria-se um adapter novo e troca-se uma linha em `composition.js`.
+- **Rota nova na API:** caso de uso em `backend/src/1-application`, rota fina em `2-adapters/http`, registro em `3-frameworks/http/servidor.ts`, teste com `app.inject`.
 
 ## Decisões
 
-- **Sem lib de rotas:** navegação por estado (`tab` + `route`) no `Shell`. Adotar React Router quando forem necessárias URLs compartilháveis.
-- **Casos de uso assíncronos** mesmo com storage local, para que a API não mude as telas.
-- **JavaScript + JSDoc** (sem TypeScript por enquanto, por causa do prazo da Sprint 1).
-- **Estado inteiro numa porta (`carregar`/`salvar`)**: simples para o modo demonstração. Com back-end, cada caso de uso passa a chamar a rota correspondente.
+- **Domínio em TypeScript estrito**, compartilhado; o front continua em JavaScript por enquanto (pode migrar arquivo por arquivo).
+- **Sem lib de rotas no front:** navegação por estado (`tab` + `route`). Adotar React Router quando houver URLs compartilháveis.
+- **Casos de uso assíncronos** mesmo com storage local, para a API não mudar as telas.
+- **Porta "carregar/salvar tudo"** no front só vale para o modo demonstração; com a API, cada caso de uso chama a rota dele (Auditoria MÉDIA-001).

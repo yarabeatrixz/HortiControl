@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { STATUS_PEDIDO, ORIGEM } from "@domain";
+import { STATUS_PEDIDO, ORIGEM } from "@hortilink/dominio";
 import { criarRepositorioEmMemoria } from "../test/fixtures";
 import { criarCasosDeUso } from "./useCases";
 

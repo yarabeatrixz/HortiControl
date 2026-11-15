@@ -4,7 +4,7 @@
 
 import { LogOut, UserRound } from "lucide-react";
 import { useState } from "react";
-import { inicial, nomePerfil } from "@domain";
+import { inicial, nomePerfil } from "@hortilink/dominio";
 import { Logo } from "../components/Logo";
 import { useApp } from "../state/AppProvider";
 import { NAV } from "./navigation";

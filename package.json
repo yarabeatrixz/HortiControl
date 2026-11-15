@@ -1,0 +1,20 @@
+{
+  "name": "hortilink",
+  "version": "0.1.0",
+  "private": true,
+  "description": "HortiLink: marketplace de hortaliças do Alto Tietê (monorepo: domínio, front-end e back-end).",
+  "type": "module",
+  "packageManager": "pnpm@10.34.3",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "pnpm --parallel --filter ./frontend --filter ./backend run dev",
+    "check": "pnpm -r run check",
+    "test": "pnpm -r run test",
+    "format": "oxfmt"
+  },
+  "devDependencies": {
+    "oxfmt": "^0.76.0"
+  }
+}

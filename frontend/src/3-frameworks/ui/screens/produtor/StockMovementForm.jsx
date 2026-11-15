@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { MOTIVOS_PERDA, TIPO_MOVIMENTO, brl, num } from "@domain";
+import { MOTIVOS_PERDA, TIPO_MOVIMENTO, brl, num } from "@hortilink/dominio";
 import { Button } from "../../components/base/Button";
 import { ErrorMessage } from "../../components/base/ErrorMessage";
 import { Field } from "../../components/base/Field";

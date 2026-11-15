@@ -1,5 +1,5 @@
 import { MapPin } from "lucide-react";
-import { EVENTO_PEDIDO } from "@domain";
+import { EVENTO_PEDIDO } from "@hortilink/dominio";
 import { BackButton } from "../../components/base/BackButton";
 import { OrderTimeline } from "../../components/OrderTimeline";
 import { StatusBadge } from "../../components/StatusBadge";

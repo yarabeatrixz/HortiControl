@@ -1,6 +1,6 @@
 import { ArrowDownToLine, ArrowUpFromLine, History, Warehouse } from "lucide-react";
 import { useState } from "react";
-import { TIPO_MOVIMENTO, brl, dataHora, statusEstoque } from "@domain";
+import { TIPO_MOVIMENTO, brl, dataHora, statusEstoque } from "@hortilink/dominio";
 import { Button } from "../../components/base/Button";
 import { EmptyState } from "../../components/base/EmptyState";
 import { PageTitle } from "../../components/base/PageTitle";
