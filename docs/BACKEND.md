@@ -1,0 +1,69 @@
+# Guia para o back-end e o banco de dados
+
+O front-end está pronto e funciona com **dados fictícios no navegador**. Este documento descreve o que ele espera do back-end. As rotas são **sugestões**; a equipe define o contrato final, e o front se adapta num único lugar.
+
+## Onde o back-end entra no front
+
+```
+frontend/src/composition.js
+  const repositorio = criarLocalStorageRepository();   ← trocar pelo adapter da API
+  export const casosDeUso = criarCasosDeUso(repositorio);
+```
+
+Caminho recomendado:
+1. Criar `frontend/src/2-adapters/apiRepository.js` (ou `apiCasosDeUso.js`) que chama as rotas abaixo com `fetch`.
+2. Trocar a linha em `composition.js`.
+3. Nenhuma tela muda: todas já chamam ações assíncronas e mostram `err.message` em caso de erro.
+
+URL da API via variável de ambiente do Vite: `VITE_API_URL` em `frontend/.env.local` (não versionado).
+
+## Regras = validações do servidor
+
+Toda regra de `frontend/src/0-domain/regras.js` precisa existir **também no servidor** (o servidor é a fonte da verdade). As mensagens de erro do front são as que o usuário vê; a API pode devolver `{ "error": "mensagem" }` com status 4xx e o adapter repassa a mensagem.
+
+## Entidades (formato atual dos dados)
+
+| Entidade | Campos | Observações |
+|---|---|---|
+| `users` | `id, role (produtor\|comprador\|loja), name, city, email, password, pickupStoreIds[]` | `password` em texto puro **só no modo demo**. No servidor: hash (bcrypt/argon2) e nunca devolver a senha. `pickupStoreIds` só em produtor. |
+| `products` | `id, producerId, name, category, unit, price, quantity, photo` | `photo` hoje é URL ou base64 → trocar por upload (storage) e salvar a URL. |
+| `offers` | `id, producerId, productId, quantity, promotionalPrice, city, validityDays, storeIds[], createdAt, endedAt?` | Status calculado: `Encerrada` se `endedAt` ou vencida; `Esgotada` se `quantity <= 0`; senão `Ativa`. |
+| `stores` | `id, userId, name, address, city, hours, distanceKm` | `distanceKm` é simulado; calcular por geolocalização no futuro. |
+| `orders` | `id, orderNumber (#HL-000001), type (offer\|product), sourceId, producerId, buyerId, productId, quantity, unitPrice, storeId, status, createdAt, paidAt?, paymentMethod?, deliveredAt?, proposalId?, timeline[{label, at}]` | Sequência do número de pedido no servidor. |
+| `proposals` | `id, type, sourceId, producerId, buyerId, productId, quantity, unitPrice, storeId, status, createdAt, orderId?` | Regras prontas; a tela atual usa compra direta (ver "Pontos em aberto"). |
+
+Valores fixos (status, categorias, unidades, eventos da linha do tempo): `frontend/src/0-domain/constants.js`. Use **exatamente as mesmas strings**.
+
+Fluxo de status do pedido: `Aguardando pagamento → Pago → Entregue na loja → Pronto para retirada → Retirado` (ou `Cancelado`).
+
+## Operações (caso de uso → rota sugerida)
+
+| Caso de uso (`useCases.js`) | Rota sugerida | Validações principais |
+|---|---|---|
+| `entrar` | `POST /auth/login` | e-mail + senha + perfil |
+| `cadastrar` | `POST /auth/register` | campos obrigatórios, e-mail único, senha ≥ 6 |
+| `sair` | `POST /auth/logout` | |
+| `salvarProduto` | `POST /products` · `PUT /products/:id` | nome, preço > 0, quantidade > 0; só o dono edita |
+| `excluirProduto` | `DELETE /products/:id` | remove as ofertas do produto |
+| `criarOferta` | `POST /offers` | qtd > 0 e ≤ estoque; 0 < preço promocional < preço normal; cidade; validade > 0; ≥ 1 ponto |
+| `encerrarOferta` | `POST /offers/:id/end` | só oferta ativa |
+| `salvarPontosRetirada` | `PUT /producers/me/pickup-stores` | |
+| `criarPedido` | `POST /orders` | oferta ativa; qtd ≤ disponível; ponto permitido; baixa estoque da oferta **e** do produto |
+| `pagarPedido` | `POST /orders/:id/pay` | só "Aguardando pagamento" (pagamento hoje é simulado) |
+| `confirmarEntregaNaLoja` | `POST /orders/:id/delivered` | só pedido "Pago"; só o produtor do pedido |
+| `criarProposta` / `aceitarProposta` / `recusarProposta` | `POST /proposals` · `POST /proposals/:id/accept` · `/reject` | não decide duas vezes; aceitar reserva estoque e cria pedido |
+| `salvarLoja` | `PUT /stores/me` | todos os campos obrigatórios |
+
+Leituras de que as telas precisam: ofertas ativas, produtos por produtor, lojas, pedidos do usuário (comprador/produtor/loja), usuário logado.
+
+## Segurança (checklist antes de ir para produção)
+
+- Senha com hash no servidor; sessão por cookie `HttpOnly` ou token com expiração (hoje o id do usuário fica no `localStorage`, aceitável só no modo demo).
+- Autorização por perfil e por dono do recurso em toda rota de escrita.
+- Nenhum dado real no seed nem nos testes (DoD).
+- Pagamento real só por provedor (Pix/cartão); o front nunca deve receber nem guardar dados de cartão.
+
+## Pontos em aberto (decidir com a PO)
+
+1. **Proposta × compra direta:** o backlog (US04/US05) descreve proposta → aceitar/recusar; a tela atual faz compra direta com pagamento. As regras de proposta existem e têm testes, mas não há tela.
+2. **Nome do produto:** o README fala em "HortiControl (controle de estoque)"; o app é o marketplace "HortiLink".
