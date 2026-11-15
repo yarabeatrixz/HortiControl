@@ -4,7 +4,7 @@
 
 O HortiLink é um projeto acadêmico de Engenharia de Software: um sistema web que conecta **produtores** de verduras e legumes do Alto Tietê a **compradores** (restaurantes, sacolões, mercados e famílias), com retirada em **lojas parceiras**. Além da venda, o produtor controla o próprio estoque: entradas, perdas, custos e indicadores.
 
-Projeto individual de Bruna Franco: front-end, back-end e banco de dados.
+Projeto individual: front-end, back-end e banco de dados por Bruna (desenvolvedora full-stack).
 
 ## Objetivo
 
@@ -64,6 +64,10 @@ Contas de demonstração (senha `123456`): `produtor@hortilink.com`, `comprador@
 1. Uma branch por tarefa (`feat/...`, `fix/...`, `docs/...`).
 2. Commits pequenos no padrão [Conventional Commits](https://www.conventionalcommits.org/pt-br/) (`feat(backend): ...`).
 3. Pull Request com descrição e checklist; merge só com o CI verde e depois de revisão (checklist próprio + revisão de código automatizada).
+
+## Equipe
+
+- Bruna — Desenvolvedora Full-Stack
 
 ## Metodologia
 
