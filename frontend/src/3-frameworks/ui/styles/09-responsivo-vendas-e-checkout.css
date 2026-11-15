@@ -1,0 +1,119 @@
+/* Ajustes de telas menores (vendas e checkout) */
+
+@media (max-width: 1050px) {
+  .summary-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .sales-filters {
+    grid-template-columns: 1fr 1fr;
+  }
+  .checkout-grid {
+    grid-template-columns: 1fr;
+  }
+  .order-summary {
+    position: static;
+    grid-row: 1;
+  }
+}
+
+@media (max-width: 520px) {
+  .public-profile-hero {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .public-profile-count {
+    text-align: left;
+  }
+  .producer-head {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .producer-head .button {
+    width: 100%;
+  }
+  .location-tools {
+    flex-direction: column;
+  }
+  .location-tools .button {
+    width: 100%;
+  }
+  .pickup-picker {
+    padding: 13px;
+  }
+  .radius-row {
+    flex-wrap: wrap;
+  }
+  .radius-row b {
+    width: 100%;
+  }
+  .nearby-store {
+    align-items: flex-start;
+  }
+  .pickup-results .nearby-store {
+    flex-wrap: wrap;
+  }
+  .pickup-results .nearby-store .button {
+    width: 100%;
+  }
+  .nearby-store .pickup-icon {
+    display: none;
+  }
+  .summary-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 7px;
+  }
+  .summary-card {
+    padding: 11px;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .summary-card strong {
+    font-size: 13px;
+  }
+  .sales-filters {
+    grid-template-columns: 1fr;
+  }
+  .sales-filters select {
+    height: 42px;
+  }
+  .sale-card {
+    align-items: flex-start;
+  }
+  .sale-card > img {
+    width: 55px;
+    height: 55px;
+  }
+  .sale-total {
+    display: none;
+  }
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+  .detail-data {
+    grid-template-columns: 1fr;
+  }
+  .payment-methods {
+    grid-template-columns: 1fr;
+  }
+  .payment-panel {
+    padding: 15px;
+  }
+  .receipt {
+    grid-template-columns: 1fr;
+  }
+  .receipt > div + div {
+    border-left: 0;
+    border-top: 1px solid var(--line);
+  }
+  .payment-result {
+    margin: 0;
+    padding: 24px 16px;
+  }
+  .result-actions {
+    flex-direction: column;
+  }
+  .order-summary {
+    padding: 16px;
+  }
+}

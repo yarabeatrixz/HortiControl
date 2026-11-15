@@ -1,0 +1,241 @@
+/* Estoque, custos e relatórios do produtor */
+
+/* ------------------------------------------------ Estoque, custos e relatórios */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+.page-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.alert-banner {
+  margin-bottom: 18px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  color: var(--amber);
+  background: var(--amber-light);
+  border: 1px solid #f0d58a;
+  border-radius: 11px;
+}
+.alert-banner > span {
+  min-width: 0;
+  flex: 1;
+}
+.alert-banner b,
+.alert-banner small {
+  display: block;
+}
+.alert-banner b {
+  font-size: 12px;
+}
+.alert-banner small {
+  margin-top: 2px;
+  color: #7a5208;
+  font-size: 10px;
+}
+.normal-price b {
+  font: 800 17px "Manrope";
+}
+.form-hint {
+  margin: -6px 0 14px;
+  color: var(--green);
+  font-size: 11px;
+  font-weight: 700;
+}
+.table-card {
+  margin-bottom: 22px;
+  overflow-x: auto;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+}
+.data-table {
+  width: 100%;
+  min-width: 560px;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+.data-table th,
+.data-table td {
+  padding: 11px 13px;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+}
+.data-table tbody tr:last-child > * {
+  border-bottom: 0;
+}
+.data-table thead th {
+  color: var(--muted);
+  background: #f8faf6;
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.data-table tbody th {
+  font-weight: 800;
+}
+.data-table tbody th small {
+  display: block;
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 500;
+}
+.row-actions {
+  white-space: nowrap;
+  text-align: right;
+}
+.row-actions button {
+  margin-left: 6px;
+  padding: 6px 9px;
+  color: var(--green);
+  background: var(--green-light);
+  border: 0;
+  border-radius: 7px;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.row-actions button:last-child {
+  color: var(--red);
+  background: var(--red-light);
+}
+.section-heading {
+  margin: 8px 0 12px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.section-heading h2 {
+  font-size: 17px;
+}
+.section-heading .filter-row {
+  margin: 0;
+}
+.movement-list {
+  margin: 0 0 22px;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+  list-style: none;
+}
+.movement-list li {
+  padding: 11px 13px;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+}
+.movement-list li > span:nth-child(2) {
+  min-width: 0;
+  flex: 1;
+}
+.movement-list b,
+.movement-list small {
+  display: block;
+}
+.movement-list b {
+  font-size: 12px;
+}
+.movement-list small {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 10px;
+}
+.movement-list strong {
+  font: 800 14px "Manrope";
+}
+.movement-icon {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border-radius: 9px;
+}
+.movement-list li.in .movement-icon {
+  color: var(--green);
+  background: var(--green-light);
+}
+.movement-list li.out .movement-icon {
+  color: var(--red);
+  background: var(--red-light);
+}
+.movement-list li.invest .movement-icon {
+  color: var(--amber);
+  background: var(--amber-light);
+}
+.inline-form {
+  margin-bottom: 14px;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr auto;
+  align-items: end;
+  gap: 12px;
+}
+.inline-form .field {
+  margin: 0;
+}
+.inline-form .button {
+  min-height: 44px;
+}
+.summary-grid.three {
+  grid-template-columns: repeat(3, 1fr);
+}
+.period-select {
+  min-height: 40px;
+  padding: 0 12px;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  font-size: 12px;
+}
+.report-note {
+  margin: -4px 0 20px;
+  padding: 10px 13px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--green);
+  background: var(--green-light);
+  border-radius: 9px;
+  font-size: 11px;
+  font-weight: 700;
+}
+.report-note.negative,
+.report-note.warning {
+  color: var(--amber);
+  background: var(--amber-light);
+}
+
+@media (max-width: 760px) {
+  .bottom-nav {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .bottom-nav button {
+    min-width: 72px;
+    flex: 1 0 auto;
+  }
+  .inline-form,
+  .summary-grid.three {
+    grid-template-columns: 1fr;
+  }
+  .page-actions {
+    width: 100%;
+  }
+  .page-actions .button {
+    flex: 1;
+  }
+}

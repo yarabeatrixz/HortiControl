@@ -1,0 +1,405 @@
+/* Compra, minhas compras, acompanhamento, linha do tempo e modais */
+
+.purchase-quantity {
+  margin-bottom: 17px;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  background: #f5f7f3;
+  border-radius: 10px;
+}
+.purchase-quantity b,
+.purchase-quantity small {
+  display: block;
+}
+.purchase-quantity b {
+  font-size: 11px;
+}
+.purchase-quantity small {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 8px;
+}
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+.stepper button {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  color: var(--green);
+  background: white;
+  border: 1px solid #b8cbbb;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: 700;
+}
+.stepper strong {
+  min-width: 25px;
+  text-align: center;
+  font: 800 15px "Manrope";
+}
+.purchase-stores {
+  margin-bottom: 17px;
+}
+.purchase-stores > legend b {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 11px;
+}
+.purchase-stores > div {
+  display: grid;
+  gap: 7px;
+}
+.purchase-stores label {
+  padding: 11px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  cursor: pointer;
+}
+.purchase-stores label.selected {
+  background: var(--green-light);
+  border-color: var(--green);
+}
+.purchase-stores input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.purchase-stores label:has(input:focus-visible) {
+  outline: 2px solid var(--green);
+  outline-offset: 2px;
+}
+.purchase-stores label > span:nth-of-type(2) {
+  min-width: 0;
+  flex: 1;
+}
+.purchase-stores label b,
+.purchase-stores label small {
+  display: block;
+}
+.purchase-stores label b {
+  font-size: 10px;
+}
+.purchase-stores label small {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 8px;
+}
+.purchase-stores label small:last-child {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.purchase-stores label i {
+  width: 18px;
+  height: 18px;
+  display: grid;
+  place-items: center;
+  color: white;
+  background: white;
+  border: 1.5px solid var(--line);
+  border-radius: 50%;
+}
+.purchase-stores label.selected i {
+  background: var(--green);
+  border-color: var(--green);
+}
+.purchase-filters {
+  margin-bottom: 16px;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: minmax(250px, 1fr) 160px 210px;
+  gap: 8px;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+.purchase-filters .order-search {
+  max-width: none;
+  margin: 0;
+}
+.purchase-filters select {
+  width: 100%;
+  padding: 0 10px;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-size: 9px;
+}
+.purchase-history,
+.tracking-list {
+  display: grid;
+  gap: 9px;
+}
+.purchase-history-card {
+  width: 100%;
+  padding: 11px;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  text-align: left;
+  color: var(--text);
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+}
+.purchase-history-card:hover,
+.tracking-list > button:hover {
+  border-color: #a6c2aa;
+  box-shadow: var(--shadow);
+}
+.purchase-history-card > img {
+  width: 88px;
+  height: 82px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+.purchase-history-main {
+  min-width: 0;
+  flex: 1;
+}
+.purchase-history-main .order-number {
+  margin: 0;
+}
+.purchase-history-main .card-heading small {
+  display: block;
+  margin-top: 3px;
+}
+.purchase-history-main .purchase-line {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--muted);
+  font-size: 8px;
+}
+.tracking-list > button {
+  width: 100%;
+  padding: 13px;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  text-align: left;
+  color: var(--text);
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+.tracking-list-icon {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  color: var(--green);
+  background: var(--green-light);
+  border-radius: 9px;
+}
+.tracking-list > button > span:nth-child(2) {
+  min-width: 0;
+  flex: 1;
+}
+.tracking-list strong,
+.tracking-list b,
+.tracking-list small {
+  display: block;
+}
+.tracking-list strong {
+  color: var(--green-dark);
+  font: 800 12px "Manrope";
+}
+.tracking-list b {
+  margin-top: 3px;
+  font-size: 10px;
+}
+.tracking-list small {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 8px;
+}
+.tracking-card {
+  max-width: 720px;
+  padding: 24px;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+}
+.tracking-card h2 {
+  font-size: 16px;
+}
+.order-timeline {
+  margin-top: 20px;
+}
+.order-timeline > div {
+  position: relative;
+  min-height: 72px;
+  display: flex;
+  gap: 13px;
+}
+.order-timeline > div:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  top: 29px;
+  bottom: 0;
+  left: 13px;
+  width: 2px;
+  background: #dfe4df;
+}
+.order-timeline > div.done:not(:last-child)::before {
+  background: var(--green);
+}
+.order-timeline > div > span {
+  z-index: 1;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  color: #929b94;
+  background: #edf0ed;
+  border-radius: 50%;
+  font-size: 9px;
+  font-weight: 800;
+}
+.order-timeline > div.done > span {
+  color: white;
+  background: var(--green);
+}
+.order-timeline > div.current > span {
+  color: var(--green);
+  background: white;
+  box-shadow:
+    0 0 0 3px var(--green-light),
+    inset 0 0 0 2px var(--green);
+}
+.order-timeline b,
+.order-timeline small {
+  display: block;
+}
+.order-timeline b {
+  padding-top: 4px;
+  color: #8a938c;
+  font-size: 11px;
+}
+.order-timeline .done b,
+.order-timeline .current b {
+  color: var(--text);
+}
+.order-timeline .current b {
+  color: var(--green);
+}
+.order-timeline small {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 8px;
+}
+.where-pickup {
+  padding: 15px;
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  background: var(--green-light);
+  border-radius: 10px;
+}
+.where-pickup > span {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  color: white;
+  background: var(--green);
+  border-radius: 9px;
+}
+.where-pickup small,
+.where-pickup b {
+  display: block;
+}
+.where-pickup small {
+  color: var(--green);
+  font-size: 7px;
+  font-weight: 800;
+}
+.where-pickup b {
+  margin-top: 3px;
+  font-size: 11px;
+}
+.where-pickup p {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 8px;
+  line-height: 1.5;
+}
+.sale-card {
+  cursor: pointer;
+}
+.status-update-card {
+  cursor: default;
+}
+.purchase-history-card .purchase-line.payment-pending {
+  color: var(--amber);
+  font-weight: 700;
+}
+.delivery-button {
+  flex: 0 0 auto;
+  min-height: 36px;
+  padding: 0 11px;
+  font-size: 8px;
+}
+.modal-backdrop {
+  position: fixed;
+  z-index: 100;
+  inset: 0;
+  padding: 18px;
+  display: grid;
+  place-items: center;
+  background: rgba(6, 34, 20, 0.55);
+  backdrop-filter: blur(3px);
+}
+.confirm-modal {
+  width: min(100%, 430px);
+  padding: 27px;
+  text-align: center;
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 20px 60px rgba(5, 35, 20, 0.22);
+}
+.confirm-modal > span {
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 13px;
+  display: grid;
+  place-items: center;
+  color: var(--green);
+  background: var(--green-light);
+  border-radius: 50%;
+}
+.confirm-modal > .danger-modal-icon {
+  color: var(--red);
+  background: var(--red-light);
+}
+.confirm-modal h2 {
+  font-size: 18px;
+}
+.confirm-modal p {
+  margin: 8px 0 20px;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.6;
+}
+.confirm-modal p b {
+  color: var(--text);
+}
+.confirm-modal > div {
+  display: flex;
+  justify-content: center;
+  gap: 7px;
+}

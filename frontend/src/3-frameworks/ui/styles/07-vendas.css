@@ -1,0 +1,161 @@
+/* Minhas vendas: resumo, filtros, cards e detalhe da venda */
+
+.summary-grid {
+  margin-bottom: 18px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+.summary-card {
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+}
+.summary-card > span {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  color: var(--green);
+  background: var(--green-light);
+  border-radius: 9px;
+}
+.summary-card small,
+.summary-card strong {
+  display: block;
+}
+.summary-card small {
+  color: var(--muted);
+  font-size: 8px;
+}
+.summary-card strong {
+  margin-top: 3px;
+  font: 800 16px "Manrope";
+}
+.sales-filters {
+  margin-bottom: 15px;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: 1.6fr repeat(3, 0.7fr);
+  gap: 8px;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+}
+.sales-filters .order-search {
+  margin: 0;
+  max-width: none;
+}
+.sales-filters select {
+  width: 100%;
+  padding: 0 9px;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-size: 9px;
+}
+.custom-dates {
+  max-width: 430px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+}
+.sales-list {
+  display: grid;
+  gap: 9px;
+}
+.sale-card {
+  width: 100%;
+  padding: 11px;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  text-align: left;
+  color: var(--text);
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+}
+.sale-card:hover {
+  border-color: #a6c2aa;
+  box-shadow: var(--shadow);
+}
+.sale-card > img {
+  width: 72px;
+  height: 66px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+.sale-main {
+  min-width: 0;
+  flex: 1;
+}
+.sale-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+.sale-top .order-number {
+  margin: 0;
+}
+.sale-main > b,
+.sale-main > small,
+.sale-top > span > small {
+  display: block;
+}
+.sale-main > b {
+  margin-top: 6px;
+  font-size: 12px;
+}
+.sale-main small {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 8px;
+}
+.sale-total {
+  color: var(--green);
+  font: 800 14px "Manrope";
+}
+.detail-heading {
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.detail-heading h1 {
+  margin-top: 4px;
+  font-size: 28px;
+}
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 15px;
+}
+.detail-data {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+.detail-data span small,
+.detail-data span b {
+  display: block;
+}
+.detail-data span > small:first-child {
+  margin-bottom: 4px;
+  color: var(--muted);
+  font-size: 7px;
+  font-weight: 700;
+}
+.detail-data span b {
+  font-size: 10px;
+}
+.detail-data span b + small {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 8px;
+}
