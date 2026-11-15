@@ -64,9 +64,7 @@ Contas de demonstração (senha `123456`): `produtor@hortilink.com`, `comprador@
 
 ## Equipe
 
-- Yara — Scrum Master e organização do projeto.
-- Bruna — Desenvolvedora Front-end.
-- Laura — Desenvolvedora Back-end.
+- Bruna — Desenvolvedora Full-Stack
 
 ## Metodologia
 
