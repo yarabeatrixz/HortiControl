@@ -1,0 +1,151 @@
+/* Login e cadastro */
+
+.auth-page {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(380px, 0.8fr) minmax(560px, 1.2fr);
+  background: var(--paper);
+}
+.auth-visual {
+  position: relative;
+  padding: 42px 56px;
+  display: flex;
+  flex-direction: column;
+  color: white;
+  background:
+    linear-gradient(160deg, rgba(5, 52, 29, 0.92), rgba(13, 89, 49, 0.72)),
+    url("https://images.unsplash.com/photo-1788710605358-25b449e7e3bc?auto=format&fit=crop&w=1400&q=88")
+      center/cover;
+}
+.auth-visual .brand {
+  color: white;
+}
+.auth-visual .brand-mark {
+  color: var(--lime);
+  background: rgba(255, 255, 255, 0.12);
+}
+.auth-visual-copy {
+  margin: auto 0;
+  max-width: 470px;
+}
+.auth-kicker {
+  color: #badc83;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+}
+.auth-visual h1 {
+  margin-top: 20px;
+  font-size: 46px;
+  line-height: 1.12;
+  letter-spacing: -0.045em;
+}
+.auth-visual-copy p {
+  margin-top: 18px;
+  max-width: 420px;
+  color: #d0ddd4;
+  font-size: 15px;
+  line-height: 1.7;
+}
+.visual-note {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 10px;
+}
+.visual-note strong {
+  font-size: 11px;
+}
+.auth-form-wrap {
+  padding: 45px;
+  display: grid;
+  place-items: center;
+}
+.auth-form {
+  width: min(100%, 560px);
+}
+.mobile-logo {
+  display: none;
+}
+.eyebrow {
+  color: var(--green);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.17em;
+}
+.auth-form h2 {
+  margin-top: 10px;
+  font-size: 30px;
+  letter-spacing: -0.035em;
+}
+.auth-form > p {
+  margin: 6px 0 24px;
+  color: var(--muted);
+  font-size: 12px;
+}
+.role-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 9px;
+  margin-bottom: 20px;
+}
+.role-card {
+  min-height: 80px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  text-align: left;
+  color: var(--muted);
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+.role-card span {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  color: var(--green);
+  background: var(--green-light);
+  border-radius: 9px;
+}
+.role-card b {
+  font-size: 10px;
+}
+.role-card.selected {
+  color: var(--green-dark);
+  background: var(--green-light);
+  border-color: var(--green);
+  box-shadow: inset 0 0 0 1px var(--green);
+}
+.role-card.selected span {
+  color: white;
+  background: var(--green);
+}
+.switch-auth {
+  width: 100%;
+  padding: 18px;
+  color: var(--green);
+  background: none;
+  border: 0;
+  font-size: 11px;
+  font-weight: 700;
+}
+.demo-access {
+  padding: 11px;
+  text-align: center;
+  color: var(--muted);
+  background: #f0f4ee;
+  border-radius: 8px;
+  font-size: 9px;
+}
+.demo-access b,
+.demo-access span {
+  display: block;
+}
+.demo-access b {
+  margin-bottom: 5px;
+  color: var(--green-dark);
+}

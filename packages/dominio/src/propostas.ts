@@ -12,7 +12,7 @@ export function criarProposta(estado: Estado, dados: DadosCompra, agora: Date = 
   if (!validacao.ok) return validacao;
   const { produto, oferta } = validacao;
   const proposta: Proposta = {
-    id: novoId("proposta"),
+    id: novoId(),
     type: dados.type,
     sourceId: oferta?.id ?? produto.id,
     producerId: produto.producerId,
@@ -47,7 +47,7 @@ export function aceitarProposta(
   const { status: _statusDaProposta, orderId: _semPedido, ...dadosDaProposta } = proposta;
   const order: Pedido = {
     ...dadosDaProposta,
-    id: novoId("pedido"),
+    id: novoId(),
     proposalId: propostaId,
     orderNumber: numeroPedido(sequencia),
     status: STATUS_PEDIDO.AGUARDANDO_PAGAMENTO,

@@ -1,0 +1,42 @@
+/* Ajustes de telas menores (compras e pedidos) */
+
+@media (max-width: 760px) {
+  .purchase-filters {
+    grid-template-columns: 1fr 1fr;
+  }
+  .purchase-filters .order-search {
+    grid-column: 1 / -1;
+  }
+  .delivery-button {
+    width: 100%;
+    order: 5;
+  }
+  .sale-card {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 520px) {
+  .purchase-filters {
+    grid-template-columns: 1fr;
+  }
+  .purchase-filters .order-search {
+    grid-column: auto;
+  }
+  .purchase-filters select {
+    height: 42px;
+  }
+  .purchase-history-card {
+    align-items: flex-start;
+  }
+  .purchase-history-card > img {
+    width: 64px;
+    height: 64px;
+  }
+  .purchase-history-card .proposal-inline span:nth-child(2) {
+    display: none;
+  }
+  .tracking-card {
+    padding: 17px;
+  }
+}

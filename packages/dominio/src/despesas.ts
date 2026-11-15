@@ -21,7 +21,7 @@ export function registrarDespesa(estado: Estado, dados: DadosDespesa, agora: Dat
   if (!ehTipoDespesa(dados.type)) return falha("Escolha se é custo ou investimento");
   if (valor <= 0) return falha("Informe um valor maior que zero");
   const despesa: Despesa = {
-    id: novoId("despesa"),
+    id: novoId(),
     producerId: dados.producerId,
     type: dados.type,
     description: texto(dados.description),

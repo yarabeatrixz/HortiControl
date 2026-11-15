@@ -39,7 +39,7 @@ export function criarOferta(estado: Estado, dados: DadosOferta, agora: Date = ne
   if (quantidade > produto.quantity) return falha("A quantidade da oferta supera o estoque do produto");
 
   const oferta: Oferta = {
-    id: novoId("oferta"),
+    id: novoId(),
     producerId: produto.producerId,
     productId: produto.id,
     quantity: quantidade,

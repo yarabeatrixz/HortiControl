@@ -1,47 +1,68 @@
 # HortiLink · Back-end
 
-API do HortiLink em **TypeScript estrito** (Fastify), em Clean Architecture. As regras de negócio vêm do pacote compartilhado `@hortilink/dominio`: o servidor roda **as mesmas regras** que o front-end, sendo a fonte da verdade. Banco e login: **Supabase** (a partir da fase 2).
+API do HortiLink em **TypeScript estrito** (Fastify), em Clean Architecture. As regras de negócio vêm do pacote compartilhado `@hortilink/dominio`: o servidor roda **as mesmas regras** que o front-end e é a fonte da verdade. Banco e login: **Supabase**.
+
+**Divisão de responsabilidades:** o front **lê** direto do Supabase (protegido por RLS) e **escreve só pela API**. A API confere login, perfil e dono, roda a regra do domínio e grava com a `service_role`.
 
 ## Camadas
 
 ```
 src/
-├── 1-application/      (fase 3) casos de uso por agregado + portas (interfaces TS)
-├── 2-adapters/http/    rotas Fastify finas; recebem, validam e delegam ao caso de uso
+├── 1-application/
+│   ├── portas.ts            RepositorioPort, VerificadorDeTokenPort, Relogio
+│   ├── casosDeUso.ts        autorização (perfil e dono) + regras do domínio
+│   └── erros.ts             ErroDeAplicacao: nao-autenticado | proibido | nao-encontrado | regra
+├── 2-adapters/
+│   ├── http/                rotas finas, login por Bearer token, esquemas de validação do corpo
+│   ├── memoria/             repositório em memória + login demo (desenvolvimento e testes)
+│   └── supabase/            mapeamento banco ↔ domínio (puro), repositório, verificador de token, gerador de seed
 ├── 3-frameworks/
-│   ├── config/         ambiente.ts: variáveis de ambiente lidas e validadas na inicialização
-│   └── http/           servidor.ts: monta o Fastify e registra as rotas (sem abrir porta)
-└── main.ts             lê o ambiente, monta o servidor e abre a porta
+│   ├── config/ambiente.ts   variáveis validadas; escolhe o modo demo ou supabase
+│   └── http/servidor.ts     Fastify: CORS, tradução de erros, registro das rotas
+├── composition.ts           único lugar que escolhe os adapters
+└── main.ts                  lê o ambiente, monta e abre a porta
 ```
 
-Dependências só para dentro: `3-frameworks → 2-adapters → 1-application → @hortilink/dominio`. Detalhes em [`../docs/ARQUITETURA.md`](../docs/ARQUITETURA.md); contrato das rotas em [`../docs/BACKEND.md`](../docs/BACKEND.md).
+Dependências só para dentro: `3-frameworks → 2-adapters → 1-application → @hortilink/dominio`.
 
 ## Como rodar
 
 ```bash
 pnpm install                              # na raiz do monorepo
-cp backend/.env.example backend/.env      # e preencha (o .env não vai para o git)
+cp backend/.env.example backend/.env      # opcional: sem Supabase roda em modo demo
 pnpm --filter @hortilink/backend dev      # http://localhost:3333/saude
 ```
 
+**Modo demo** (sem Supabase no `.env`): dados de exemplo em memória e login com o header `Authorization: Bearer demo:<id>`, ex.: `demo:user-produtor`. É proibido em produção: com `NODE_ENV=production`, a API se recusa a subir sem o Supabase.
+
 | Script | O que faz |
 |---|---|
-| `pnpm dev` | API com recarga automática (tsx watch) |
-| `pnpm start` | API sem recarga |
-| `pnpm lint` | análise estática (oxlint) |
-| `pnpm typecheck` | checagem de tipos (`tsc --noEmit`, modo estrito) |
-| `pnpm test` | testes (Vitest; rotas testadas com `app.inject`, sem rede) |
+| `pnpm dev` / `pnpm start` | API com / sem recarga automática |
+| `pnpm lint` · `pnpm typecheck` · `pnpm test` | oxlint · `tsc` estrito · Vitest (rotas testadas com `app.inject`, sem rede) |
 | `pnpm check` | lint + tipos + testes |
-
-## Variáveis de ambiente
-
-Veja [`.env.example`](.env.example): `PORT`, `HOST`, `FRONTEND_ORIGIN` e, a partir da fase 2, `SUPABASE_URL`, `SUPABASE_ANON_KEY` e `SUPABASE_SERVICE_ROLE_KEY`.
-
-> A `SUPABASE_SERVICE_ROLE_KEY` ignora o RLS: fica **só** no `.env` do back-end. Nunca no front-end, no git ou em mensagens.
+| `pnpm gerar:seed` | gera `supabase/seed.sql` a partir dos dados de exemplo |
 
 ## Rotas
 
-| Método | Rota | Status |
-|---|---|---|
-| `GET` | `/saude` | ✅ confirma que a API está no ar |
-| demais | ver `docs/BACKEND.md` | ⏳ fase 3 |
+Todas exigem `Authorization: Bearer <token do Supabase>`, menos `/saude`.
+
+| Método | Rota | Perfil | O quê |
+|---|---|---|---|
+| `GET` | `/saude` | — | API no ar |
+| `POST` · `PUT` · `DELETE` | `/products` · `/products/:id` | produtor (dono) | catálogo |
+| `POST` | `/offers` · `/offers/:id/end` | produtor (dono) | criar / encerrar oferta |
+| `PUT` | `/producers/me/pickup-stores` | produtor | pontos de retirada do catálogo |
+| `POST` | `/stock/entries` · `/stock/losses` | produtor (dono) | entrada / perda de estoque |
+| `POST` · `DELETE` | `/expenses` · `/expenses/:id` | produtor (dono) | custos e investimentos |
+| `POST` | `/orders` | comprador | comprar (devolve o pedido com número) |
+| `POST` | `/orders/:id/pay` | comprador (dono) | pagamento **simulado** |
+| `POST` | `/orders/:id/delivered` | produtor (dono) | entregue na loja |
+| `PUT` | `/stores/me` | loja | ponto de coleta |
+
+Respostas de erro: `{ "error": "mensagem pronta para o usuário" }` com **400** (corpo inválido), **401** (sem login), **403** (perfil ou dono errado), **404** (não existe) ou **422** (regra de negócio).
+
+## Limites conhecidos (MVP)
+
+- O repositório Supabase carrega o estado inteiro a cada escrita e grava só o que mudou, mas **sem transação**. Próximo passo: uma função SQL `aplicar_mudancas(jsonb)` para gravar tudo de uma vez.
+- O número do pedido é calculado na API (`#HL-000001`); dois pedidos simultâneos podem colidir (o banco recusa o duplicado com `unique`).
+- Propostas (US04/US05) não têm rota: aguardam a decisão de produto.

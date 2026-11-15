@@ -16,7 +16,7 @@ describe("produtos", () => {
   it("cria produto novo com id e números convertidos", () => {
     const { state } = sucesso(salvarProduto(criarExemplo(), couve));
     expect(state.products[0]).toMatchObject({ name: "Couve", price: 3.2, quantity: 15 });
-    expect(state.products[0]?.id).toMatch(/^produto-/);
+    expect(state.products[0]?.id).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/);
   });
 
   it("edita produto existente sem trocar o id", () => {

@@ -8,7 +8,8 @@ declare const crypto: { randomUUID(): string };
 
 export const falha = (error: string): Falha => ({ ok: false, error });
 
-export const novoId = (prefixo: string): string => `${prefixo}-${crypto.randomUUID()}`;
+/** Id novo no formato UUID, o mesmo tipo usado nas tabelas do banco. */
+export const novoId = (): string => crypto.randomUUID();
 
 export const substituir = <T extends { id: string }>(
   lista: T[],
