@@ -8,9 +8,9 @@ Clean Architecture em camadas numeradas; detalhes em `../docs/ARQUITETURA.md`.
 
 - `@hortilink/dominio` (`../packages/dominio`): regras puras em TypeScript, compartilhadas com o back-end. Regra nova entra **lá**, com teste.
 - `src/1-application/`: casos de uso assíncronos + portas. Importa só `@hortilink/dominio`.
-- `src/2-adapters/`: implementações das portas (hoje `localStorageRepository` + `mock/seed.js`, que repassa os dados de exemplo do domínio).
+- `src/2-adapters/`: implementações das portas. Modo demo: `localStorageRepository` + `mock/seed.js`. Modo conectado: `supabaseLeitura` (lê com a anon key, RLS), `supabaseAutenticacao` (Supabase Auth) e `apiEscrita` (`fetch` + Bearer nas rotas da API).
 - `src/3-frameworks/ui/`: React. Telas usam só `useApp()` e `@hortilink/dominio`; nunca `@adapters` nem `localStorage`.
-- `src/composition.js`: único lugar que escolhe implementações.
+- `src/composition.js`: único lugar que escolhe implementações. Com `VITE_API_URL` + `VITE_SUPABASE_URL` + `VITE_SUPABASE_ANON_KEY` (ver `.env.example`) usa o modo conectado; sem elas, o modo demo.
 
 ## Convenções
 

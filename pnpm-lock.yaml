@@ -17,6 +17,9 @@ importers:
       '@fastify/cors':
         specifier: ^11.4.3
         version: 11.4.3
+      '@hortilink/banco':
+        specifier: workspace:*
+        version: link:../packages/banco
       '@hortilink/dominio':
         specifier: workspace:*
         version: link:../packages/dominio
@@ -45,9 +48,15 @@ importers:
 
   frontend:
     dependencies:
+      '@hortilink/banco':
+        specifier: workspace:*
+        version: link:../packages/banco
       '@hortilink/dominio':
         specifier: workspace:*
         version: link:../packages/dominio
+      '@supabase/supabase-js':
+        specifier: ^2.119.0
+        version: 2.119.0
       lucide-react:
         specifier: ^1.73.0
         version: 1.73.0(@types/react@19.3.0)(react@19.3.1)
@@ -88,6 +97,25 @@ importers:
       vite:
         specifier: ^8.3.8
         version: 8.3.8(@types/node@22.20.5)(esbuild@0.28.2)(tsx@4.23.15)
+      vitest:
+        specifier: ^5.1.0
+        version: 5.1.0(@types/node@22.20.5)(jsdom@31.0.1)(vite@8.3.8(@types/node@22.20.5)(esbuild@0.28.2)(tsx@4.23.15))
+
+  packages/banco:
+    dependencies:
+      '@hortilink/dominio':
+        specifier: workspace:*
+        version: link:../dominio
+    devDependencies:
+      '@types/node':
+        specifier: ^22.20.5
+        version: 22.20.5
+      oxlint:
+        specifier: ^1.93.0
+        version: 1.93.0
+      typescript:
+        specifier: ^6.0.3
+        version: 6.0.3
       vitest:
         specifier: ^5.1.0
         version: 5.1.0(@types/node@22.20.5)(jsdom@31.0.1)(vite@8.3.8(@types/node@22.20.5)(esbuild@0.28.2)(tsx@4.23.15))

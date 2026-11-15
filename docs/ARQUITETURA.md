@@ -5,6 +5,7 @@ O HortiLink é um **monorepo pnpm** em **Clean Architecture** com camadas numera
 ```
 hortilink/
 ├── packages/dominio/   @hortilink/dominio: regras puras em TypeScript (camada 0)
+├── packages/banco/     @hortilink/banco: tabelas do Supabase ↔ estado do domínio (puro, usado por adapters)
 ├── frontend/           React 19 + Vite: camadas 1 a 3 do app
 ├── backend/            API Fastify + TypeScript: camadas 1 a 3 do servidor
 ├── supabase/           (fase 2) migrations SQL com RLS e seed fictício
@@ -18,7 +19,7 @@ flowchart LR
   dominio["packages/dominio<br/>regras puras (TS)"]
   subgraph FE["frontend"]
     ui["3-frameworks/ui<br/>React"] --> fapp["1-application<br/>casos de uso + portas"]
-    fadp["2-adapters<br/>localStorage (hoje) / API (fase 4)"] -. implementa .-> fapp
+    fadp["2-adapters<br/>localStorage (demo) / Supabase + API"] -. implementa .-> fapp
     fcomp["composition.js"] --> fadp
   end
   subgraph BE["backend"]
@@ -52,10 +53,10 @@ Um arquivo por agregado, cada um com o seu teste:
 ## Front-end (`frontend/src`)
 
 ```
-1-application/      casos de uso assíncronos + RepositorioPort (JSDoc)
-2-adapters/         localStorageRepository (fake atual) + mock/seed.js → dados de exemplo do domínio
+1-application/      casos de uso assíncronos (locais e remotos) + portas (JSDoc)
+2-adapters/         demo: localStorageRepository + mock/seed.js · conectado: supabaseLeitura, supabaseAutenticacao, apiEscrita
 3-frameworks/ui/    React: state/AppProvider, layout/, components/base (genéricos), components/, screens/
-composition.js      único lugar que escolhe o adapter
+composition.js      único lugar que escolhe o modo (variáveis VITE_*)
 ```
 
 Aliases (em `vite.config.js` e `jsconfig.json`): `@application`, `@adapters`, `@ui`. O domínio é importado pelo nome do pacote: `@hortilink/dominio`.
@@ -89,7 +90,7 @@ grep -rn "@adapters" frontend/src/3-frameworks                                 #
 2. `AppProvider` chama `casosDeUso.criarOferta(form)`.
 3. O caso de uso carrega o estado pelo repositório, aplica `criarOferta` do domínio e, se der certo, salva.
 4. Se a regra recusar, o caso de uso lança `Error("mensagem clara")` e a tela mostra em `<ErrorMessage>`.
-5. Com o back-end (fase 4), o passo 3 vira uma chamada à API, que roda **a mesma regra** no servidor.
+5. No modo conectado (fase 4), o passo 3 vira uma chamada à API, que roda **a mesma regra** no servidor.
 
 ## Como acrescentar
 

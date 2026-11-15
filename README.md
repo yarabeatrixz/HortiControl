@@ -41,9 +41,10 @@ Facilitar o gerenciamento de produtos, entradas, vendas, perdas e quantidades di
 | Pasta | Conteúdo | Status |
 |---|---|---|
 | [`packages/dominio/`](packages/dominio/) | `@hortilink/dominio`: regras de negócio puras em TypeScript estrito, usadas pelo front e pelo back | ✅ 42 testes |
-| [`frontend/`](frontend/) | Interface web (React 19 + Vite), em camadas de Clean Architecture | ✅ funcional com dados fictícios |
-| [`backend/`](backend/) | API em TypeScript (Fastify), em camadas de Clean Architecture | 🟡 esqueleto (`GET /saude`) |
-| `supabase/` | Migrations SQL (tabelas + RLS) e seed fictício | ⏳ fase 2 |
+| [`packages/banco/`](packages/banco/) | `@hortilink/banco`: tradução pura entre as tabelas do Supabase e o estado do domínio (front e back) | ✅ 8 testes |
+| [`frontend/`](frontend/) | Interface web (React 19 + Vite), em camadas de Clean Architecture | ✅ modo demo (dados fictícios) · 🟡 modo conectado (Supabase + API) pronto, falta o projeto Supabase |
+| [`backend/`](backend/) | API em TypeScript (Fastify), em camadas de Clean Architecture | ✅ rotas de escrita com login (fase 3) |
+| `supabase/` | Migrations SQL (tabelas + RLS) e seed fictício | 🟡 pronto, falta aplicar no Supabase |
 | [`docs/`](docs/) | [Arquitetura](docs/ARQUITETURA.md), [contrato do back-end](docs/BACKEND.md) e tutorial em vídeo/áudio | ✅ |
 | `.github/workflows/` | CI: lint, tipos, testes e build de todos os pacotes a cada push/PR | ✅ |
 

@@ -1,27 +1,21 @@
 // RepositorioPort sobre o Supabase (Postgres via PostgREST), com a service_role.
-// Este arquivo só faz I/O: a tradução e o cálculo de mudanças estão em mapeamento.ts.
+// Este arquivo só faz I/O: a tradução e o cálculo de mudanças estão em @hortilink/banco.
 //
 // Limite conhecido (MVP): as operações de um salvamento não são uma transação.
 // Próximo passo: uma função SQL `aplicar_mudancas(jsonb)` para gravar tudo de uma vez.
 
+import {
+  calcularOperacoes,
+  chavesDaTabela,
+  type Linhas,
+  type Operacao,
+  paraEstado,
+  TABELAS,
+  type Tabela,
+} from "@hortilink/banco";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import type { RepositorioPort } from "../../1-application/portas";
 import type { ConfigSupabase } from "../../3-frameworks/config/ambiente";
-import { calcularOperacoes, chavesDaTabela, type Linhas, type Operacao, paraEstado, type Tabela } from "./mapeamento";
-
-const TABELAS: Tabela[] = [
-  "profiles",
-  "stores",
-  "producer_pickup_stores",
-  "products",
-  "offers",
-  "offer_stores",
-  "proposals",
-  "orders",
-  "order_events",
-  "stock_movements",
-  "expenses",
-];
 
 export function clienteServidor(config: ConfigSupabase): SupabaseClient {
   return createClient(config.url, config.chaveServiceRole, {

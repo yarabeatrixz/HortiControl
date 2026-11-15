@@ -15,7 +15,7 @@ src/
 ├── 2-adapters/
 │   ├── http/                rotas finas, login por Bearer token, esquemas de validação do corpo
 │   ├── memoria/             repositório em memória + login demo (desenvolvimento e testes)
-│   └── supabase/            mapeamento banco ↔ domínio (puro), repositório, verificador de token, gerador de seed
+│   └── supabase/            repositório (tradução banco ↔ domínio em @hortilink/banco), verificador de token, gerador de seed
 ├── 3-frameworks/
 │   ├── config/ambiente.ts   variáveis validadas; escolhe o modo demo ou supabase
 │   └── http/servidor.ts     Fastify: CORS, tradução de erros, registro das rotas
