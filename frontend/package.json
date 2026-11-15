@@ -2,6 +2,8 @@
   "name": "hortilink-frontend",
   "version": "0.1.0",
   "private": true,
+  "license": "UNLICENSED",
+  "author": "Bruna Cristiny Franco",
   "type": "module",
   "scripts": {
     "dev": "vite",

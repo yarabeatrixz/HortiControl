@@ -15,7 +15,7 @@ import {
 } from "@hortilink/banco";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import type { RepositorioPort } from "../../1-application/portas";
-import type { ConfigSupabase } from "../../3-frameworks/config/ambiente";
+import type { ConfigSupabase } from "./config";
 
 export function clienteServidor(config: ConfigSupabase): SupabaseClient {
   return createClient(config.url, config.chaveServiceRole, {

@@ -2,6 +2,8 @@
   "name": "hortilink",
   "version": "0.1.0",
   "private": true,
+  "license": "UNLICENSED",
+  "author": "Bruna Cristiny Franco",
   "description": "HortiLink: marketplace de hortaliças do Alto Tietê (monorepo: domínio, front-end e back-end).",
   "type": "module",
   "packageManager": "pnpm@10.34.3",

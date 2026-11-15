@@ -2,6 +2,8 @@
   "name": "@hortilink/banco",
   "version": "0.1.0",
   "private": true,
+  "license": "UNLICENSED",
+  "author": "Bruna Cristiny Franco",
   "description": "Tradução pura entre as tabelas do Supabase e o Estado do domínio, usada pela API (leitura e gravação) e pelo front (leitura).",
   "type": "module",
   "exports": {

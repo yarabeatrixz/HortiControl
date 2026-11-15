@@ -2,6 +2,8 @@
   "name": "@hortilink/backend",
   "version": "0.1.0",
   "private": true,
+  "license": "UNLICENSED",
+  "author": "Bruna Cristiny Franco",
   "description": "API do HortiLink em TypeScript (Fastify + Supabase), em Clean Architecture.",
   "type": "module",
   "scripts": {

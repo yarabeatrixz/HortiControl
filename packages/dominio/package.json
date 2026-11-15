@@ -2,6 +2,8 @@
   "name": "@hortilink/dominio",
   "version": "0.1.0",
   "private": true,
+  "license": "UNLICENSED",
+  "author": "Bruna Cristiny Franco",
   "description": "Regras de negócio puras do HortiLink, compartilhadas pelo front-end e pelo back-end.",
   "type": "module",
   "exports": {

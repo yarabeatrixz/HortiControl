@@ -1,11 +1,7 @@
 // Lê e valida as variáveis de ambiente uma única vez, na inicialização.
 // Falta de configuração vira erro claro logo no início, não um bug no meio do uso.
 
-export interface ConfigSupabase {
-  url: string;
-  /** Ignora o RLS: usada SÓ aqui no servidor, nunca no front-end. */
-  chaveServiceRole: string;
-}
+import type { ConfigSupabase } from "../../2-adapters/supabase/config";
 
 export interface Ambiente {
   porta: number;
