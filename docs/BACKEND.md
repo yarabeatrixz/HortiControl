@@ -1,6 +1,6 @@
 # Guia para o back-end e o banco de dados
 
-O front-end está pronto e funciona com **dados fictícios no navegador**. Este documento descreve o que ele espera do back-end. As rotas são **sugestões**; a equipe define o contrato final, e o front se adapta num único lugar.
+O front-end está pronto e funciona com **dados fictícios no navegador**. Este documento descreve o que ele espera do back-end. As rotas são o **plano inicial**: podem mudar durante o desenvolvimento da API, e o front se adapta num único lugar.
 
 ## Onde o back-end entra no front
 
@@ -71,6 +71,6 @@ Alerta de estoque baixo: `quantity <= minQuantity` (ou `quantity <= 0`), regra e
 - Nenhum dado real no seed nem nos testes (DoD).
 - Pagamento real só por provedor (Pix/cartão); o front nunca deve receber nem guardar dados de cartão.
 
-## Pontos em aberto (decidir com a PO)
+## Pontos em aberto (decisões de produto)
 
 1. **Proposta × compra direta:** o backlog (US04/US05) descreve proposta → aceitar/recusar; a tela atual faz compra direta com pagamento. As regras de proposta existem e têm testes, mas não há tela.
