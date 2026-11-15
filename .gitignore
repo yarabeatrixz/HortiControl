@@ -21,3 +21,9 @@ Thumbs.db
 .idea/
 .vscode/*
 !.vscode/extensions.json
+
+# Configuração local do Claude Code
+.claude/
+
+# Capturas exportadas localmente
+docs/telas/
