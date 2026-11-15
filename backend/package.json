@@ -10,7 +10,8 @@
     "lint": "oxlint src",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "check": "pnpm lint && pnpm typecheck && pnpm test"
+    "check": "pnpm lint && pnpm typecheck && pnpm test",
+    "gerar:seed": "tsx scripts/gerar-seed.ts"
   },
   "dependencies": {
     "@hortilink/dominio": "workspace:*",
