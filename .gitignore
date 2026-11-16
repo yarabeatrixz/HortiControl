@@ -41,11 +41,11 @@ desktop.ini
 
 # ---------------------------------------------------------------- Editores
 .idea/
+# Só o que serve para todo mundo rodar o projeto; settings.json é pessoal de cada um.
 .vscode/*
 !.vscode/extensions.json
 !.vscode/tasks.json
 !.vscode/launch.json
-!.vscode/settings.json
 
 # ---------------------------------------------------------------- Local de cada pessoa
 # Configuração local do Claude Code
