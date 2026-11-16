@@ -40,17 +40,19 @@ Facilitar o gerenciamento de produtos, entradas, vendas, perdas e quantidades di
 
 | Pasta | Conteúdo | Status |
 |---|---|---|
-| [`packages/dominio/`](packages/dominio/) | `@hortilink/dominio`: regras de negócio puras em TypeScript estrito, usadas pelo front e pelo back | ✅ 42 testes |
+| [`packages/dominio/`](packages/dominio/) | `@hortilink/dominio`: regras de negócio puras em TypeScript estrito, usadas pelo front e pelo back | ✅ 44 testes |
 | [`packages/banco/`](packages/banco/) | `@hortilink/banco`: tradução pura entre as tabelas do Supabase e o estado do domínio (front e back) | ✅ 8 testes |
-| [`frontend/`](frontend/) | Interface web (React 19 + Vite), em camadas de Clean Architecture | ✅ modo demo (dados fictícios) · 🟡 modo conectado (Supabase + API) pronto, falta o projeto Supabase |
-| [`backend/`](backend/) | API em TypeScript (Fastify), em camadas de Clean Architecture | ✅ rotas de escrita com login (fase 3) |
-| `supabase/` | Migrations SQL (tabelas + RLS) e seed fictício | 🟡 pronto, falta aplicar no Supabase |
+| [`frontend/`](frontend/) | Interface web (React 19 + Vite), em camadas de Clean Architecture | ✅ modo demo (dados fictícios) · ✅ modo conectado (Supabase + API) |
+| [`backend/`](backend/) | API em TypeScript (Fastify), em camadas de Clean Architecture | ✅ rotas de escrita com login, testada no Supabase real |
+| [`supabase/`](supabase/) | Migrations SQL (tabelas, RLS e permissões), auditoria e seed fictício | ✅ aplicado no projeto Supabase |
+| [`tests/`](tests/) | Teste ponta a ponta com o Supabase real (`pnpm test:e2e`) | ✅ |
 | [`docs/`](docs/) | [Arquitetura](docs/ARQUITETURA.md), [contrato do back-end](docs/BACKEND.md) e tutorial em vídeo/áudio | ✅ |
+| `.vscode/` | Tarefas, depuração e extensões recomendadas ([como usar](#rodar-no-vs-code)) | ✅ |
 | `.github/` | CI (lint, tipos, testes e build a cada push/PR) e Dependabot (dependências e Actions) | ✅ |
 
 ## Como rodar
 
-Pré-requisitos: Node 22+ e pnpm 10 (`npm i -g pnpm`).
+Pré-requisitos: Node 22+ e pnpm 10 (`npm i -g pnpm`, ou use `npx --yes pnpm@10.34.3` no lugar de `pnpm`).
 
 ```bash
 pnpm install
@@ -61,6 +63,20 @@ pnpm check    # lint + tipos + testes + build de todos os pacotes
 Para o modo conectado, copie `frontend/.env.example` → `frontend/.env` e `backend/.env.example` → `backend/.env` e preencha (os `.env` não vão para o git; a `service_role` fica **só** no `backend/.env`).
 
 Contas de demonstração (senha `123456`, **só para teste**: não aplique o `supabase/seed.sql` num projeto em produção): `produtor@hortilink.com`, `comprador@hortilink.com`, `loja@hortilink.com`. Mais detalhes em [`frontend/README.md`](frontend/README.md) e [`backend/README.md`](backend/README.md).
+
+### Rodar no VS Code
+
+1. **File → Open Folder…** e abra a pasta `HortiLink` (a raiz, não `frontend/`). Aceite instalar as **extensões recomendadas** quando o VS Code oferecer.
+2. **Terminal → Run Task…** e escolha:
+   - **1. Instalar dependências** (só na primeira vez ou quando o `pnpm-lock.yaml` mudar);
+   - **2. Rodar modo demo (sem banco)**: abre o site em http://localhost:5173 com dados de exemplo;
+   - **3. Rodar conectado (API + site + Supabase)**: precisa dos dois `.env` preenchidos;
+   - **4. Verificar tudo**: o mesmo `pnpm check` do CI (também em **Terminal → Run Test Task**);
+   - **5. Teste ponta a ponta no Supabase real**: com a tarefa 3 rodando.
+3. Para **depurar** (parar em breakpoints): **Run and Debug** (Ctrl+Shift+D), escolha a configuração e aperte **F5**:
+   - *Demo no Chrome* ou *Conectado no Chrome*: sobe o site e abre o Chrome ligado ao VS Code;
+   - *Depurar a API*: breakpoints no `backend/src` (feche a tarefa 3 antes, para não brigar pela porta 3333).
+4. Para parar: clique no ícone de lixeira do terminal da tarefa (ou **Ctrl+C** nele).
 
 ## Segurança
 

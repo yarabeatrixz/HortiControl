@@ -1,0 +1,15 @@
+{
+  // Esconde da árvore de arquivos do VS Code o que não se edita no dia a dia.
+  // Eles continuam no git (o .gitignore é o que impede os .env de subirem).
+  // Para ver de novo: apague a linha correspondente aqui.
+  "files.exclude": {
+    "**/node_modules": true,
+    "**/dist": true,
+    ".gitignore": true,
+    ".gitattributes": true
+  },
+  "search.exclude": {
+    "pnpm-lock.yaml": true
+  },
+  "files.eol": "\n"
+}
