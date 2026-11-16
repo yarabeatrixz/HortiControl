@@ -166,6 +166,9 @@ A primeira parte deste documento é o diagnóstico; depois dele vieram as corre�
 | Chave errada no lugar errado | O front recusa chave secreta; a API recusa a chave publicável como secreta | `frontend/src/configRemota.js`, `ambiente.ts` |
 | Sem CSP | Content-Security-Policy no build (scripts só do próprio site, conexões só com a API e o Supabase) | `frontend/src/politicaDeConteudo.js`, `vite.config.js` |
 | (bug) upsert da linha do tempo sem chave única | Índice único `(order_id, label, at)` | `0002_endurecimento.sql` |
+| (bug) API sem permissão nas tabelas: com "expor novas tabelas" desligado, o Supabase não concede nada nem à `service_role` | `grant` explícito de `SELECT/INSERT/UPDATE/DELETE` só para `service_role` (cliente continua só com `SELECT`) | `0003_grants_service_role.sql` |
+
+**Teste ponta a ponta no banco real (16/11/2026, após a 0003):** 3 contas de teste (loja, produtor, comprador) criaram ponto, produto, oferta, pedido, pagamento e entrega pela API; sem login → 401, papel errado → 403, escrita direta no Supabase com token de usuário → 403. Contas e dados apagados no fim.
 
 **Conferência no banco real (após a 0001):** tabelas sem RLS: 0 · sem `force`: 0 · policies de escrita: 0 · grants para `anon`: 0 · `authenticated`: só `SELECT` · `profiles`: colunas `id, role, name, city` · buckets: 0 · Realtime: 0 tabelas · usuários: 0.
 
