@@ -1,8 +1,15 @@
 // Esquemas JSON do corpo das requisições (validados pelo Fastify antes da rota).
 // Validam só FORMATO; regras de negócio ficam no domínio.
 
-const texto = { type: "string", minLength: 1 } as const;
-const textoOpcional = { type: "string" } as const;
+const texto = { type: "string", minLength: 1, maxLength: 120 } as const;
+const textoOpcional = { type: "string", maxLength: 120 } as const;
+const textoLongo = { type: "string", maxLength: 500 } as const;
+/** Foto: imagem PNG/JPEG/WebP em base64 (até ~1 MB) ou endereço https; vazio = sem foto. */
+const foto = {
+  type: "string",
+  maxLength: 1_400_000,
+  pattern: "^$|^data:image/(png|jpeg|webp);base64,[A-Za-z0-9+/=]+$|^https://[^\\s<>\"]+$",
+} as const;
 /** Números podem chegar como texto de formulário ("2,50"); o domínio converte. */
 const numero = { type: ["number", "string"] } as const;
 const listaDeIds = { type: "array", items: texto } as const;
@@ -24,7 +31,7 @@ export const esquemaProduto = objeto(
     price: numero,
     quantity: numero,
     minQuantity: numero,
-    photo: textoOpcional,
+    photo: foto,
   },
   ["name", "category", "unit", "price", "quantity"],
 );
@@ -60,21 +67,21 @@ export const esquemaPagamento = objeto(
 );
 
 export const esquemaLoja = objeto(
-  { name: textoOpcional, address: textoOpcional, city: textoOpcional, hours: textoOpcional },
+  { name: textoOpcional, address: { type: "string", maxLength: 200 }, city: textoOpcional, hours: textoOpcional },
   ["name", "address", "city", "hours"],
 );
 
 export const esquemaEntrada = objeto(
-  { productId: texto, quantity: numero, unitCost: numero, note: textoOpcional },
+  { productId: texto, quantity: numero, unitCost: numero, note: textoLongo },
   ["productId", "quantity", "unitCost"],
 );
 
 export const esquemaPerda = objeto(
-  { productId: texto, quantity: numero, reason: textoOpcional, note: textoOpcional },
+  { productId: texto, quantity: numero, reason: textoOpcional, note: textoLongo },
   ["productId", "quantity", "reason"],
 );
 
 export const esquemaDespesa = objeto(
-  { type: textoOpcional, description: textoOpcional, amount: numero },
+  { type: textoOpcional, description: textoLongo, amount: numero },
   ["type", "description", "amount"],
 );

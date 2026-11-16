@@ -1,9 +1,29 @@
 // Composition root: fora das camadas, é o ÚNICO lugar que escolhe implementações.
-// Back-end pronto → trocar `criarLocalStorageRepository()` pelo adapter da API.
+// Com VITE_API_URL + VITE_SUPABASE_URL + VITE_SUPABASE_ANON_KEY → modo conectado
+// (lê do Supabase, escreve pela API). Sem elas → modo demo no localStorage.
 
-import { criarLocalStorageRepository } from "@adapters";
-import { criarCasosDeUso } from "@application";
+import { createClient } from "@supabase/supabase-js";
+import {
+  criarApiEscrita,
+  criarLocalStorageRepository,
+  criarSupabaseAutenticacao,
+  criarSupabaseLeitura,
+} from "@adapters";
+import { criarCasosDeUso, criarCasosDeUsoRemotos } from "@application";
+import { lerConfigRemota } from "./configRemota";
 
-const repositorio = criarLocalStorageRepository();
+function montarModoConectado({ urlApi, urlSupabase, chaveAnonSupabase }) {
+  const cliente = createClient(urlSupabase, chaveAnonSupabase);
+  const autenticacao = criarSupabaseAutenticacao(cliente);
+  return criarCasosDeUsoRemotos({
+    leitura: criarSupabaseLeitura(cliente),
+    autenticacao,
+    escrita: criarApiEscrita({ urlBase: urlApi, obterToken: autenticacao.obterToken }),
+  });
+}
 
-export const casosDeUso = criarCasosDeUso(repositorio);
+const config = lerConfigRemota(import.meta.env);
+
+export const casosDeUso = config
+  ? montarModoConectado(config)
+  : criarCasosDeUso(criarLocalStorageRepository());

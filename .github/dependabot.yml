@@ -1,0 +1,27 @@
+# Dependabot: PRs semanais de atualização das dependências e das GitHub Actions.
+# Alertas e atualizações de SEGURANÇA são ligados em Settings → Code security.
+version: 2
+updates:
+  # Monorepo pnpm: o lockfile da raiz cobre packages/*, frontend e backend.
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      timezone: "America/Sao_Paulo"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "chore(deps)"
+    groups:
+      # Atualizações menores juntas num PR só; versões maiores ficam em PRs próprios.
+      menores:
+        update-types: ["minor", "patch"]
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      timezone: "America/Sao_Paulo"
+    commit-message:
+      prefix: "ci(deps)"

@@ -9,7 +9,7 @@ const novo: DadosCadastro = {
   name: "Ana",
   city: "Suzano",
   email: "ana@x.com",
-  password: "123456",
+  password: "senha-forte-1",
 };
 
 describe("num", () => {
@@ -32,7 +32,7 @@ describe("usuários", () => {
     expect(falhaDe(cadastrarUsuario(estado, { ...novo, email: "comprador@hortilink.com" }))).toMatch(
       /já está cadastrado/,
     );
-    expect(falhaDe(cadastrarUsuario(estado, { ...novo, password: "123" }))).toMatch(/6 caracteres/);
+    expect(falhaDe(cadastrarUsuario(estado, { ...novo, password: "123" }))).toMatch(/8 caracteres/);
   });
 
   it("produtor novo começa sem pontos de retirada", () => {

@@ -1,6 +1,6 @@
 // Tradução PURA entre as linhas do banco (snake_case, supabase/migrations) e o
 // Estado do domínio (camelCase), mais o cálculo do que mudou entre dois estados.
-// Sem I/O: testável sem banco.
+// Sem I/O: testável sem banco. Leitura serve ao front e à API; gravação, só à API.
 
 import type {
   Despesa,
@@ -34,6 +34,21 @@ export interface Linhas {
 
 export type Tabela = keyof Linhas;
 
+/** Todas as tabelas que formam o Estado (a leitura completa passa por todas). */
+export const TABELAS: Tabela[] = [
+  "profiles",
+  "stores",
+  "producer_pickup_stores",
+  "products",
+  "offers",
+  "offer_stores",
+  "proposals",
+  "orders",
+  "order_events",
+  "stock_movements",
+  "expenses",
+];
+
 const n = (valor: unknown): number => Number(valor);
 const s = (valor: unknown): string => String(valor);
 const opcional = <T>(valor: unknown, converter: (v: unknown) => T): T | undefined =>
@@ -59,7 +74,8 @@ export function paraEstado(linhas: Linhas): Estado {
     role: l.role as Usuario["role"],
     name: s(l.name),
     city: s(l.city),
-    email: s(l.email),
+    // O RLS só mostra o e-mail ao servidor (service_role); no front ele vem vazio.
+    email: s(l.email ?? ""),
     ...(l.role === "produtor" ? { pickupStoreIds: pontosDe(s(l.id)) } : {}),
   }));
 

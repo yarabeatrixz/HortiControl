@@ -49,6 +49,35 @@ describe("rotas da API", () => {
     expect(repositorio.espiar().products[0]).toMatchObject({ name: "Couve", price: 3.2, producerId: "user-produtor" });
   });
 
+  it("recusa foto que não é imagem e texto longo demais (400)", async () => {
+    const { app, como } = montar();
+    const enviar = (payload: object) =>
+      app.inject({ method: "POST", url: "/products", headers: como("user-produtor"), payload: { ...produto, ...payload } });
+    expect((await enviar({ photo: "data:text/html;base64,PHNjcmlwdD4=" })).statusCode).toBe(400);
+    expect((await enviar({ photo: "javascript:alert(1)" })).statusCode).toBe(400);
+    expect((await enviar({ name: "x".repeat(121) })).statusCode).toBe(400);
+    expect((await enviar({ photo: "data:image/png;base64,iVBORw0KGgo=" })).statusCode).toBe(201);
+  });
+
+  it("oferta com ponto de retirada inexistente responde 404", async () => {
+    const { app, repositorio, como } = montar();
+    const produtoDoProdutor = repositorio.espiar().products.find((p) => p.producerId === "user-produtor");
+    const resposta = await app.inject({
+      method: "POST",
+      url: "/offers",
+      headers: como("user-produtor"),
+      payload: {
+        productId: produtoDoProdutor?.id,
+        quantity: 1,
+        promotionalPrice: "0,50",
+        city: "Mogi das Cruzes",
+        validityDays: 2,
+        storeIds: ["loja-que-nao-existe"],
+      },
+    });
+    expect(resposta.statusCode).toBe(404);
+  });
+
   it("perfil errado responde 403", async () => {
     const { app, como } = montar();
     const resposta = await app.inject({ method: "POST", url: "/products", headers: como("user-comprador"), payload: produto });

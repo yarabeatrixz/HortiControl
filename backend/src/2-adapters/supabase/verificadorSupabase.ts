@@ -3,7 +3,7 @@
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { VerificadorDeTokenPort } from "../../1-application/portas";
-import type { ConfigSupabase } from "../../3-frameworks/config/ambiente";
+import type { ConfigSupabase } from "./config";
 import { clienteServidor } from "./repositorioSupabase";
 
 export function criarVerificadorSupabase(

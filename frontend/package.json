@@ -2,6 +2,8 @@
   "name": "hortilink-frontend",
   "version": "0.1.0",
   "private": true,
+  "license": "UNLICENSED",
+  "author": "Bruna Cristiny Franco",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -14,7 +16,9 @@
     "check": "pnpm lint && pnpm test && pnpm build"
   },
   "dependencies": {
+    "@hortilink/banco": "workspace:*",
     "@hortilink/dominio": "workspace:*",
+    "@supabase/supabase-js": "^2.119.0",
     "lucide-react": "^1.73.0",
     "react": "^19.3.0",
     "react-dom": "^19.3.0"

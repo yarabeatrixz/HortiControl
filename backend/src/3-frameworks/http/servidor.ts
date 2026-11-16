@@ -2,6 +2,8 @@
 // quem chama decide (main.ts em produção; testes usam `app.inject` sem rede).
 
 import cors from "@fastify/cors";
+import helmet from "@fastify/helmet";
+import rateLimit from "@fastify/rate-limit";
 import Fastify, { type FastifyError, type FastifyInstance } from "fastify";
 import type { CasosDeUso } from "../../1-application/casosDeUso";
 import { ErroDeAplicacao, type MotivoErro } from "../../1-application/erros";
@@ -17,6 +19,11 @@ const STATUS_POR_MOTIVO: Record<MotivoErro, number> = {
   regra: 422,
 };
 
+/** Corpo máximo: a foto do produto (até ~1 MB em base64) é o maior campo. */
+const LIMITE_CORPO_BYTES = 1.5 * 1024 * 1024;
+/** Requisições por IP a cada minuto (protege o banco: cada escrita lê o estado inteiro). */
+const REQUISICOES_POR_MINUTO = 120;
+
 export interface DependenciasServidor {
   casos: CasosDeUso;
   verificador: VerificadorDeTokenPort;
@@ -28,7 +35,21 @@ export function criarServidor(
   opcoes = { log: false },
 ): FastifyInstance {
   // removeAdditional: false → campo desconhecido no corpo é recusado (400), não apagado em silêncio.
-  const app = Fastify({ logger: opcoes.log, ajv: { customOptions: { removeAdditional: false } } });
+  const app = Fastify({
+    logger: opcoes.log,
+    bodyLimit: LIMITE_CORPO_BYTES,
+    ajv: { customOptions: { removeAdditional: false } },
+  });
+
+  // Cabeçalhos de segurança (HSTS, nosniff, frame-ancestors…): a API só devolve JSON.
+  app.register(helmet, { contentSecurityPolicy: { directives: { defaultSrc: ["'none'"] } } });
+  app.register(rateLimit, {
+    max: REQUISICOES_POR_MINUTO,
+    timeWindow: "1 minute",
+    // O plugin lança o que esta função devolve; o tratador de erros abaixo responde { error }.
+    errorResponseBuilder: () =>
+      Object.assign(new Error("Muitas requisições. Aguarde um minuto e tente de novo."), { statusCode: 429 }),
+  });
 
   app.register(cors, {
     origin: ambiente.origemFrontend,
@@ -41,6 +62,11 @@ export function criarServidor(
     if (erro instanceof ErroDeAplicacao) {
       return resposta.code(STATUS_POR_MOTIVO[erro.motivo]).send({ error: erro.message });
     }
+    if (erro.statusCode === 429 || erro.statusCode === 413) {
+      const mensagem =
+        erro.statusCode === 413 ? "Envio grande demais: use uma foto de até 1 MB." : erro.message;
+      return resposta.code(erro.statusCode).send({ error: mensagem });
+    }
     if (erro.validation) {
       return resposta.code(400).send({ error: "Dados inválidos: confira os campos enviados" });
     }
@@ -48,7 +74,10 @@ export function criarServidor(
     return resposta.code(500).send({ error: "Erro inesperado no servidor. Tente de novo." });
   });
 
-  registrarRotasSaude(app);
-  if (dependencias) registrarRotasApi(app, dependencias.casos, dependencias.verificador);
+  // As rotas entram depois dos plugins acima, para o limite de requisições valer em todas.
+  app.register(async (rotas) => {
+    registrarRotasSaude(rotas);
+    if (dependencias) registrarRotasApi(rotas, dependencias.casos, dependencias.verificador);
+  });
   return app;
 }

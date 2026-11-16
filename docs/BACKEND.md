@@ -7,18 +7,14 @@ O front-end está pronto e funciona com **dados fictícios no navegador**. Este 
 
 ## Onde o back-end entra no front
 
-```
-frontend/src/composition.js
-  const repositorio = criarLocalStorageRepository();   ← trocar pelo adapter da API
-  export const casosDeUso = criarCasosDeUso(repositorio);
-```
+Pronto (fase 4): `frontend/src/composition.js` escolhe o modo pelas variáveis do Vite.
 
-Caminho recomendado:
-1. Criar `frontend/src/2-adapters/apiRepository.js` (ou `apiCasosDeUso.js`) que chama as rotas abaixo com `fetch`.
-2. Trocar a linha em `composition.js`.
-3. Nenhuma tela muda: todas já chamam ações assíncronas e mostram `err.message` em caso de erro.
+| Modo | Quando | Adapters |
+|---|---|---|
+| Demo | nenhuma `VITE_*` definida | `localStorageRepository` (dados de exemplo no navegador) |
+| Conectado | `VITE_API_URL` + `VITE_SUPABASE_URL` + `VITE_SUPABASE_ANON_KEY` (ver `frontend/.env.example`) | `supabaseLeitura` (lê com a anon key; RLS decide), `supabaseAutenticacao` (Supabase Auth) e `apiEscrita` (`fetch` + `Authorization: Bearer <token>`) |
 
-URL da API via variável de ambiente do Vite: `VITE_API_URL` em `frontend/.env.local` (não versionado).
+No modo conectado os casos de uso (`1-application/useCasesRemotos.js`) têm a **mesma interface** dos locais: escrevem pela API e releem o estado do banco; nenhuma tela muda. A tradução banco ↔ domínio é a mesma da API (`packages/banco`). Configuração pela metade dá erro claro ao abrir o app.
 
 ## Regras = validações do servidor
 

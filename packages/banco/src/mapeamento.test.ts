@@ -1,20 +1,18 @@
 import { MOTIVOS_PERDA, registrarPerda, salvarLoja } from "@hortilink/dominio";
 import { criarExemplo } from "@hortilink/dominio/exemplo";
 import { describe, expect, it } from "vitest";
-import { calcularOperacoes, paraEstado, paraLinhas } from "./mapeamento";
+import { calcularOperacoes, type Linhas, paraEstado, paraLinhas } from "./mapeamento";
 
 const agora = new Date("2026-11-15T12:00:00.000Z");
 
 /** Linhas do banco equivalentes ao exemplo (profiles vem dos usuários). */
 function linhasDoExemplo() {
   const estado = criarExemplo(agora);
-  return {
-    estado,
-    linhas: {
-      profiles: estado.users.map((u) => ({ id: u.id, role: u.role, name: u.name, city: u.city, email: u.email })),
-      ...paraLinhas(estado),
-    },
+  const linhas: Linhas = {
+    profiles: estado.users.map((u) => ({ id: u.id, role: u.role, name: u.name, city: u.city, email: u.email })),
+    ...paraLinhas(estado),
   };
+  return { estado, linhas };
 }
 
 describe("mapeamento banco ↔ domínio", () => {
@@ -36,6 +34,12 @@ describe("mapeamento banco ↔ domínio", () => {
     const { linhas } = linhasDoExemplo();
     linhas.products = linhas.products.map((p) => ({ ...p, price: String(p.price) }));
     expect(paraEstado(linhas).products[0]?.price).toBe(3.5);
+  });
+
+  it("aceita perfis sem e-mail (leitura do front, que o RLS não deixa ver)", () => {
+    const { linhas } = linhasDoExemplo();
+    linhas.profiles = linhas.profiles.map(({ email: _email, ...perfil }) => perfil);
+    expect(paraEstado(linhas).users.every((u) => u.email === "")).toBe(true);
   });
 });
 
