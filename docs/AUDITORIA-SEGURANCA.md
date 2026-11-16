@@ -149,5 +149,27 @@ Auditoria **estática** de `supabase/migrations/0001_schema.sql` e `supabase/see
 - `order_events` herda o filtro de `orders` por subconsulta, e o RLS de `orders` vale dentro da subconsulta. Correto.
 - `profiles` é legível por qualquer usuário logado (`using (true)`), limitado às colunas `id, role, name, city`. Os dados de todos os perfis (nome, cidade, papel) ficam listáveis. Aceito por desenho (catálogos públicos para quem está logado).
 
+## Correções aplicadas (16/11/2026)
+
+A primeira parte deste documento é o diagnóstico; depois dele vieram as correções abaixo (commit `8562e8a` e seguintes, PR #3). A conferência foi feita no banco real (projeto `hortilink`, região São Paulo) com a consulta somente leitura das skills.
+
+| Achado | Correção | Onde |
+|---|---|---|
+| 1a. Login falso da API demo | O modo demo só sobe em `127.0.0.1`/`localhost` (o `HOST` padrão passou a ser local) e nunca com `NODE_ENV=production` | `backend/src/3-frameworks/config/ambiente.ts` |
+| 1b. Seed com senha pública | Não aplicado no projeto real; aviso no README e na política de segurança | `README.md`, `SECURITY.md` |
+| 2. Senha fraca | Mínimo de 8 caracteres no domínio e no Supabase Auth | `packages/dominio/src/constantes.ts`, painel do Auth |
+| 3c. Oferta com ponto de retirada inexistente | 404 "Ponto de retirada não encontrado" | `backend/src/1-application/casosDeUso.ts` |
+| Upload sem validação | Foto só JPG/PNG/WebP até 1 MB (tela), formato `data:image/…` ou `https://` (API e banco) | `validarArquivoDeFoto`, `esquemas.ts`, `0002_endurecimento.sql` |
+| API sem limites | Limite de corpo de 1,5 MB, `maxLength` nos textos, 120 requisições/min por IP (429), cabeçalhos de segurança (helmet) | `backend/src/3-frameworks/http/servidor.ts`, `esquemas.ts` |
+| Privilégios padrão de tabelas futuras | `alter default privileges … revoke`; projeto criado com "expor novas tabelas" **desligado** e RLS automático **ligado** | `0002_endurecimento.sql`, painel do Supabase |
+| Textos sem limite no banco | `check (length(...) <= N)` | `0002_endurecimento.sql` |
+| Chave errada no lugar errado | O front recusa chave secreta; a API recusa a chave publicável como secreta | `frontend/src/configRemota.js`, `ambiente.ts` |
+| Sem CSP | Content-Security-Policy no build (scripts só do próprio site, conexões só com a API e o Supabase) | `frontend/src/politicaDeConteudo.js`, `vite.config.js` |
+| (bug) upsert da linha do tempo sem chave única | Índice único `(order_id, label, at)` | `0002_endurecimento.sql` |
+
+**Conferência no banco real (após a 0001):** tabelas sem RLS: 0 · sem `force`: 0 · policies de escrita: 0 · grants para `anon`: 0 · `authenticated`: só `SELECT` · `profiles`: colunas `id, role, name, city` · buckets: 0 · Realtime: 0 tabelas · usuários: 0.
+
+**Continuam abertos (aceitos e documentados):** escritas sem transação, pagamento simulado, perfil escolhido no cadastro e logs/alertas de segurança (OWASP A09). Ver [OWASP-TOP10.md](OWASP-TOP10.md).
+
 ## Dependências
 `pnpm audit` em 15/11/2026: **nenhuma vulnerabilidade conhecida**. O monitoramento contínuo passa a ser feito pelo Dependabot (`.github/dependabot.yml`).

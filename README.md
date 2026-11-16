@@ -64,6 +64,9 @@ Contas de demonstração (senha `123456`, **só para teste**: não aplique o `su
 
 ## Segurança
 
+- [Política de segurança](SECURITY.md): como relatar falhas e as regras do projeto.
+- [OWASP Top 10](docs/OWASP-TOP10.md) · [Manutenção](docs/MANUTENCAO.md) · [Testes de usabilidade](docs/TESTES-USABILIDADE.md) · [Roteiro da apresentação](docs/APRESENTACAO.md)
+
 - [Auditoria de segurança](docs/AUDITORIA-SEGURANCA.md) do código (autenticação, autorização, injeções, API) e do banco Supabase (RLS e políticas).
 - Escritas só pela API, que confere login, perfil e dono; o cliente só **lê** do banco, protegido por RLS em todas as tabelas.
 - Segredos fora do git (`.env*` no `.gitignore`); o front só recebe variáveis públicas `VITE_*`.
