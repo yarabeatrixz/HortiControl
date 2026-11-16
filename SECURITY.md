@@ -33,7 +33,7 @@ Testes de segurança só no **modo demo** (localhost) ou num projeto Supabase pr
 
 **Banco (Supabase)**
 - RLS ligado **e forçado** em toda tabela; o cliente só tem `SELECT`, e só no que lhe diz respeito. Toda escrita passa pela API.
-- Toda migration nova repete o padrão: `enable` + `force row level security`, `revoke all` de `anon` e `authenticated`, depois só os `grant` necessários. As tabelas futuras já nascem sem privilégio (`0002_endurecimento.sql`).
+- Toda migration nova repete o padrão: `enable` + `force row level security`, `revoke all` de `anon` e `authenticated`, depois só os `grant` necessários. As tabelas futuras já nascem sem privilégio (`0002_endurecimento.sql`); a `service_role` (só no servidor) recebe as escritas por `grant` explícito (`0003_grants_service_role.sql`).
 - Antes de cada entrega, rodar `supabase/auditoria/auditoria-completa.sql` (somente leitura) e comparar com o resultado esperado no cabeçalho do arquivo.
 - `supabase/seed.sql` tem senha pública (`123456`): **só** em projeto de teste, nunca em produção.
 
