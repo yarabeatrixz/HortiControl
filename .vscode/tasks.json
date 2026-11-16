@@ -1,0 +1,51 @@
+{
+  // Terminal → Run Task… (ou Ctrl+Shift+P → "Tasks: Run Task").
+  // Usa o pnpm pela versão fixada do projeto, sem instalar nada global.
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "1. Instalar dependências",
+      "type": "shell",
+      "command": "npx --yes pnpm@10.34.3 install",
+      "problemMatcher": []
+    },
+    {
+      "label": "2. Rodar modo demo (sem banco)",
+      "detail": "Só o site, com dados de exemplo no navegador. Abre em http://localhost:5173",
+      "type": "shell",
+      "command": "npx --yes pnpm@10.34.3 --filter hortilink-frontend dev:demo",
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "vite",
+        "pattern": { "regexp": "^x^" },
+        "background": { "activesBegins": ".", "beginsPattern": "VITE", "endsPattern": "Local:" }
+      }
+    },
+    {
+      "label": "3. Rodar conectado (API + site + Supabase)",
+      "detail": "Precisa de backend/.env e frontend/.env preenchidos. Site em http://localhost:5173, API em :3333",
+      "type": "shell",
+      "command": "npx --yes pnpm@10.34.3 dev",
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "vite",
+        "pattern": { "regexp": "^x^" },
+        "background": { "activesBegins": ".", "beginsPattern": "VITE|tsx", "endsPattern": "Local:" }
+      }
+    },
+    {
+      "label": "4. Verificar tudo (lint + tipos + testes + build)",
+      "type": "shell",
+      "command": "npx --yes pnpm@10.34.3 check",
+      "group": { "kind": "test", "isDefault": true },
+      "problemMatcher": []
+    },
+    {
+      "label": "5. Teste ponta a ponta no Supabase real",
+      "detail": "Com a API rodando (tarefa 3). Cria 3 contas de teste e apaga no fim.",
+      "type": "shell",
+      "command": "node tests/e2e-supabase.mjs",
+      "problemMatcher": []
+    }
+  ]
+}

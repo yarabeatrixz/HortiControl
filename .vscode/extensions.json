@@ -1,0 +1,4 @@
+{
+  // Extensões recomendadas: o VS Code oferece instalar ao abrir a pasta.
+  "recommendations": ["oxc.oxc-vscode", "editorconfig.editorconfig", "vitest.explorer"]
+}

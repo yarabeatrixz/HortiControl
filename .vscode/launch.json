@@ -1,0 +1,32 @@
+{
+  // Run and Debug (Ctrl+Shift+D): escolha a configuração e aperte F5.
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Demo no Chrome (sem banco)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:5173",
+      "webRoot": "${workspaceFolder}/frontend",
+      "preLaunchTask": "2. Rodar modo demo (sem banco)"
+    },
+    {
+      "name": "Conectado no Chrome (API + Supabase)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:5173",
+      "webRoot": "${workspaceFolder}/frontend",
+      "preLaunchTask": "3. Rodar conectado (API + site + Supabase)"
+    },
+    {
+      "name": "Depurar a API (breakpoints no backend)",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/backend",
+      "runtimeArgs": ["--import", "tsx", "--env-file-if-exists=.env"],
+      "program": "${workspaceFolder}/backend/src/main.ts",
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**", "**/node_modules/**"]
+    }
+  ]
+}

@@ -14,6 +14,7 @@
     "dev": "pnpm --parallel --filter ./frontend --filter ./backend run dev",
     "check": "pnpm -r run check",
     "test": "pnpm -r run test",
+    "test:e2e": "node tests/e2e-supabase.mjs",
     "format": "oxfmt"
   },
   "devDependencies": {
