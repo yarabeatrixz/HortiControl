@@ -16,12 +16,13 @@ function linhasDoExemplo() {
 }
 
 describe("mapeamento banco ↔ domínio", () => {
-  it("ida e volta preserva o estado (sem senhas, que ficam no Auth; foto vazia = sem foto)", () => {
+  it("ida e volta preserva o estado (sem senhas, que ficam no Auth; foto vazia = sem foto; distância não é gravada)", () => {
     const { estado, linhas } = linhasDoExemplo();
     const esperado = {
       ...estado,
       users: estado.users.map(({ password: _senha, ...u }) => u),
       products: estado.products.map((p) => ({ ...p, photo: p.photo || undefined })),
+      stores: estado.stores.map(({ distanceKm: _distancia, ...loja }) => loja),
     };
     expect(paraEstado(linhas)).toEqual(esperado);
   });

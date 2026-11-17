@@ -191,7 +191,7 @@ export function paraLinhas(estado: Estado): Omit<Linhas, "users"> {
   return {
     stores: estado.stores.map((x) => ({
       id: x.id, user_id: x.userId, name: x.name, address: x.address, city: x.city, hours: x.hours,
-      distance_km: nuloSeVazio(x.distanceKm),
+      // distance_km não existe no banco oficial: a distância é simulada no front.
     })),
     producer_pickup_stores: estado.users.flatMap((u) =>
       (u.pickupStoreIds ?? []).map((storeId) => ({ producer_id: u.id, store_id: storeId })),

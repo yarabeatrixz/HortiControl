@@ -82,10 +82,9 @@ export function gerarSeedSql(estado: Estado, referencia: Date): string {
     ),
     insert(
       "public.stores",
-      ["id", "user_id", "name", "address", "city", "hours", "distance_km"],
+      ["id", "user_id", "name", "address", "city", "hours"],
       estado.stores.map((s) => [
         uuid(s.id), uuid(s.userId), texto(s.name), texto(s.address), texto(s.city), texto(s.hours),
-        nulo(s.distanceKm, String),
       ]),
     ),
     insert(

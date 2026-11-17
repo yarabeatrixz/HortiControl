@@ -14,9 +14,9 @@ insert into auth.identities (id, user_id, provider_id, provider, identity_data, 
   (md5('user-produtor-2')::uuid, md5('user-produtor-2')::uuid, md5('user-produtor-2')::uuid::text, 'email', jsonb_build_object('sub', md5('user-produtor-2')::uuid::text, 'email', 'carlos@hortilink.com'), now(), now()),
   (md5('loja-demo-2')::uuid, md5('loja-demo-2')::uuid, md5('loja-demo-2')::uuid::text, 'email', jsonb_build_object('sub', md5('loja-demo-2')::uuid::text, 'email', 'loja-demo-2@hortilink.com'), now(), now());
 
-insert into public.stores (id, user_id, name, address, city, hours, distance_km) values
-  (md5('loja-1')::uuid, md5('user-loja')::uuid, 'Mercado Alto Tietê', 'Rua das Hortênsias, 120', 'Mogi das Cruzes', 'Segunda a sábado, 8h às 18h', 1.2),
-  (md5('loja-2')::uuid, md5('loja-demo-2')::uuid, 'Empório Vila Verde', 'Avenida das Palmeiras, 540', 'Suzano', 'Segunda a sexta, 9h às 19h', 8.4);
+insert into public.stores (id, user_id, name, address, city, hours) values
+  (md5('loja-1')::uuid, md5('user-loja')::uuid, 'Mercado Alto Tietê', 'Rua das Hortênsias, 120', 'Mogi das Cruzes', 'Segunda a sábado, 8h às 18h'),
+  (md5('loja-2')::uuid, md5('loja-demo-2')::uuid, 'Empório Vila Verde', 'Avenida das Palmeiras, 540', 'Suzano', 'Segunda a sexta, 9h às 19h');
 
 insert into public.producer_pickup_stores (producer_id, store_id) values
   (md5('user-produtor')::uuid, md5('loja-1')::uuid),
