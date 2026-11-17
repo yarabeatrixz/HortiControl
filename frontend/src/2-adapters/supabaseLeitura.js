@@ -4,8 +4,8 @@
 
 import { paraEstado, TABELAS } from "@hortilink/banco";
 
-/** profiles: o cliente só pode ler as colunas públicas (sem e-mail). */
-const COLUNAS = { profiles: "id, role, name, city" };
+/** users: o cliente só pode ler as colunas públicas (sem e-mail). */
+const COLUNAS = { users: "id, role, name, city" };
 
 /**
  * @param {import("@supabase/supabase-js").SupabaseClient} cliente

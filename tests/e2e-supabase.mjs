@@ -96,7 +96,7 @@ try {
   const comp = await criarConta("comprador", "Comprador Teste");
   contas.push(comp);
 
-  const perfil = await j(`${SB}/rest/v1/profiles?select=id,role,name,city&id=eq.${prod.id}`, {
+  const perfil = await j(`${SB}/rest/v1/users?select=id,role,name,city&id=eq.${prod.id}`, {
     headers: { apikey: PUB, authorization: `Bearer ${prod.token}` },
   });
   ok(
@@ -219,7 +219,7 @@ try {
 
   const pedidoFinal = await ler(comp.token, "orders", `&id=eq.${pedidoId}`);
   console.log("     status final do pedido:", pedidoFinal.body[0]?.status);
-  const eventos = await ler(comp.token, "order_events", `&order_id=eq.${pedidoId}`);
+  const eventos = await ler(comp.token, "order_timeline", `&order_id=eq.${pedidoId}`);
   console.log("     linha do tempo:", (eventos.body || []).map?.((e) => e.label).join(" → "));
   const estoque = await ler(prod.token, "offers", `&id=eq.${ofertaId}`);
   console.log(

@@ -95,7 +95,7 @@ export function gerarSeedSql(estado: Estado, referencia: Date): string {
     ),
     insert(
       "public.products",
-      ["id", "producer_id", "name", "category", "unit", "price", "quantity", "min_quantity", "photo_url"],
+      ["id", "producer_id", "name", "category", "unit", "price", "quantity", "min_quantity", "photo"],
       estado.products.map((p) => [
         uuid(p.id), uuid(p.producerId), texto(p.name), texto(p.category), texto(p.unit),
         String(p.price), String(p.quantity), String(p.minQuantity ?? 0), p.photo ? texto(p.photo) : "null",
@@ -127,8 +127,8 @@ export function gerarSeedSql(estado: Estado, referencia: Date): string {
       ]),
     ),
     insert(
-      "public.order_events",
-      ["order_id", "label", "at"],
+      "public.order_timeline",
+      ["order_id", "label", "created_at"],
       estado.orders.flatMap((o) => o.timeline.map((e) => [uuid(o.id), texto(e.label), quando(e.at, referencia)])),
     ),
     insert(

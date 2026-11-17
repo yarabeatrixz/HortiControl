@@ -1,5 +1,7 @@
 # Supabase (banco e login)
 
+> ⚠️ **O banco oficial é o projeto Supabase da Yara (HortiLink)**, que já tem as tabelas criadas. **Não rode as migrations desta pasta nele**: elas são de um modelo anterior (`profiles`/`order_events`) e não batem com o banco oficial (`users`/`order_timeline` + tabelas da Sprint 2 e 3). O código (`packages/banco`, API e front) já usa os nomes do banco oficial. Próximo passo: exportar o esquema real do banco da Yara para `migrations/`.
+
 | Arquivo | Conteúdo |
 |---|---|
 | `migrations/0001_schema.sql` | tabelas (espelham `packages/dominio/src/tipos.ts`), enums, índices, trigger que cria o perfil no cadastro, **RLS em todas as tabelas** |

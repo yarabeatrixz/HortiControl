@@ -5,11 +5,11 @@ import { calcularOperacoes, type Linhas, paraEstado, paraLinhas } from "./mapeam
 
 const agora = new Date("2026-11-15T12:00:00.000Z");
 
-/** Linhas do banco equivalentes ao exemplo (profiles vem dos usuários). */
+/** Linhas do banco equivalentes ao exemplo (users vem dos usuários). */
 function linhasDoExemplo() {
   const estado = criarExemplo(agora);
   const linhas: Linhas = {
-    profiles: estado.users.map((u) => ({ id: u.id, role: u.role, name: u.name, city: u.city, email: u.email })),
+    users: estado.users.map((u) => ({ id: u.id, role: u.role, name: u.name, city: u.city, email: u.email })),
     ...paraLinhas(estado),
   };
   return { estado, linhas };
@@ -38,7 +38,7 @@ describe("mapeamento banco ↔ domínio", () => {
 
   it("aceita perfis sem e-mail (leitura do front, que o RLS não deixa ver)", () => {
     const { linhas } = linhasDoExemplo();
-    linhas.profiles = linhas.profiles.map(({ email: _email, ...perfil }) => perfil);
+    linhas.users = linhas.users.map(({ email: _email, ...perfil }) => perfil);
     expect(paraEstado(linhas).users.every((u) => u.email === "")).toBe(true);
   });
 });

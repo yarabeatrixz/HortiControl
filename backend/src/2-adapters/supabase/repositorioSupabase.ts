@@ -32,7 +32,7 @@ export function criarRepositorioSupabase(config: ConfigSupabase, cliente = clien
 
   async function executar(operacao: Operacao): Promise<void> {
     if (operacao.tipo === "gravar") {
-      const chaves = chavesDaTabela(operacao.tabela as Exclude<Tabela, "profiles">);
+      const chaves = chavesDaTabela(operacao.tabela as Exclude<Tabela, "users">);
       const { error } = await cliente.from(operacao.tabela).upsert(operacao.linhas, { onConflict: chaves.join(",") });
       if (error) throw new Error(`Falha ao gravar ${operacao.tabela}: ${error.message}`);
       return;

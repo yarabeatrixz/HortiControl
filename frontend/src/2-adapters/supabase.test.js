@@ -10,7 +10,7 @@ function criarClienteFalso({ tabelas = {}, perfil = "produtor", login = {}, cada
   });
   return {
     from: vi.fn((tabela) =>
-      tabela === "profiles" && !tabelas.profiles
+      tabela === "users" && !tabelas.users
         ? { select: () => ({ eq: () => ({ single: async () => ({ data: { role: perfil }, error: null }) }) }) }
         : consulta(tabela),
     ),
@@ -27,7 +27,7 @@ describe("supabaseLeitura", () => {
   it("lê as tabelas e traduz para o Estado do domínio", async () => {
     const cliente = criarClienteFalso({
       tabelas: {
-        profiles: [{ id: "user-1", role: "comprador", name: "Ana", city: "Suzano" }],
+        users: [{ id: "user-1", role: "comprador", name: "Ana", city: "Suzano" }],
         products: [],
       },
     });
@@ -38,10 +38,10 @@ describe("supabaseLeitura", () => {
     expect(estado.nextOrderNumber).toBe(1);
   });
 
-  it("pede só as colunas públicas de profiles (o RLS esconde o e-mail)", async () => {
-    const cliente = criarClienteFalso({ tabelas: { profiles: [] } });
+  it("pede só as colunas públicas de users (o RLS esconde o e-mail)", async () => {
+    const cliente = criarClienteFalso({ tabelas: { users: [] } });
     await criarSupabaseLeitura(cliente).carregar();
-    const indice = cliente.from.mock.calls.findIndex(([tabela]) => tabela === "profiles");
+    const indice = cliente.from.mock.calls.findIndex(([tabela]) => tabela === "users");
     const { select } = cliente.from.mock.results[indice].value;
     expect(select).toHaveBeenCalledWith("id, role, name, city");
   });
