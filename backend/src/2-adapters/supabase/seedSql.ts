@@ -52,7 +52,10 @@ export function gerarSeedSql(estado: Estado, referencia: Date): string {
     "",
     insert(
       "auth.users",
-      ["instance_id", "id", "aud", "role", "email", "encrypted_password", "email_confirmed_at", "raw_app_meta_data", "raw_user_meta_data", "created_at", "updated_at"],
+      ["instance_id", "id", "aud", "role", "email", "encrypted_password", "email_confirmed_at", "raw_app_meta_data", "raw_user_meta_data", "created_at", "updated_at",
+        // O Auth do Supabase espera texto vazio (não NULL) nestes campos; com NULL o login falha
+        // com "Database error querying schema".
+        "confirmation_token", "recovery_token", "email_change", "email_change_token_new"],
       usuarios.map((u) => [
         "'00000000-0000-0000-0000-000000000000'",
         uuid(u.id),
@@ -65,6 +68,10 @@ export function gerarSeedSql(estado: Estado, referencia: Date): string {
         metadados(u),
         "now()",
         "now()",
+        "''",
+        "''",
+        "''",
+        "''",
       ]),
     ),
     insert(
