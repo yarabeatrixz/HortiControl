@@ -6,17 +6,17 @@ Aplicação web (React 19 + Vite 8) do marketplace de hortaliças do Alto Tietê
 
 ## Como rodar
 
-Pré-requisitos: Node 22+ e pnpm 10 (`npm i -g pnpm`).
+Pré-requisitos: Node 22+ e pnpm 10 (`npm i -g pnpm`). Instale pela **raiz** do monorepo, porque o front usa o pacote `@hortilink/dominio`:
 
 ```bash
-cd frontend
-pnpm install
-pnpm dev        # http://localhost:5173
+pnpm install                     # na raiz
+cd frontend && pnpm dev          # http://localhost:5173
 ```
 
 | Script            | O que faz                                       |
 | ----------------- | ----------------------------------------------- |
-| `pnpm dev`        | servidor de desenvolvimento                     |
+| `pnpm dev`        | servidor de desenvolvimento (modo conectado se houver `.env`) |
+| `pnpm dev:demo`   | servidor no modo demo, ignorando o `.env`       |
 | `pnpm test`       | testes (regras, casos de uso e fluxos de tela)  |
 | `pnpm test:watch` | testes em modo observação                       |
 | `pnpm lint`       | análise estática (oxlint)                       |
@@ -24,7 +24,7 @@ pnpm dev        # http://localhost:5173
 | `pnpm build`      | gera o site estático em `dist/`                 |
 | `pnpm check`      | lint + testes + build (rodar antes de abrir PR) |
 
-### Contas de demonstração (senha `123456`)
+### Contas de demonstração (senha `123456`, só no modo demo; cadastros novos pedem 8+ caracteres)
 
 - `produtor@hortilink.com` · `comprador@hortilink.com` · `loja@hortilink.com`
 - Checkout (simulado): cartão `4111 1111 1111 1111` aprova; `4000 0000 0000 0002` recusa.
@@ -33,8 +33,8 @@ pnpm dev        # http://localhost:5173
 ## Arquitetura (resumo)
 
 ```
+../packages/dominio/   @hortilink/dominio: regras puras em TypeScript (compartilhadas com o back-end)
 src/
-  0-domain/        regras puras + constantes      (não importa nada de fora)
   1-application/   casos de uso + portas          (importa só o domínio)
   2-adapters/      localStorage fake + seed       (implementa as portas)
   3-frameworks/ui/ React: state, layout, components, screens
@@ -55,7 +55,6 @@ Integração com o back-end: [`../docs/BACKEND.md`](../docs/BACKEND.md).
 
 ## Testes
 
-- `src/0-domain/regras.test.js`: regras de negócio (validações, pedidos, ofertas, status).
-- `src/0-domain/estoque.test.js`: entradas, perdas, custos/investimentos, alerta de estoque baixo e indicadores.
+- As regras de negócio são testadas no pacote de domínio (`packages/dominio/src/*.test.ts`, 42 testes).
 - `src/1-application/useCases.test.js`: casos de uso com repositório em memória.
 - `src/3-frameworks/ui/App.test.jsx`: fluxos completos na tela (login, compra + pagamento, cartão recusado, publicar oferta, cadastrar produto, entrega na loja, pedidos da loja, estoque, perdas, custos e relatórios).

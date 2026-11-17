@@ -1,0 +1,15 @@
+/* Estilos do HortiLink, divididos por área. A ORDEM importa (cascata do CSS):
+   cada arquivo pode sobrescrever os anteriores, como no antigo styles.css. */
+
+@import "./01-base.css";
+@import "./02-acesso.css";
+@import "./03-layout.css";
+@import "./04-catalogo-e-formularios.css";
+@import "./05-responsivo-geral.css";
+@import "./06-perfis-e-retirada.css";
+@import "./07-vendas.css";
+@import "./08-checkout-e-pagamento.css";
+@import "./09-responsivo-vendas-e-checkout.css";
+@import "./10-compras-e-pedidos.css";
+@import "./11-responsivo-pedidos.css";
+@import "./12-estoque-custos-relatorios.css";

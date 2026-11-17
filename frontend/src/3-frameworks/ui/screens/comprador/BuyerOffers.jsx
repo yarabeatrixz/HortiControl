@@ -1,6 +1,6 @@
 import { BadgePercent, MapPin, Sprout } from "lucide-react";
 import { useState } from "react";
-import { CATEGORIAS, brl, ofertaAtiva } from "@domain";
+import { CATEGORIAS, brl, ofertaAtiva } from "@hortilink/dominio";
 import { Button } from "../../components/base/Button";
 import { EmptyState } from "../../components/base/EmptyState";
 import { PageTitle } from "../../components/base/PageTitle";

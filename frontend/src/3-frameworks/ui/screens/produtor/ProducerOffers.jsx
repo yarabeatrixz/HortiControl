@@ -1,6 +1,6 @@
 import { MapPin, Plus, XCircle } from "lucide-react";
 import { useState } from "react";
-import { STATUS_OFERTA, brl, statusOferta } from "@domain";
+import { STATUS_OFERTA, brl, statusOferta } from "@hortilink/dominio";
 import { Button } from "../../components/base/Button";
 import { ConfirmModal } from "../../components/base/ConfirmModal";
 import { EmptyState } from "../../components/base/EmptyState";

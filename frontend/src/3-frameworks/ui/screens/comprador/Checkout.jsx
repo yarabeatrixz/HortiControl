@@ -3,7 +3,7 @@
 
 import { Check, CircleAlert, Clock3, Copy, CreditCard, QrCode } from "lucide-react";
 import { useEffect, useState } from "react";
-import { METODO_PAGAMENTO, brl } from "@domain";
+import { METODO_PAGAMENTO, brl } from "@hortilink/dominio";
 import { BackButton } from "../../components/base/BackButton";
 import { Button } from "../../components/base/Button";
 import { ErrorMessage } from "../../components/base/ErrorMessage";

@@ -1,6 +1,6 @@
 import { Landmark, Plus, Receipt, Trash2, Wallet } from "lucide-react";
 import { useState } from "react";
-import { TIPO_DESPESA, TIPO_MOVIMENTO, brl, dataCurta } from "@domain";
+import { TIPO_DESPESA, TIPO_MOVIMENTO, brl, dataCurta } from "@hortilink/dominio";
 import { Button } from "../../components/base/Button";
 import { ConfirmModal } from "../../components/base/ConfirmModal";
 import { EmptyState } from "../../components/base/EmptyState";

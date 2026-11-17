@@ -1,16 +1,16 @@
 # Instruções para agentes de IA (front-end HortiLink)
 
-React 19 + Vite 8, JavaScript (JSX) com JSDoc, CSS próprio em `src/3-frameworks/ui/styles.css` (sem Tailwind). Gerenciador: **pnpm**.
+React 19 + Vite 8, JavaScript (JSX) com JSDoc, CSS próprio em `src/3-frameworks/ui/styles.css` (sem Tailwind). Gerenciador: **pnpm**, num monorepo (instale pela raiz).
 
 ## Arquitetura (obrigatória)
 
 Clean Architecture em camadas numeradas; detalhes em `../docs/ARQUITETURA.md`.
 
-- `src/0-domain/`: regras puras. Não importar React, `localStorage`, `fetch` nem outras camadas.
-- `src/1-application/`: casos de uso assíncronos + portas. Importa só `@domain`.
-- `src/2-adapters/`: implementações das portas (hoje `localStorageRepository` + `mock/seed.js`).
-- `src/3-frameworks/ui/`: React. Telas usam só `useApp()` e `@domain`; nunca `@adapters` nem `localStorage`.
-- `src/composition.js`: único lugar que escolhe implementações.
+- `@hortilink/dominio` (`../packages/dominio`): regras puras em TypeScript, compartilhadas com o back-end. Regra nova entra **lá**, com teste.
+- `src/1-application/`: casos de uso assíncronos + portas. Importa só `@hortilink/dominio`.
+- `src/2-adapters/`: implementações das portas. Modo demo: `localStorageRepository` + `mock/seed.js`. Modo conectado: `supabaseLeitura` (lê com a anon key, RLS), `supabaseAutenticacao` (Supabase Auth) e `apiEscrita` (`fetch` + Bearer nas rotas da API).
+- `src/3-frameworks/ui/`: React. Telas usam só `useApp()` e `@hortilink/dominio`; nunca `@adapters` nem `localStorage`.
+- `src/composition.js`: único lugar que escolhe implementações. Com `VITE_API_URL` + `VITE_SUPABASE_URL` + `VITE_SUPABASE_ANON_KEY` (ver `.env.example`) usa o modo conectado; sem elas, o modo demo.
 
 ## Convenções
 
@@ -24,7 +24,7 @@ Clean Architecture em camadas numeradas; detalhes em `../docs/ARQUITETURA.md`.
 ## Antes de entregar
 
 ```bash
-pnpm check   # lint + testes + build
+pnpm check   # na raiz: lint + tipos + testes + build de todos os pacotes
 ```
 
-Regra nova = teste novo em `regras.test.js`; fluxo novo de tela = teste em `App.test.jsx`.
+Regra nova = teste novo no `*.test.ts` do agregado em `packages/dominio`; fluxo novo de tela = teste em `App.test.jsx`.

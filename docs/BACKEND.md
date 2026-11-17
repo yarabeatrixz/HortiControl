@@ -1,25 +1,24 @@
 # Guia para o back-end e o banco de dados
 
-O front-end está pronto e funciona com **dados fictícios no navegador**. Este documento descreve o que ele espera do back-end. As rotas são **sugestões**; a equipe define o contrato final, e o front se adapta num único lugar.
+O front-end está pronto e funciona com **dados fictícios no navegador**. Este documento descreve o contrato entre front, API e banco.
+
+> **Estado (fase 3):** as rotas de escrita abaixo estão **implementadas** em `backend/` (lista final, status HTTP e modo demo em [`backend/README.md`](../backend/README.md)).
+> **Leituras** são feitas pelo front direto no Supabase, protegidas por RLS (`supabase/migrations/0001_schema.sql`); **escritas** só pela API.
 
 ## Onde o back-end entra no front
 
-```
-frontend/src/composition.js
-  const repositorio = criarLocalStorageRepository();   ← trocar pelo adapter da API
-  export const casosDeUso = criarCasosDeUso(repositorio);
-```
+Pronto (fase 4): `frontend/src/composition.js` escolhe o modo pelas variáveis do Vite.
 
-Caminho recomendado:
-1. Criar `frontend/src/2-adapters/apiRepository.js` (ou `apiCasosDeUso.js`) que chama as rotas abaixo com `fetch`.
-2. Trocar a linha em `composition.js`.
-3. Nenhuma tela muda: todas já chamam ações assíncronas e mostram `err.message` em caso de erro.
+| Modo | Quando | Adapters |
+|---|---|---|
+| Demo | nenhuma `VITE_*` definida | `localStorageRepository` (dados de exemplo no navegador) |
+| Conectado | `VITE_API_URL` + `VITE_SUPABASE_URL` + `VITE_SUPABASE_ANON_KEY` (ver `frontend/.env.example`) | `supabaseLeitura` (lê com a anon key; RLS decide), `supabaseAutenticacao` (Supabase Auth) e `apiEscrita` (`fetch` + `Authorization: Bearer <token>`) |
 
-URL da API via variável de ambiente do Vite: `VITE_API_URL` em `frontend/.env.local` (não versionado).
+No modo conectado os casos de uso (`1-application/useCasesRemotos.js`) têm a **mesma interface** dos locais: escrevem pela API e releem o estado do banco; nenhuma tela muda. A tradução banco ↔ domínio é a mesma da API (`packages/banco`). Configuração pela metade dá erro claro ao abrir o app.
 
 ## Regras = validações do servidor
 
-Toda regra de `frontend/src/0-domain/regras.js` precisa existir **também no servidor** (o servidor é a fonte da verdade). As mensagens de erro do front são as que o usuário vê; a API pode devolver `{ "error": "mensagem" }` com status 4xx e o adapter repassa a mensagem.
+As regras ficam no pacote `@hortilink/dominio` (`packages/dominio/src`, TypeScript) e a API **importa as mesmas funções**: o servidor é a fonte da verdade e roda exatamente a mesma validação do front. As mensagens de erro do front são as que o usuário vê; a API pode devolver `{ "error": "mensagem" }` com status 4xx e o adapter repassa a mensagem.
 
 ## Entidades (formato atual dos dados)
 
@@ -34,11 +33,11 @@ Toda regra de `frontend/src/0-domain/regras.js` precisa existir **também no ser
 | `expenses` | `id, producerId, type (Custo\|Investimento), description, amount, createdAt` | Custos e investimentos que não são entrada de mercadoria. |
 | `proposals` | `id, type, sourceId, producerId, buyerId, productId, quantity, unitPrice, storeId, status, createdAt, orderId?` | Regras prontas; a tela atual usa compra direta (ver "Pontos em aberto"). |
 
-Valores fixos (status, categorias, unidades, eventos da linha do tempo): `frontend/src/0-domain/constants.js`. Use **exatamente as mesmas strings**.
+Valores fixos (status, categorias, unidades, eventos da linha do tempo): `packages/dominio/src/constantes.ts`. Use **exatamente as mesmas strings**.
 
 Fluxo de status do pedido: `Aguardando pagamento → Pago → Entregue na loja → Pronto para retirada → Retirado` (ou `Cancelado`).
 
-## Operações (caso de uso → rota sugerida)
+## Operações (caso de uso → rota)
 
 | Caso de uso (`useCases.js`) | Rota sugerida | Validações principais |
 |---|---|---|
@@ -62,7 +61,7 @@ Fluxo de status do pedido: `Aguardando pagamento → Pago → Entregue na loja �
 
 Leituras de que as telas precisam: ofertas ativas, produtos por produtor, lojas, pedidos do usuário (comprador/produtor/loja), movimentações de estoque e despesas do produtor, usuário logado.
 
-Alerta de estoque baixo: `quantity <= minQuantity` (ou `quantity <= 0`), regra em `frontend/src/0-domain/estoque.js` (`statusEstoque`).
+Alerta de estoque baixo: `quantity <= minQuantity` (ou `quantity <= 0`), regra em `packages/dominio/src/estoque.ts` (`statusEstoque`).
 
 ## Segurança (checklist antes de ir para produção)
 
@@ -71,6 +70,6 @@ Alerta de estoque baixo: `quantity <= minQuantity` (ou `quantity <= 0`), regra e
 - Nenhum dado real no seed nem nos testes (DoD).
 - Pagamento real só por provedor (Pix/cartão); o front nunca deve receber nem guardar dados de cartão.
 
-## Pontos em aberto (decidir com a PO)
+## Pontos em aberto (decisões de produto)
 
 1. **Proposta × compra direta:** o backlog (US04/US05) descreve proposta → aceitar/recusar; a tela atual faz compra direta com pagamento. As regras de proposta existem e têm testes, mas não há tela.

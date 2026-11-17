@@ -1,6 +1,6 @@
 import { PackageCheck } from "lucide-react";
 import { useState } from "react";
-import { STATUS_PEDIDO, dataCurta } from "@domain";
+import { STATUS_PEDIDO, dataCurta } from "@hortilink/dominio";
 import { Button } from "../../components/base/Button";
 import { ConfirmModal } from "../../components/base/ConfirmModal";
 import { EmptyState } from "../../components/base/EmptyState";

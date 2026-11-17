@@ -1,0 +1,340 @@
+/* Perfil público do produtor e escolha de pontos de retirada (busca, mapa, lista) */
+
+.form-card > h2 {
+  font-size: 17px;
+}
+.pickup-icon {
+  width: 35px;
+  height: 35px;
+  display: grid;
+  place-items: center;
+  color: var(--green);
+  background: var(--green-light);
+  border-radius: 8px;
+}
+.public-profile-hero {
+  margin-bottom: 12px;
+  padding: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: white;
+  background: linear-gradient(120deg, var(--green-deep), var(--green));
+  border-radius: 14px;
+}
+.public-profile-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+.avatar.xlarge {
+  width: 66px;
+  height: 66px;
+  color: var(--green-dark);
+  background: #dcecbe;
+  font-size: 19px;
+}
+.public-profile-info .eyebrow {
+  color: #b9da82;
+}
+.public-profile-info h1 {
+  margin-top: 5px;
+  font-size: 25px;
+}
+.public-profile-info p {
+  margin-top: 5px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #cbd9d0;
+  font-size: 10px;
+}
+.public-profile-count {
+  text-align: right;
+}
+.public-profile-count b,
+.public-profile-count span {
+  display: block;
+}
+.public-profile-count b {
+  font: 800 29px "Manrope";
+}
+.public-profile-count span {
+  color: #cbd9d0;
+  font-size: 8px;
+}
+.public-pickups {
+  margin-bottom: 28px;
+  padding: 13px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--green);
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+.public-pickups div {
+  flex: 1;
+}
+.public-pickups b,
+.public-pickups p {
+  display: block;
+}
+.public-pickups b {
+  font-size: 10px;
+}
+.public-pickups p {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 9px;
+  line-height: 1.5;
+}
+.producer-head .button {
+  min-height: 34px;
+  padding: 0 10px;
+  font-size: 8px;
+}
+
+.order-search {
+  max-width: 440px;
+  margin-bottom: 18px;
+}
+.order-search input {
+  background: white;
+}
+.order-number {
+  display: block;
+  margin-top: 8px;
+  color: var(--green-dark);
+  font: 800 15px "Manrope";
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+.pickup-picker {
+  margin: 7px 0 18px;
+  padding: 18px;
+  background: #f8faf6;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+.pickup-picker-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 15px;
+}
+.pickup-picker-head h3 {
+  margin-top: 5px;
+  font-size: 15px;
+}
+.pickup-picker-head > span {
+  color: var(--green);
+  font-size: 9px;
+  font-weight: 700;
+}
+.selected-chips {
+  margin-top: 13px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.selected-chips button {
+  padding: 6px 9px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--green-dark);
+  background: var(--green-light);
+  border: 0;
+  border-radius: 16px;
+  font-size: 8px;
+  font-weight: 700;
+}
+.location-tools {
+  margin-top: 15px;
+  display: flex;
+  gap: 8px;
+}
+.location-tools .search-box {
+  min-width: 0;
+}
+.location-tools .search-box input {
+  background: white;
+}
+.mini-map {
+  position: relative;
+  height: 210px;
+  margin-top: 12px;
+  overflow: hidden;
+  background:
+    linear-gradient(35deg, transparent 48%, #d9e2d6 49%, #d9e2d6 52%, transparent 53%),
+    linear-gradient(-28deg, transparent 45%, #d9e2d6 46%, #d9e2d6 50%, transparent 51%), #eaf1e7;
+  border: 1px solid #d7e1d5;
+  border-radius: 10px;
+}
+.mini-map::before,
+.mini-map::after {
+  content: "";
+  position: absolute;
+  background: #dcebd7;
+  border: 1px solid #cdddc9;
+  border-radius: 10px;
+}
+.mini-map::before {
+  inset: 22px 56% 102px 22px;
+}
+.mini-map::after {
+  inset: 105px 18px 20px 61%;
+}
+.map-user-pin,
+.map-store-pin {
+  position: absolute;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  color: white;
+  filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.2));
+}
+.map-user-pin {
+  top: 77px;
+  left: 47%;
+  color: var(--red);
+}
+.map-store-pin {
+  width: 31px;
+  height: 31px;
+  background: var(--green);
+  border: 3px solid white;
+  border-radius: 50% 50% 50% 8px;
+}
+.pin-1 {
+  top: 35px;
+  left: 25%;
+}
+.pin-2 {
+  right: 23%;
+  bottom: 35px;
+}
+.pin-3 {
+  top: 36px;
+  right: 20%;
+}
+.mini-map > small {
+  position: absolute;
+  z-index: 3;
+  right: 8px;
+  bottom: 8px;
+  padding: 6px 8px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.94);
+  border-radius: 6px;
+  font-size: 7px;
+}
+.mini-map > small svg:first-child {
+  color: var(--red);
+}
+.mini-map > small svg:last-of-type {
+  margin-left: 5px;
+  color: var(--green);
+}
+.radius-row {
+  margin: 13px 0 9px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.radius-row b {
+  margin-right: auto;
+  font-size: 9px;
+}
+.radius-row button {
+  padding: 6px 9px;
+  color: var(--muted);
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  font-size: 8px;
+  font-weight: 700;
+}
+.radius-row button.active {
+  color: white;
+  background: var(--green);
+  border-color: var(--green);
+}
+.nearby-list {
+  display: grid;
+  gap: 7px;
+}
+.nearby-store {
+  padding: 11px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  cursor: pointer;
+}
+.nearby-store.selected {
+  background: var(--green-light);
+  border-color: var(--green);
+}
+.nearby-store > input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--green);
+}
+.nearby-store > span:nth-of-type(2) {
+  min-width: 0;
+  flex: 1;
+}
+.nearby-store b,
+.nearby-store small {
+  display: block;
+}
+.nearby-store b {
+  font-size: 10px;
+}
+.nearby-store small {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 8px;
+}
+.nearby-store small:last-child {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.nearby-store > strong {
+  color: var(--green);
+  font-size: 10px;
+}
+.pickup-points-page {
+  max-width: 980px;
+}
+.pickup-results {
+  margin-top: 12px;
+}
+.pickup-results .nearby-store > span:nth-of-type(2) {
+  min-width: 0;
+  flex: 1;
+}
+.pickup-results .nearby-store .button {
+  min-width: 112px;
+  min-height: 36px;
+  padding: 0 11px;
+  font-size: 9px;
+}
+.no-stores {
+  padding: 30px 15px;
+  text-align: center;
+  color: var(--muted);
+  background: white;
+  border: 1px dashed var(--line);
+  border-radius: 9px;
+  font-size: 10px;
+}

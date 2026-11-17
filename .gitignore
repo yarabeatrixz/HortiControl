@@ -1,23 +1,54 @@
-# Dependências e builds
+# ---------------------------------------------------------------- Dependências e builds
 node_modules/
+.pnpm-store/
 dist/
 build/
 coverage/
 .vite/
 *.tsbuildinfo
+.eslintcache
+.cache/
 
-# Ambiente (nunca versionar segredos)
+# ---------------------------------------------------------------- Segredos (NUNCA versionar)
+# Variáveis de ambiente: só os modelos sem valor entram no git.
 .env
 .env.*
 !.env.example
+!.env.demo
+*.local
+# Chaves e certificados
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+id_rsa*
+# Pasta local da CLI do Supabase (guarda ref do projeto e tokens)
+supabase/.temp/
+supabase/.branches/
+.supabase/
 
-# Logs e sistema
+# ---------------------------------------------------------------- Logs e sistema
 *.log
 logs/
+npm-debug.log*
+pnpm-debug.log*
 .DS_Store
 Thumbs.db
+desktop.ini
+*.swp
+*~
 
-# Editores
+# ---------------------------------------------------------------- Editores
 .idea/
+# Só o que serve para todo mundo rodar o projeto; settings.json é pessoal de cada um.
 .vscode/*
 !.vscode/extensions.json
+!.vscode/tasks.json
+!.vscode/launch.json
+
+# ---------------------------------------------------------------- Local de cada pessoa
+# Configuração local do Claude Code
+.claude/
+# Capturas exportadas localmente
+docs/telas/

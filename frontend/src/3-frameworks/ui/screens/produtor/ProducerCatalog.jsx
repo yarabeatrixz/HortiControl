@@ -1,6 +1,6 @@
 import { BadgePercent, Edit3, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
-import { brl } from "@domain";
+import { brl } from "@hortilink/dominio";
 import { Button } from "../../components/base/Button";
 import { ConfirmModal } from "../../components/base/ConfirmModal";
 import { EmptyState } from "../../components/base/EmptyState";

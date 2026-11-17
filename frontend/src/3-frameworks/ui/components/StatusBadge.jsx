@@ -1,4 +1,4 @@
-import { STATUS_ESTOQUE, STATUS_OFERTA, STATUS_PEDIDO, STATUS_PROPOSTA } from "@domain";
+import { STATUS_ESTOQUE, STATUS_OFERTA, STATUS_PEDIDO, STATUS_PROPOSTA } from "@hortilink/dominio";
 
 const TOM_POR_STATUS = {
   [STATUS_ESTOQUE.BAIXO]: "waiting",

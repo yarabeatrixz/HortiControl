@@ -1,0 +1,627 @@
+/* Status, cards de produto e oferta, filtros, busca, produtores, loja, formulários */
+
+.status {
+  padding: 5px 8px;
+  border-radius: 12px;
+  font-size: 8px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+.status-accepted {
+  color: var(--green);
+  background: var(--green-light);
+}
+.status-waiting {
+  color: var(--amber);
+  background: var(--amber-light);
+}
+.status-rejected {
+  color: var(--red);
+  background: var(--red-light);
+}
+.status-sold {
+  color: #58635c;
+  background: #e8ece8;
+}
+.status-info {
+  color: #27618a;
+  background: #e5f2fb;
+}
+.product-grid,
+.market-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.product-card,
+.market-card {
+  overflow: hidden;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  transition: 0.2s;
+}
+.product-card:hover,
+.market-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow);
+}
+.product-image,
+.market-image {
+  position: relative;
+  height: 190px;
+  overflow: hidden;
+}
+.product-image img,
+.market-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: 0.3s;
+}
+.product-card:hover img,
+.market-card:hover img {
+  transform: scale(1.035);
+}
+.product-image > span,
+.market-image > span {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 5px 8px;
+  color: var(--green-dark);
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 6px;
+  font-size: 8px;
+  font-weight: 800;
+}
+.product-body,
+.market-body {
+  padding: 16px;
+}
+.product-body h3,
+.market-body h3 {
+  font-size: 16px;
+}
+.stock,
+.market-stock {
+  margin-top: 5px;
+  color: var(--green);
+  font-size: 10px;
+  font-weight: 700;
+}
+.product-price {
+  margin: 14px 0;
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+}
+.product-price strong {
+  font: 800 18px "Manrope";
+}
+.product-price small {
+  color: var(--muted);
+  font-size: 9px;
+}
+.card-actions {
+  display: flex;
+  gap: 6px;
+}
+.card-actions .button {
+  min-height: 36px;
+  padding: 0 9px;
+  font-size: 9px;
+}
+.icon-danger {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  color: var(--red);
+  background: var(--red-light);
+  border: 0;
+  border-radius: 8px;
+}
+.list-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+.horizontal-card,
+.order-card {
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+.horizontal-card > img {
+  width: 108px;
+  height: 96px;
+  object-fit: cover;
+  border-radius: 9px;
+}
+.horizontal-main {
+  min-width: 0;
+  flex: 1;
+}
+.card-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+.card-heading small {
+  color: var(--green);
+  font-size: 8px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+.card-heading h3 {
+  margin-top: 3px;
+  font-size: 15px;
+}
+.horizontal-card p {
+  margin-top: 7px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--muted);
+  font-size: 9px;
+}
+.offer-metrics {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid var(--line);
+}
+.offer-metrics span {
+  padding: 10px 10px 3px;
+  border-right: 1px solid var(--line);
+}
+.offer-metrics span:last-child {
+  border: 0;
+}
+.offer-actions {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+}
+.end-offer-button {
+  min-height: 36px;
+  color: var(--red);
+  background: white;
+  border-color: var(--red);
+}
+.offer-metrics small,
+.offer-metrics b {
+  display: block;
+}
+.offer-metrics small {
+  color: var(--muted);
+  font-size: 7px;
+}
+.offer-metrics b {
+  margin-top: 3px;
+  font-size: 10px;
+}
+.strike {
+  text-decoration: line-through;
+  color: var(--muted);
+}
+.green {
+  color: var(--green);
+}
+.order-card small {
+  color: var(--muted);
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+.filter-row {
+  margin-bottom: 18px;
+  display: flex;
+  gap: 7px;
+  overflow: auto;
+  padding-bottom: 2px;
+}
+.filter-row button {
+  padding: 8px 12px;
+  color: var(--muted);
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  white-space: nowrap;
+  font-size: 9px;
+  font-weight: 700;
+}
+.filter-row button.active {
+  color: white;
+  background: var(--green);
+  border-color: var(--green);
+}
+.market-image > span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: white;
+  background: var(--green);
+}
+.market-body > small {
+  color: var(--green);
+  font-size: 8px;
+  font-weight: 800;
+}
+.market-body p {
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--muted);
+  font-size: 9px;
+}
+.market-price {
+  margin: 12px 0;
+  padding-top: 11px;
+  border-top: 1px solid var(--line);
+}
+.market-price s,
+.market-price strong {
+  display: block;
+}
+.market-price s {
+  color: #8a948d;
+  font-size: 9px;
+}
+.market-price strong {
+  margin-top: 2px;
+  color: var(--green);
+  font: 800 19px "Manrope";
+}
+.market-price strong small {
+  font-size: 9px;
+}
+.catalog-tools {
+  margin-bottom: 18px;
+  padding: 10px;
+  display: flex;
+  gap: 9px;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+.search-box {
+  position: relative;
+  flex: 1;
+}
+.search-box svg {
+  position: absolute;
+  left: 12px;
+  top: 13px;
+  color: var(--muted);
+}
+.search-box input {
+  width: 100%;
+  height: 43px;
+  padding: 0 12px 0 39px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  outline: none;
+}
+.catalog-tools select {
+  width: 190px;
+}
+.producer-section {
+  margin-bottom: 18px;
+  padding: 18px;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+}
+.producer-head {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 14px;
+}
+.producer-head > span {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  color: white;
+  background: var(--green);
+  border-radius: 50%;
+  font-weight: 800;
+}
+.producer-head > div {
+  flex: 1;
+}
+.producer-head h3 {
+  font-size: 13px;
+}
+.producer-head p {
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  color: var(--muted);
+  font-size: 8px;
+}
+.producer-head > small {
+  color: var(--muted);
+  font-size: 8px;
+}
+.producer-products {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 9px;
+}
+.producer-products article {
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  background: #f6f8f4;
+  border-radius: 9px;
+}
+.producer-products img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 7px;
+}
+.producer-products small {
+  color: var(--green);
+  font-size: 7px;
+}
+.producer-products h4 {
+  margin-top: 2px;
+  font-size: 10px;
+}
+.producer-products b {
+  display: block;
+  margin-top: 3px;
+  color: var(--green);
+  font-size: 9px;
+}
+.proposal-inline {
+  margin-top: 12px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+.proposal-inline span {
+  color: var(--muted);
+  font-size: 10px;
+}
+.proposal-inline strong {
+  margin-left: auto;
+  color: var(--green);
+  font-size: 14px;
+}
+.store-layout {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 18px;
+  align-items: start;
+}
+.store-preview,
+.form-card {
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  box-shadow: 0 4px 16px rgba(20, 55, 33, 0.03);
+}
+.store-cover {
+  height: 155px;
+  display: grid;
+  place-items: center;
+  color: white;
+  background: linear-gradient(135deg, var(--green), #62a45e);
+  border-radius: 13px 13px 0 0;
+}
+.store-preview > div:last-child {
+  padding: 20px;
+}
+.store-preview h2 {
+  margin-top: 10px;
+  font-size: 18px;
+}
+.store-preview p {
+  margin-top: 9px;
+  display: flex;
+  gap: 5px;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.5;
+}
+.form-card {
+  padding: 24px;
+}
+.order-card {
+  display: grid;
+  grid-template-columns: auto 1.2fr auto 1fr 1fr auto;
+}
+.order-icon {
+  width: 45px;
+  height: 45px;
+  display: grid;
+  place-items: center;
+  color: var(--green);
+  background: var(--green-light);
+  border-radius: 10px;
+}
+.order-card h3 {
+  margin-top: 2px;
+  font-size: 13px;
+}
+.order-card p {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 9px;
+}
+.order-card > div b {
+  display: block;
+  margin-top: 3px;
+  font-size: 10px;
+}
+.order-card > strong {
+  color: var(--green);
+  font-size: 14px;
+}
+.form-page {
+  max-width: 820px;
+  margin: auto;
+}
+.back-button {
+  margin-bottom: 14px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--green);
+  background: none;
+  border: 0;
+  font-size: 10px;
+  font-weight: 700;
+}
+.form-card-title {
+  margin-bottom: 23px;
+  padding-bottom: 17px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid var(--line);
+}
+.form-card-title > span {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  color: var(--green);
+  background: var(--green-light);
+  border-radius: 9px;
+}
+.form-card-title small {
+  color: var(--green);
+  font-size: 7px;
+  letter-spacing: 0.1em;
+}
+.form-card-title h1 {
+  margin-top: 2px;
+  font-size: 20px;
+}
+.form-actions {
+  padding-top: 15px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 7px;
+  border-top: 1px solid var(--line);
+}
+.photo-field {
+  margin-bottom: 18px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #f5f7f3;
+  border-radius: 10px;
+}
+.photo-field img {
+  width: 110px;
+  height: 85px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+.photo-field label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--green);
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.photo-field label small {
+  display: block;
+  margin-top: 3px;
+  color: var(--muted);
+  font-weight: 400;
+}
+.photo-field input {
+  display: none;
+}
+.normal-price {
+  margin-bottom: 16px;
+  padding: 13px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--green-light);
+  border-radius: 9px;
+}
+.normal-price span {
+  font-size: 9px;
+}
+.normal-price s {
+  font: 800 17px "Manrope";
+  color: var(--muted);
+}
+.normal-price small {
+  margin-left: auto;
+  color: var(--green);
+  font-size: 8px;
+}
+.selected-product {
+  margin-bottom: 18px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #f5f7f3;
+  border-radius: 10px;
+}
+.selected-product img {
+  width: 90px;
+  height: 75px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+.selected-product small {
+  color: var(--green);
+  font-size: 7px;
+  font-weight: 800;
+}
+.selected-product h3 {
+  margin-top: 3px;
+  font-size: 15px;
+}
+.selected-product p {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 9px;
+}
+.selected-product b {
+  display: block;
+  margin-top: 4px;
+  color: var(--green);
+  font-size: 12px;
+}
+.proposal-total {
+  margin-bottom: 15px;
+  padding: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--green-dark);
+  background: var(--green-light);
+  border-radius: 9px;
+  font-size: 10px;
+  font-weight: 700;
+}
+.proposal-total strong {
+  font: 800 20px "Manrope";
+}

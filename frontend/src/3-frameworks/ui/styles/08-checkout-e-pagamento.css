@@ -1,0 +1,355 @@
+/* Checkout (Pix e cartão), resumo do pedido e resultado do pagamento */
+
+.test-banner {
+  margin-bottom: 16px;
+  padding: 11px 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #805407;
+  background: var(--amber-light);
+  border: 1px solid #efda9e;
+  border-radius: 9px;
+  font-size: 10px;
+}
+.checkout-grid {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 18px;
+  align-items: start;
+}
+.checkout-grid > section > h1 {
+  margin: 6px 0 18px;
+  font-size: 28px;
+}
+.payment-methods {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.payment-methods > button {
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  text-align: left;
+  color: var(--text);
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+.payment-methods > button.active {
+  border-color: var(--green);
+  box-shadow: inset 0 0 0 1px var(--green);
+}
+.payment-methods > button > span:first-child {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  color: var(--green);
+  background: var(--green-light);
+  border-radius: 8px;
+}
+.payment-methods b,
+.payment-methods small {
+  display: block;
+}
+.payment-methods b {
+  font-size: 10px;
+}
+.payment-methods small {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 8px;
+}
+.payment-methods i {
+  width: 18px;
+  height: 18px;
+  margin-left: auto;
+  display: grid;
+  place-items: center;
+  color: white;
+  background: white;
+  border: 1.5px solid var(--line);
+  border-radius: 50%;
+}
+.payment-methods button.active i {
+  background: var(--green);
+  border-color: var(--green);
+}
+.payment-panel {
+  margin-top: 9px;
+  padding: 20px;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+}
+.pix-panel {
+  text-align: center;
+}
+.qr-code {
+  width: 144px;
+  height: 144px;
+  margin: 0 auto 13px;
+  padding: 9px;
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 2px;
+  background: white;
+  border: 1px solid var(--line);
+}
+.qr-code i.dark {
+  background: var(--green-deep);
+}
+.pix-panel h3 {
+  font-size: 14px;
+}
+.pix-panel > p {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 9px;
+}
+.pix-code {
+  margin: 15px 0 10px;
+  padding: 7px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: #f2f5f1;
+  border-radius: 8px;
+}
+.pix-code code {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--muted);
+  font-size: 8px;
+  white-space: nowrap;
+}
+.pix-code button {
+  padding: 7px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--green);
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font-size: 8px;
+  font-weight: 700;
+}
+.pix-wait {
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+  color: var(--amber);
+}
+.pix-wait b,
+.pix-wait small {
+  display: block;
+  text-align: left;
+}
+.pix-wait b {
+  font-size: 9px;
+}
+.pix-wait small {
+  margin-top: 2px;
+  font-size: 8px;
+}
+.test-cards {
+  margin: -2px 0 14px;
+  padding: 9px;
+  color: var(--muted);
+  background: #f3f5f1;
+  border-radius: 7px;
+  font-size: 8px;
+  line-height: 1.55;
+}
+.order-summary {
+  position: sticky;
+  top: 88px;
+  padding: 20px;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+.order-summary > .order-number {
+  margin: 6px 0 16px;
+  font-size: 19px;
+}
+.summary-product {
+  padding-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid var(--line);
+}
+.summary-product img {
+  width: 60px;
+  height: 55px;
+  object-fit: cover;
+  border-radius: 7px;
+}
+.summary-product b,
+.summary-product small {
+  display: block;
+}
+.summary-product b {
+  font-size: 11px;
+}
+.summary-product small {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 8px;
+}
+.order-summary dl {
+  margin: 0;
+  padding: 6px 0;
+}
+.order-summary dl > div {
+  padding: 8px 0;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+.order-summary dt {
+  color: var(--muted);
+  font-size: 8px;
+}
+.order-summary dd {
+  margin: 0;
+  text-align: right;
+  font-size: 9px;
+  font-weight: 700;
+}
+.order-summary dd small {
+  margin-top: 2px;
+  display: block;
+  color: var(--muted);
+  font-size: 7px;
+  font-weight: 400;
+}
+.checkout-total {
+  padding-top: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--line);
+  font-size: 10px;
+  font-weight: 700;
+}
+.checkout-total strong {
+  color: var(--green);
+  font: 800 22px "Manrope";
+}
+.payment-result {
+  max-width: 620px;
+  margin: 35px auto;
+  padding: 38px;
+  text-align: center;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+}
+.result-icon {
+  width: 76px;
+  height: 76px;
+  margin: 0 auto 17px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+}
+.result-icon.success {
+  color: var(--green);
+  background: var(--green-light);
+}
+.result-icon.error {
+  color: var(--red);
+  background: var(--red-light);
+}
+.payment-result h1 {
+  margin-top: 7px;
+  font-size: 25px;
+}
+.payment-result > .order-number {
+  margin-top: 8px;
+  font-size: 18px;
+}
+.payment-result > p {
+  margin: 7px auto 20px;
+  max-width: 440px;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.55;
+}
+.receipt {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+}
+.receipt > div {
+  padding: 12px;
+}
+.receipt > div + div {
+  border-left: 1px solid var(--line);
+}
+.receipt span,
+.receipt b {
+  display: block;
+}
+.receipt span {
+  color: var(--muted);
+  font-size: 7px;
+}
+.receipt b {
+  margin-top: 3px;
+  font-size: 9px;
+}
+.pickup-result {
+  margin-top: 12px;
+  padding: 14px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  text-align: left;
+  color: var(--green);
+  background: var(--green-light);
+  border-radius: 9px;
+}
+.pickup-result small,
+.pickup-result b {
+  display: block;
+}
+.pickup-result small {
+  font-size: 7px;
+  font-weight: 700;
+}
+.pickup-result b {
+  margin-top: 3px;
+  font-size: 11px;
+}
+.pickup-result p {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 8px;
+  line-height: 1.5;
+}
+.result-actions {
+  margin-top: 18px;
+  display: flex;
+  justify-content: center;
+  gap: 7px;
+}
+.store-order-status {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.store-order-status small {
+  color: #27618a;
+}

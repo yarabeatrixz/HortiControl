@@ -1,5 +1,5 @@
 import { TriangleAlert } from "lucide-react";
-import { precisaRepor } from "@domain";
+import { precisaRepor } from "@hortilink/dominio";
 
 /** Aviso com os produtos no estoque mínimo ou zerados. Some quando não há nenhum. */
 export function LowStockAlert({ products, action }) {

@@ -1,0 +1,24 @@
+{
+  "name": "@hortilink/dominio",
+  "version": "0.1.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "author": "Bruna Cristiny Franco",
+  "description": "Regras de negócio puras do HortiLink, compartilhadas pelo front-end e pelo back-end.",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./exemplo": "./src/exemplo.ts"
+  },
+  "scripts": {
+    "lint": "oxlint src",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "check": "pnpm lint && pnpm typecheck && pnpm test"
+  },
+  "devDependencies": {
+    "oxlint": "^1.93.0",
+    "typescript": "^6.0.3",
+    "vitest": "^5.1.0"
+  }
+}
