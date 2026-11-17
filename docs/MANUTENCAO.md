@@ -1,6 +1,6 @@
 # Manual de manutenção — HortiLink
 
-Para quem for mexer no projeto (incluindo a própria autora no futuro): como rodar, onde mudar cada coisa e o que conferir antes de entregar.
+Para quem for mexer no projeto (qualquer pessoa da equipe): como rodar, onde mudar cada coisa e o que conferir antes de entregar.
 
 ## 1. Ambiente
 

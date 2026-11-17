@@ -4,8 +4,6 @@
 
 O HortiLink é um projeto acadêmico de Engenharia de Software: um sistema web que conecta **produtores** de verduras e legumes do Alto Tietê a **compradores** (restaurantes, sacolões, mercados e famílias), com retirada em **lojas parceiras**. Além da venda, o produtor controla o próprio estoque: entradas, perdas, custos e indicadores.
 
-Projeto individual: front-end, back-end e banco de dados por **Bruna Cristiny Franco** (desenvolvedora full-stack). Software proprietário: veja a [licença](#licença).
-
 ## Objetivo
 
 Facilitar o gerenciamento de produtos, entradas, vendas, perdas e quantidades disponíveis, aproximando quem produz de quem compra. O resultado esperado é uma gestão mais organizada, preço justo e menos desperdício.
@@ -66,7 +64,7 @@ Contas de demonstração (senha `123456`, **só para teste**: não aplique o `su
 
 ### Rodar no VS Code
 
-1. **File → Open Folder…** e abra a pasta `HortiLink` (a raiz, não `frontend/`). Aceite instalar as **extensões recomendadas** quando o VS Code oferecer.
+1. **File → Open Folder…** e abra a pasta `HortiControl` (a raiz, não `frontend/`). Aceite instalar as **extensões recomendadas** quando o VS Code oferecer.
 2. **Terminal → Run Task…** e escolha:
    - **1. Instalar dependências** (só na primeira vez ou quando o `pnpm-lock.yaml` mudar);
    - **2. Rodar modo demo (sem banco)**: abre o site em http://localhost:5173 com dados de exemplo;
@@ -96,7 +94,9 @@ Contas de demonstração (senha `123456`, **só para teste**: não aplique o `su
 
 ## Equipe
 
-- Bruna Cristiny Franco — Desenvolvedora Full-Stack
+- Yara — Scrum Master e organização do projeto.
+- Bruna — Desenvolvedora Front-end.
+- Laura — Desenvolvedora Back-end.
 
 ## Metodologia
 
@@ -108,8 +108,3 @@ Desenvolvimento organizado em três Sprints, utilizando Scrum e Kanban.
 - Curso: Engenharia de Software.
 - Disciplina: Métodos Ágeis.
 - Projeto: M2 — 2026.02.
-
-## Licença
-
-Copyright (c) 2026 **Bruna Cristiny Franco**. Todos os direitos reservados.
-Software proprietário: é proibido copiar, modificar, distribuir ou usar comercialmente sem autorização por escrito da autora. Texto completo em [`LICENSE`](LICENSE).

@@ -1,6 +1,6 @@
 # Política de segurança — HortiLink
 
-Software proprietário de **Bruna Cristiny Franco** ([licença](LICENSE)). Esta política diz como relatar uma falha e quais regras de segurança o projeto segue.
+Projeto acadêmico da equipe HortiLink (UMC). Esta política diz como relatar uma falha e quais regras de segurança o projeto segue.
 
 ## Versões cobertas
 
@@ -11,7 +11,7 @@ Software proprietário de **Bruna Cristiny Franco** ([licença](LICENSE)). Esta 
 
 ## Como relatar uma vulnerabilidade
 
-1. **Não abra issue pública.** Use o relato privado do GitHub: aba **Security → Report a vulnerability** deste repositório. Se não tiver acesso, fale com a autora pelo GitHub ([@Bruna-Franco-Dev](https://github.com/Bruna-Franco-Dev)).
+1. **Não abra issue pública.** Use o relato privado do GitHub: aba **Security → Report a vulnerability** deste repositório. Se não tiver acesso, fale com a equipe pelo GitHub (responsável pelo repositório: [@yarabeatrixz](https://github.com/yarabeatrixz)).
 2. Diga o que é, onde está (arquivo, rota ou tela), como reproduzir e qual o impacto.
 3. **Nunca** mande senha, chave ou dado pessoal real no relato.
 

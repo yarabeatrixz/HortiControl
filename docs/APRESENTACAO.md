@@ -59,7 +59,7 @@ Rodar `pnpm --filter hortilink-frontend dev:demo` antes da aula (não precisa do
 | O pagamento é real? | Não, é simulado (ambiente de teste). Um provedor real (Pix/cartão) fica para depois. |
 | E se duas pessoas comprarem o último item ao mesmo tempo? | É um limite conhecido (sem transação); o próximo passo é uma função SQL que grava tudo de uma vez. |
 | Como você garante que nada quebra? | `pnpm check` (lint, tipos, testes e build) local e no CI antes de cada merge. |
-| O código é aberto? | Não, é proprietário (licença no repositório), mas o professor pode ter acesso para avaliar. |
+| O código é aberto? | É um projeto acadêmico da equipe; o professor tem acesso ao repositório para avaliar. |
 
 ## Checklist do dia
 - [ ] `pnpm install` e `pnpm check` na véspera.
