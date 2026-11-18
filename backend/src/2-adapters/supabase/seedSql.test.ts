@@ -32,7 +32,7 @@ describe("gerarSeedSql", () => {
       "public.offers",
       "public.offer_stores",
       "public.orders",
-      "public.order_events",
+      "public.order_timeline",
       "public.stock_movements",
       "public.expenses",
     ]) {

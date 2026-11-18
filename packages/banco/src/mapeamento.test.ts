@@ -5,23 +5,24 @@ import { calcularOperacoes, type Linhas, paraEstado, paraLinhas } from "./mapeam
 
 const agora = new Date("2026-11-15T12:00:00.000Z");
 
-/** Linhas do banco equivalentes ao exemplo (profiles vem dos usuários). */
+/** Linhas do banco equivalentes ao exemplo (users vem dos usuários). */
 function linhasDoExemplo() {
   const estado = criarExemplo(agora);
   const linhas: Linhas = {
-    profiles: estado.users.map((u) => ({ id: u.id, role: u.role, name: u.name, city: u.city, email: u.email })),
+    users: estado.users.map((u) => ({ id: u.id, role: u.role, name: u.name, city: u.city, email: u.email })),
     ...paraLinhas(estado),
   };
   return { estado, linhas };
 }
 
 describe("mapeamento banco ↔ domínio", () => {
-  it("ida e volta preserva o estado (sem senhas, que ficam no Auth; foto vazia = sem foto)", () => {
+  it("ida e volta preserva o estado (sem senhas, que ficam no Auth; foto vazia = sem foto; distância não é gravada)", () => {
     const { estado, linhas } = linhasDoExemplo();
     const esperado = {
       ...estado,
       users: estado.users.map(({ password: _senha, ...u }) => u),
       products: estado.products.map((p) => ({ ...p, photo: p.photo || undefined })),
+      stores: estado.stores.map(({ distanceKm: _distancia, ...loja }) => loja),
     };
     expect(paraEstado(linhas)).toEqual(esperado);
   });
@@ -38,7 +39,7 @@ describe("mapeamento banco ↔ domínio", () => {
 
   it("aceita perfis sem e-mail (leitura do front, que o RLS não deixa ver)", () => {
     const { linhas } = linhasDoExemplo();
-    linhas.profiles = linhas.profiles.map(({ email: _email, ...perfil }) => perfil);
+    linhas.users = linhas.users.map(({ email: _email, ...perfil }) => perfil);
     expect(paraEstado(linhas).users.every((u) => u.email === "")).toBe(true);
   });
 });

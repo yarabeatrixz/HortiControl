@@ -32,8 +32,17 @@ export function criarRepositorioSupabase(config: ConfigSupabase, cliente = clien
 
   async function executar(operacao: Operacao): Promise<void> {
     if (operacao.tipo === "gravar") {
-      const chaves = chavesDaTabela(operacao.tabela as Exclude<Tabela, "profiles">);
-      const { error } = await cliente.from(operacao.tabela).upsert(operacao.linhas, { onConflict: chaves.join(",") });
+      // order_timeline só tem chave primária `id` (gerada pelo banco): os eventos são
+      // só acrescentados e a "chave" deles é a linha inteira, então uma linha "mudada" é
+      // sempre um evento novo → insert. As outras tabelas têm chave única → upsert.
+      const { error } =
+        operacao.tabela === "order_timeline"
+          ? await cliente.from(operacao.tabela).insert(operacao.linhas)
+          : await cliente
+              .from(operacao.tabela)
+              .upsert(operacao.linhas, {
+                onConflict: chavesDaTabela(operacao.tabela as Exclude<Tabela, "users">).join(","),
+              });
       if (error) throw new Error(`Falha ao gravar ${operacao.tabela}: ${error.message}`);
       return;
     }

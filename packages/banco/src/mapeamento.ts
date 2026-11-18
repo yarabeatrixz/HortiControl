@@ -19,7 +19,7 @@ import type {
 export type Linha = Record<string, unknown>;
 
 export interface Linhas {
-  profiles: Linha[];
+  users: Linha[];
   stores: Linha[];
   producer_pickup_stores: Linha[];
   products: Linha[];
@@ -27,7 +27,7 @@ export interface Linhas {
   offer_stores: Linha[];
   proposals: Linha[];
   orders: Linha[];
-  order_events: Linha[];
+  order_timeline: Linha[];
   stock_movements: Linha[];
   expenses: Linha[];
 }
@@ -36,7 +36,7 @@ export type Tabela = keyof Linhas;
 
 /** Todas as tabelas que formam o Estado (a leitura completa passa por todas). */
 export const TABELAS: Tabela[] = [
-  "profiles",
+  "users",
   "stores",
   "producer_pickup_stores",
   "products",
@@ -44,7 +44,7 @@ export const TABELAS: Tabela[] = [
   "offer_stores",
   "proposals",
   "orders",
-  "order_events",
+  "order_timeline",
   "stock_movements",
   "expenses",
 ];
@@ -64,12 +64,12 @@ export function paraEstado(linhas: Linhas): Estado {
   const lojasDaOferta = (ofertaId: string) =>
     linhas.offer_stores.filter((l) => l.offer_id === ofertaId).map((l) => s(l.store_id));
   const eventosDo = (pedidoId: string): EventoLinhaDoTempo[] =>
-    linhas.order_events
+    linhas.order_timeline
       .filter((l) => l.order_id === pedidoId)
-      .map((l) => ({ label: l.label as EventoLinhaDoTempo["label"], at: s(l.at) }))
+      .map((l) => ({ label: l.label as EventoLinhaDoTempo["label"], at: s(l.created_at) }))
       .sort((a, b) => a.at.localeCompare(b.at));
 
-  const users: Usuario[] = linhas.profiles.map((l) => ({
+  const users: Usuario[] = linhas.users.map((l) => ({
     id: s(l.id),
     role: l.role as Usuario["role"],
     name: s(l.name),
@@ -123,7 +123,7 @@ export function paraEstado(linhas: Linhas): Estado {
         price: n(l.price),
         quantity: n(l.quantity),
         minQuantity: n(l.min_quantity),
-        photo: opcional(l.photo_url, s),
+        photo: opcional(l.photo, s),
       }),
     ),
     offers: linhas.offers.map(
@@ -186,19 +186,19 @@ export function paraEstado(linhas: Linhas): Estado {
 
 // ---------------------------------------------------------------- Domínio → banco
 
-/** Linhas de cada tabela que o servidor grava (profiles é criada pelo Auth). */
-export function paraLinhas(estado: Estado): Omit<Linhas, "profiles"> {
+/** Linhas de cada tabela que o servidor grava (users é criada pelo Auth). */
+export function paraLinhas(estado: Estado): Omit<Linhas, "users"> {
   return {
     stores: estado.stores.map((x) => ({
       id: x.id, user_id: x.userId, name: x.name, address: x.address, city: x.city, hours: x.hours,
-      distance_km: nuloSeVazio(x.distanceKm),
+      // distance_km não existe no banco oficial: a distância é simulada no front.
     })),
     producer_pickup_stores: estado.users.flatMap((u) =>
       (u.pickupStoreIds ?? []).map((storeId) => ({ producer_id: u.id, store_id: storeId })),
     ),
     products: estado.products.map((x) => ({
       id: x.id, producer_id: x.producerId, name: x.name, category: x.category, unit: x.unit,
-      price: x.price, quantity: x.quantity, min_quantity: x.minQuantity ?? 0, photo_url: nuloSeVazio(x.photo || undefined),
+      price: x.price, quantity: x.quantity, min_quantity: x.minQuantity ?? 0, photo: nuloSeVazio(x.photo || undefined),
     })),
     offers: estado.offers.map((x) => ({
       id: x.id, producer_id: x.producerId, product_id: x.productId, quantity: x.quantity,
@@ -218,7 +218,7 @@ export function paraLinhas(estado: Estado): Omit<Linhas, "profiles"> {
       payment_method: nuloSeVazio(x.paymentMethod), created_at: x.createdAt,
       accepted_at: nuloSeVazio(x.acceptedAt), paid_at: nuloSeVazio(x.paidAt), delivered_at: nuloSeVazio(x.deliveredAt),
     })),
-    order_events: estado.orders.flatMap((o) => o.timeline.map((e) => ({ order_id: o.id, label: e.label, at: e.at }))),
+    order_timeline: estado.orders.flatMap((o) => o.timeline.map((e) => ({ order_id: o.id, label: e.label, created_at: e.at }))),
     stock_movements: estado.stockMovements.map((x) => ({
       id: x.id, type: x.type, producer_id: x.producerId, product_id: x.productId, quantity: x.quantity,
       unit_cost: nuloSeVazio(x.unitCost), reason: nuloSeVazio(x.reason), note: x.note, created_at: x.createdAt,
@@ -237,7 +237,7 @@ export type Operacao =
   | { tipo: "apagar"; tabela: Tabela; chaves: Linha[] };
 
 /** Chave de cada tabela (as de ligação não têm `id`). */
-const CHAVES: Record<Exclude<Tabela, "profiles">, string[]> = {
+const CHAVES: Record<Exclude<Tabela, "users">, string[]> = {
   stores: ["id"],
   producer_pickup_stores: ["producer_id", "store_id"],
   products: ["id"],
@@ -245,13 +245,13 @@ const CHAVES: Record<Exclude<Tabela, "profiles">, string[]> = {
   offer_stores: ["offer_id", "store_id"],
   proposals: ["id"],
   orders: ["id"],
-  order_events: ["order_id", "label", "at"],
+  order_timeline: ["order_id", "label", "created_at"],
   stock_movements: ["id"],
   expenses: ["id"],
 };
 
 /** Ordem que respeita as chaves estrangeiras: pais antes de filhos ao gravar. */
-const ORDEM: Exclude<Tabela, "profiles">[] = [
+const ORDEM: Exclude<Tabela, "users">[] = [
   "stores",
   "producer_pickup_stores",
   "products",
@@ -259,15 +259,15 @@ const ORDEM: Exclude<Tabela, "profiles">[] = [
   "offer_stores",
   "proposals",
   "orders",
-  "order_events",
+  "order_timeline",
   "stock_movements",
   "expenses",
 ];
 
-const chaveDe = (tabela: Exclude<Tabela, "profiles">, linha: Linha) =>
+const chaveDe = (tabela: Exclude<Tabela, "users">, linha: Linha) =>
   CHAVES[tabela].map((campo) => String(linha[campo])).join("|");
 
-const soChave = (tabela: Exclude<Tabela, "profiles">, linha: Linha): Linha =>
+const soChave = (tabela: Exclude<Tabela, "users">, linha: Linha): Linha =>
   Object.fromEntries(CHAVES[tabela].map((campo) => [campo, linha[campo]]));
 
 /**
@@ -293,4 +293,4 @@ export function calcularOperacoes(antes: Estado, depois: Estado): Operacao[] {
   return [...apagar, ...gravar];
 }
 
-export const chavesDaTabela = (tabela: Exclude<Tabela, "profiles">): string[] => CHAVES[tabela];
+export const chavesDaTabela = (tabela: Exclude<Tabela, "users">): string[] => CHAVES[tabela];

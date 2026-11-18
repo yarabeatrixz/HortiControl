@@ -1,5 +1,5 @@
 // Adapter da porta `AutenticacaoPort` sobre o Supabase Auth. O cadastro manda
-// perfil, nome e cidade nos metadados; o gatilho da migration cria o `profiles`.
+// perfil, nome e cidade nos metadados; o gatilho da migration cria o `users`.
 
 const ERRO_LOGIN = "E-mail ou senha incorretos";
 const ERRO_CADASTRO = "Não foi possível cadastrar agora. Tente de novo.";
@@ -18,7 +18,7 @@ export function criarSupabaseAutenticacao(cliente) {
   /** O perfil escolhido na tela precisa ser o do cadastro (igual ao modo demo). */
   async function perfilConfere(userId, role) {
     const { data, error } = await cliente
-      .from("profiles")
+      .from("users")
       .select("role")
       .eq("id", userId)
       .single();
